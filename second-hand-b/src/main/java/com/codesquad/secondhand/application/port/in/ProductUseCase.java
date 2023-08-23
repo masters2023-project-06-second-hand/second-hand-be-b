@@ -1,8 +1,8 @@
 package com.codesquad.secondhand.application.port.in;
 
-import com.codesquad.secondhand.domain.product.Product;
+import com.codesquad.secondhand.application.port.in.request.ProductCreateRequest;
 
 public interface ProductUseCase {
 
-    Product save(Product product);
+    Long save(ProductCreateRequest productCreateRequest, String email);
 }

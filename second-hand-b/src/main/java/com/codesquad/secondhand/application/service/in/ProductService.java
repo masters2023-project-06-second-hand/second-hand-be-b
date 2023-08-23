@@ -2,8 +2,10 @@ package com.codesquad.secondhand.application.service.in;
 
 
 import com.codesquad.secondhand.application.port.in.ProductUseCase;
+import com.codesquad.secondhand.application.port.in.request.ProductCreateRequest;
 import com.codesquad.secondhand.application.port.out.ProductRepository;
 import com.codesquad.secondhand.domain.product.Product;
+import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +15,9 @@ public class ProductService implements ProductUseCase {
 
     private final ProductRepository productRepository;
 
-    public Product save(Product product) {
-        return productRepository.save(product);
+    @Transactional
+    public Long save(ProductCreateRequest productCreateRequest, String email) {
+        return productRepository.save(new Product(productCreateRequest.getName(), productCreateRequest.getContent(),
+                productCreateRequest.getPrice(), null, null, null, null)).getId();
     }
 }

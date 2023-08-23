@@ -20,6 +20,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "product")
 public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -39,4 +40,19 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "region_id")
     private Region region;
+
+    public Product(String name, String content, int price, Member writer, Category category, Images images,
+            Region region) {
+        this.name = name;
+        this.content = content;
+        this.price = price;
+        this.writer = writer;
+        this.category = category;
+        this.images = images;
+        this.region = region;
+    }
+
+    public Long getId() {
+        return id;
+    }
 }
