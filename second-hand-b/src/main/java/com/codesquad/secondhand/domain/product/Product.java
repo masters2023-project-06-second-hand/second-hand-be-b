@@ -14,11 +14,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "product")
+@Getter
 public class Product {
 
     @Id
@@ -50,9 +52,5 @@ public class Product {
         this.category = category;
         this.images = images;
         this.region = region;
-    }
-
-    public Long getId() {
-        return id;
     }
 }
