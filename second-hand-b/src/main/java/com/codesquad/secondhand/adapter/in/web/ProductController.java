@@ -43,4 +43,11 @@ public class ProductController {
         productUseCase.modify(productId, productModifyRequest);
         return ResponseEntity.ok().build();
     }
+
+    @PutMapping("/{productId}/status")
+    public ResponseEntity<Void> modifyStatus(@PathVariable Long productId,
+            @RequestBody Map<String, String> request) {
+        productUseCase.modifyStatus(productId, request.get("status"));
+        return ResponseEntity.ok().build();
+    }
 }

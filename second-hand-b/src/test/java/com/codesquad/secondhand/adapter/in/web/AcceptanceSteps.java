@@ -75,4 +75,21 @@ public class AcceptanceSteps {
                 () -> assertThat(modifiedProduct.jsonPath().getInt("price")).isEqualTo(200000)
         );
     }
+
+    public static ExtractableResponse<Response> 상품상태를_수정한다(Long id) {
+        Map<String, String> body = Map.of("status", "판매완료");
+        return RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(body)
+                .when().put("/api/products/{productId}/status", id)
+                .then().log().all().extract();
+    }
+
+    public static void 상품상태수정을_검증한다(Long id, ExtractableResponse<Response> response) {
+        var modifiedProduct = 상품상세를_조회한다(id);
+        Assertions.assertAll(
+                () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
+                () -> assertThat(modifiedProduct.jsonPath().getString("status")).isEqualTo("판매완료")
+        );
+    }
 }

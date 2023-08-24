@@ -71,4 +71,8 @@ public class Product {
         this.images = images;
         this.region = region;
     }
+
+    public void modifyStatus(String status) {
+        this.status = Status.findByName(status);
+    }
 }
