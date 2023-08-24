@@ -7,6 +7,7 @@ import com.codesquad.secondhand.application.port.in.request.ProductModifyRequest
 import com.codesquad.secondhand.application.port.in.response.ProductDetail;
 import com.codesquad.secondhand.application.port.out.ProductRepository;
 import com.codesquad.secondhand.domain.product.Product;
+import java.time.LocalDateTime;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,14 +22,14 @@ public class ProductService implements ProductUseCase {
     @Override
     public Long save(ProductCreateRequest productCreateRequest, String email) {
         return productRepository.save(new Product(productCreateRequest.getName(), productCreateRequest.getContent(),
-                productCreateRequest.getPrice(), null, null, null, null)).getId();
+                productCreateRequest.getPrice(), null, null, null, null, LocalDateTime.now())).getId();
     }
 
     @Override
     public ProductDetail getDetails(Long id) {
         Product product = productRepository.findById(id).orElseThrow();
         return new ProductDetail(product.getId(), null, product.getName(), null, null, null,
-                product.getContent(), product.getPrice(), null, null);
+                product.getContent(), product.getPrice(), null, product.getCreatedAt());
     }
 
     @Transactional

@@ -2,6 +2,7 @@ package com.codesquad.secondhand.domain.product;
 
 import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.region.Region;
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -41,9 +42,11 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "region_id")
     private Region region;
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
 
     public Product(String name, String content, int price, Member writer, Category category, Images images,
-            Region region) {
+            Region region, LocalDateTime createdAt) {
         this.name = name;
         this.content = content;
         this.price = price;
@@ -51,6 +54,7 @@ public class Product {
         this.category = category;
         this.images = images;
         this.region = region;
+        this.createdAt = createdAt;
     }
 
     public void modifyProduct(String name, String content, int price, Category category, Images images,
