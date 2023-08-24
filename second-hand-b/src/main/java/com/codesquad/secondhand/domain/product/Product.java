@@ -5,8 +5,6 @@ import com.codesquad.secondhand.domain.region.Region;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -35,7 +33,7 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "writer_id")
     private Member writer;
-    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Category category;
     @Embedded
     private Images images;
@@ -49,6 +47,16 @@ public class Product {
         this.content = content;
         this.price = price;
         this.writer = writer;
+        this.category = category;
+        this.images = images;
+        this.region = region;
+    }
+
+    public void modifyProduct(String name, String content, int price, Category category, Images images,
+            Region region) {
+        this.name = name;
+        this.content = content;
+        this.price = price;
         this.category = category;
         this.images = images;
         this.region = region;
