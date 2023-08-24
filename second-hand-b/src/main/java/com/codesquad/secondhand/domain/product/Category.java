@@ -1,12 +1,19 @@
 package com.codesquad.secondhand.domain.product;
 
-public enum Category {
-    DIGITAL("디지털기기"),
-    INTERIOR("가구/인테리어");
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-    private final String name;
+@Entity
+@Table(name = "category")
+public class Category {
 
-    Category(String name) {
-        this.name = name;
-    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(nullable = false)
+    private String name;
 }
