@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -42,11 +44,13 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "region_id")
     private Region region;
+    @Enumerated(EnumType.STRING)
+    private Status status;
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
     public Product(String name, String content, int price, Member writer, Category category, Images images,
-            Region region, LocalDateTime createdAt) {
+            Region region, Status status, LocalDateTime createdAt) {
         this.name = name;
         this.content = content;
         this.price = price;
@@ -54,6 +58,7 @@ public class Product {
         this.category = category;
         this.images = images;
         this.region = region;
+        this.status = status;
         this.createdAt = createdAt;
     }
 
