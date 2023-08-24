@@ -14,10 +14,6 @@ import org.springframework.http.MediaType;
 
 public class AcceptanceSteps {
 
-    public static void 상품등록을_검증한다(ExtractableResponse<Response> response) {
-        assertThat(response.jsonPath().getString("id")).isEqualTo("1");
-    }
-
     public static ExtractableResponse<Response> 상품을_등록한다() {
         Map<String, Object> body = new HashMap<>();
         body.put("name", "상품명");
@@ -33,7 +29,17 @@ public class AcceptanceSteps {
                 .then().log().all().extract();
     }
 
-    public static void 상품_상세를_검증한다(ExtractableResponse<Response> response) {
+    public static void 상품등록을_검증한다(ExtractableResponse<Response> response) {
+        assertThat(response.jsonPath().getString("id")).isEqualTo("1");
+    }
+
+    public static ExtractableResponse<Response> 상품상세를_조회한다(Long id) {
+        return RestAssured.given().log().all()
+                .when().get("/api/products/{productId}", id)
+                .then().log().all().extract();
+    }
+
+    public static void 상품상세조회를_검증한다(ExtractableResponse<Response> response) {
         Assertions.assertAll(
                 () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
                 () -> assertThat(response.jsonPath().getString("id")).isEqualTo("1"),
@@ -43,9 +49,30 @@ public class AcceptanceSteps {
         );
     }
 
-    public static ExtractableResponse<Response> 상품_상세를_조회한다(Long id) {
+    public static ExtractableResponse<Response> 상품을_수정한다(Long id) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("name", "상품명 수정");
+        body.put("categoryId", 2);
+        body.put("price", 200000);
+        body.put("content", "상품 내용을 수정");
+        body.put("region", 3);
+        body.put("imagesId", List.of(2, 3, 4));
+
         return RestAssured.given().log().all()
-                .when().get("/api/products/{productId}", id)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(body)
+                .when().put("/api/products/{productId}", id)
                 .then().log().all().extract();
+    }
+
+    public static void 상품수정을_검증한다(Long id, ExtractableResponse<Response> response) {
+        var modifiedProduct = 상품상세를_조회한다(id);
+        Assertions.assertAll(
+                () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
+                () -> assertThat(modifiedProduct.jsonPath().getString("id")).isEqualTo("1"),
+                () -> assertThat(modifiedProduct.jsonPath().getString("productName")).isEqualTo("상품명 수정"),
+                () -> assertThat(modifiedProduct.jsonPath().getString("content")).isEqualTo("상품 내용을 수정"),
+                () -> assertThat(modifiedProduct.jsonPath().getInt("price")).isEqualTo(200000)
+        );
     }
 }

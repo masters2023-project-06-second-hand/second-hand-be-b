@@ -2,6 +2,7 @@ package com.codesquad.secondhand.adapter.in.web;
 
 import com.codesquad.secondhand.application.port.in.ProductUseCase;
 import com.codesquad.secondhand.application.port.in.request.ProductCreateRequest;
+import com.codesquad.secondhand.application.port.in.request.ProductModifyRequest;
 import com.codesquad.secondhand.application.port.in.response.ProductDetail;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,5 +35,12 @@ public class ProductController {
         ProductDetail productDetail = productUseCase.getDetails(productId);
         return ResponseEntity.ok()
                 .body(productDetail);
+    }
+
+    @PutMapping("/{productId}")
+    public ResponseEntity<Void> modify(@PathVariable Long productId,
+            @RequestBody ProductModifyRequest productModifyRequest) {
+        productUseCase.modify(productId, productModifyRequest);
+        return ResponseEntity.ok().build();
     }
 }

@@ -10,5 +10,5 @@ public interface ProductUseCase {
 
     ProductDetail getDetails(Long id);
 
-    void modify(ProductModifyRequest productModifyRequest);
+    void modify(Long id, ProductModifyRequest productModifyRequest);
 }

@@ -33,7 +33,8 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "writer_id")
     private Member writer;
-    @Column(nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "category_id")
     private Category category;
     @Embedded
     private Images images;

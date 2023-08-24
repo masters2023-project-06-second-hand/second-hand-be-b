@@ -33,8 +33,8 @@ public class ProductService implements ProductUseCase {
 
     @Transactional
     @Override
-    public void modify(ProductModifyRequest request) {
-        Product product = productRepository.findById(request.getId()).orElseThrow();
+    public void modify(Long id, ProductModifyRequest request) {
+        Product product = productRepository.findById(id).orElseThrow();
         product.modifyProduct(request.getName(), request.getContent(), request.getPrice(), null, null, null);
     }
 }
