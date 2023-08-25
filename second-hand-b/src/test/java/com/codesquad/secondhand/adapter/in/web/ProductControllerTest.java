@@ -9,13 +9,24 @@ import static com.codesquad.secondhand.adapter.in.web.AcceptanceSteps.상품수�
 import static com.codesquad.secondhand.adapter.in.web.AcceptanceSteps.상품을_등록한다;
 import static com.codesquad.secondhand.adapter.in.web.AcceptanceSteps.상품을_수정한다;
 
+import com.codesquad.secondhand.utils.DatabaseCleanup;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 class ProductControllerTest {
+
+    @Autowired
+    private DatabaseCleanup databaseCleanup;
+
+    @BeforeEach
+    public void setUp() {
+        databaseCleanup.execute();
+    }
 
     @Test
     @DisplayName("상품 등록 요청이 오면 상품 아이디를 반환한다.")
