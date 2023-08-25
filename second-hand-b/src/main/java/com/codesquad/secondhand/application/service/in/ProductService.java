@@ -22,15 +22,14 @@ public class ProductService implements ProductUseCase {
     @Transactional
     @Override
     public Long save(ProductCreateRequest productCreateRequest, String email) {
-        return productRepository.save(new Product(productCreateRequest.getName(), productCreateRequest.getContent(),
-                productCreateRequest.getPrice(), null, null, null, null, Status.ONSALES, LocalDateTime.now())).getId();
+        Product product = toProduct(productCreateRequest);
+        return productRepository.save(product).getId();
     }
 
     @Override
     public ProductDetail getDetails(Long id) {
         Product product = productRepository.findById(id).orElseThrow();
-        return new ProductDetail(product.getId(), null, product.getName(), null, null, product.getStatus().getName(),
-                product.getContent(), product.getPrice(), null, product.getCreatedAt());
+        return toProductDetail(product);
     }
 
     @Transactional
@@ -45,5 +44,15 @@ public class ProductService implements ProductUseCase {
     public void modifyStatus(Long id, String status) {
         Product product = productRepository.findById(id).orElseThrow();
         product.modifyStatus(status);
+    }
+
+    private static Product toProduct(ProductCreateRequest productCreateRequest) {
+        return new Product(productCreateRequest.getName(), productCreateRequest.getContent(),
+                productCreateRequest.getPrice(), null, null, null, null, Status.ONSALES, LocalDateTime.now());
+    }
+
+    private static ProductDetail toProductDetail(Product product) {
+        return new ProductDetail(product.getId(), null, product.getName(), null, null,
+                product.getStatus().getName(), product.getContent(), product.getPrice(), null, product.getCreatedAt());
     }
 }

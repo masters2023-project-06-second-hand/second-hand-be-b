@@ -1,5 +1,7 @@
 package com.codesquad.secondhand.domain.product;
 
+import java.util.Arrays;
+
 public enum Status {
     ONSALES("판매중"),
     RESERVED("예약중"),
@@ -16,11 +18,9 @@ public enum Status {
     }
 
     public static Status findByName(String name) {
-        for (Status status : values()) {
-            if (status.name.equals(name)) {
-                return status;
-            }
-        }
-        return null;
+        return Arrays.stream(values())
+                .filter(status -> status.name.equals(name))
+                .findFirst()
+                .orElse(null);
     }
 }

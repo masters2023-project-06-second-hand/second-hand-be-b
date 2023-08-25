@@ -19,8 +19,4 @@ public class Region {
     private Long id;
     @Column(nullable = false)
     private String name;
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 }

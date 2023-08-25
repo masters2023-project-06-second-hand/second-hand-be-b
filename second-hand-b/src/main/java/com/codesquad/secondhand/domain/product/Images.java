@@ -13,10 +13,4 @@ public class Images {
 
     @OneToMany(mappedBy = "id")
     private List<Image> imageList;
-
-    public void modifyImagesId(List<Long> imagesId) {
-        for (int i = 0; i < imageList.size(); i++) {
-            imageList.get(i).setId(imagesId.get(i));
-        }
-    }
 }

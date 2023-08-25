@@ -19,8 +19,4 @@ public class Image {
     private Long id;
     @Column(nullable = false)
     private String url;
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 }
