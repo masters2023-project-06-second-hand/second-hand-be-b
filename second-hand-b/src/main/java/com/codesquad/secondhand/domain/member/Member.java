@@ -1,5 +1,6 @@
 package com.codesquad.secondhand.domain.member;
 
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "member")
-public class Member {
+public class Member implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,4 +26,25 @@ public class Member {
     private String profileImage;
     @Embedded
     private Regions regions;
+    private Role role;
+
+    public Member(String email, String nickname, String profileImage, Regions regions, Role role) {
+        this.email = email;
+        this.nickname = nickname;
+        this.profileImage = profileImage;
+        this.regions = regions;
+        this.role = role;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public Role getRole() {
+        return role;
+    }
 }
