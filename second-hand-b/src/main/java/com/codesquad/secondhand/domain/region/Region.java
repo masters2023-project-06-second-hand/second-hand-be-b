@@ -1,5 +1,6 @@
 package com.codesquad.secondhand.domain.region;
 
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "region")
-public class Region {
+public class Region implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
