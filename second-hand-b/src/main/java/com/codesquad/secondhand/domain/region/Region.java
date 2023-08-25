@@ -13,8 +13,9 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "region")
 public class Region {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
     private String name;

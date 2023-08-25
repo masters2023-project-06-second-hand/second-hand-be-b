@@ -2,6 +2,7 @@ package com.codesquad.secondhand.domain.product;
 
 import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.region.Region;
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -24,7 +25,7 @@ import lombok.NoArgsConstructor;
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
     private String name;
@@ -35,16 +36,21 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "writer_id")
     private Member writer;
-    @Enumerated(EnumType.STRING)
+    @ManyToOne
+    @JoinColumn(name = "category_id")
     private Category category;
     @Embedded
     private Images images;
     @ManyToOne
     @JoinColumn(name = "region_id")
     private Region region;
+    @Enumerated(EnumType.STRING)
+    private Status status;
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
 
     public Product(String name, String content, int price, Member writer, Category category, Images images,
-            Region region) {
+            Region region, Status status, LocalDateTime createdAt) {
         this.name = name;
         this.content = content;
         this.price = price;
@@ -52,5 +58,21 @@ public class Product {
         this.category = category;
         this.images = images;
         this.region = region;
+        this.status = status;
+        this.createdAt = createdAt;
+    }
+
+    public void modifyProduct(String name, String content, int price, Category category, Images images,
+            Region region) {
+        this.name = name;
+        this.content = content;
+        this.price = price;
+        this.category = category;
+        this.images = images;
+        this.region = region;
+    }
+
+    public void modifyStatus(String status) {
+        this.status = Status.findByName(status);
     }
 }
