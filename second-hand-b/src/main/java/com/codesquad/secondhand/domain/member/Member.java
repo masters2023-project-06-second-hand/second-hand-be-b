@@ -19,20 +19,25 @@ public class Member implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(nullable = false)
     private String email;
+
     @Column(nullable = false)
     private String nickname;
+
     private String profileImage;
+
     @Embedded
-    private Regions regions;
+    private MemberRegions memberRegions;
+
     private Role role;
 
-    public Member(String email, String nickname, String profileImage, Regions regions, Role role) {
+    public Member(String email, String nickname, String profileImage, MemberRegions memberRegions, Role role) {
         this.email = email;
         this.nickname = nickname;
         this.profileImage = profileImage;
-        this.regions = regions;
+        this.memberRegions = memberRegions;
         this.role = role;
     }
 
