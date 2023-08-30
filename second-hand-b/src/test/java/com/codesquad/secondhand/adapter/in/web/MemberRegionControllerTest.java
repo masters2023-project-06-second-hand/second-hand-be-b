@@ -4,6 +4,10 @@ import static com.codesquad.secondhand.adapter.in.web.MemberRegionSteps.멤버�
 import static com.codesquad.secondhand.adapter.in.web.MemberRegionSteps.멤버의_지역을_추가한다;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.restassured.RestAssured;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,5 +45,26 @@ class MemberRegionControllerTest {
 
         //then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
+    }
+
+    @Test
+    @DisplayName("멤버의 지역 목록 조회 요청을 받으면 멤버의 지역 목록을 반환한다.")
+    void getRegionsOfMember() {
+        //given
+        Long memberId = 1L;
+        Long regionId = 1L;
+        멤버의_지역을_추가한다(memberId, regionId);
+
+        //when
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
+                .when().get("/api/members/{memberId}/regions", memberId)
+                .then().log().all().extract();
+
+        //then
+        Assertions.assertAll(
+                () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value()),
+                () -> assertThat(response.jsonPath().getLong("selectedRegionId")).isEqualTo(1L),
+                () -> assertThat(response.jsonPath().getList("regions.id")).contains(1L)
+        );
     }
 }
