@@ -1,11 +1,13 @@
 package com.codesquad.secondhand.adapter.in.web;
 
 import com.codesquad.secondhand.application.port.in.MemberRegionUseCase;
+import com.codesquad.secondhand.application.port.in.response.MemberRegionList;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +33,13 @@ public class MemberRegionController {
             @RequestBody Map<String, Long> request) {
         memberRegionUseCase.removeRegionFromMember(memberId, request.get("id"));
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping
+    public ResponseEntity<MemberRegionList> getRegionsOfMember(@PathVariable Long memberId) {
+        MemberRegionList memberRegionList = memberRegionUseCase.getRegionsOfMember(memberId);
+        return ResponseEntity.ok()
+                .body(memberRegionList);
     }
 }
 

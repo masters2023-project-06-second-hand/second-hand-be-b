@@ -52,8 +52,10 @@ class MemberRegionControllerTest {
     void getRegionsOfMember() {
         //given
         Long memberId = 1L;
-        Long regionId = 1L;
-        멤버의_지역을_추가한다(memberId, regionId);
+        Long regionId1 = 1L;
+        Long regionId2 = 2L;
+        멤버의_지역을_추가한다(memberId, regionId1);
+        멤버의_지역을_추가한다(memberId, regionId2);
 
         //when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
@@ -62,9 +64,10 @@ class MemberRegionControllerTest {
 
         //then
         Assertions.assertAll(
-                () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value()),
+                () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
                 () -> assertThat(response.jsonPath().getLong("selectedRegionId")).isEqualTo(1L),
-                () -> assertThat(response.jsonPath().getList("regions.id")).contains(1L)
+                () -> assertThat(response.jsonPath().getList("regions.id")).hasSize(2),
+                () -> assertThat(response.jsonPath().getList("regions.id")).contains(1, 2)
         );
     }
 }

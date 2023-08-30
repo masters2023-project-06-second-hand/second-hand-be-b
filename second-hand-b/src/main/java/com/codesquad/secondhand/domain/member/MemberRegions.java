@@ -20,6 +20,10 @@ public class MemberRegions implements Serializable {
             joinColumns = @JoinColumn(name = "member_id", referencedColumnName = "id"))
     private List<Region> regions = new ArrayList<>();
 
+    public List<Region> getRegions() {
+        return regions;
+    }
+
     public void addRegion(Region region) {
         regions.add(region);
     }

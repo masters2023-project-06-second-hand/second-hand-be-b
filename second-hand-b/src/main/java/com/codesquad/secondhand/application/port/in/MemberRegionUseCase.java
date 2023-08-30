@@ -1,5 +1,7 @@
 package com.codesquad.secondhand.application.port.in;
 
+import com.codesquad.secondhand.application.port.in.response.MemberRegionList;
+
 public interface MemberRegionUseCase {
 
     /**
@@ -17,4 +19,12 @@ public interface MemberRegionUseCase {
      * @param regionId Region의 식별 ID
      */
     void removeRegionFromMember(Long memberId, Long regionId);
+
+    /**
+     * memberId에 해당하는 멤버의 선택된 Region ID와 Region 목록을 조회한다.
+     *
+     * @param memberId Member의 식별 ID
+     * @return 선택된 Region ID와 Region 목록을 가지는 DTO
+     */
+    MemberRegionList getRegionsOfMember(Long memberId);
 }

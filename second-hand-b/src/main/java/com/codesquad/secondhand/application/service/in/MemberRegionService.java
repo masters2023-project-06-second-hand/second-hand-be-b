@@ -2,6 +2,7 @@ package com.codesquad.secondhand.application.service.in;
 
 
 import com.codesquad.secondhand.application.port.in.MemberRegionUseCase;
+import com.codesquad.secondhand.application.port.in.response.MemberRegionList;
 import com.codesquad.secondhand.application.port.out.MemberRepository;
 import com.codesquad.secondhand.application.port.out.RegionRepository;
 import com.codesquad.secondhand.domain.member.Member;
@@ -31,5 +32,11 @@ public class MemberRegionService implements MemberRegionUseCase {
         Member member = memberRepository.findById(memberId).orElseThrow();
         Region region = regionRepository.findById(regionId).orElseThrow();
         member.removeRegion(region);
+    }
+
+    @Override
+    public MemberRegionList getRegionsOfMember(Long memberId) {
+        return memberRepository.findById(memberId).orElseThrow()
+                .fetchRegionListInfo();
     }
 }
