@@ -13,6 +13,11 @@ public class MemberRepositoryImpl implements MemberRepository {
     private final UserJpaRepository userJpaRepository;
 
     @Override
+    public Optional<Member> findById(Long id) {
+        return userJpaRepository.findById(id);
+    }
+
+    @Override
     public Optional<Member> findByEmail(String email) {
         return userJpaRepository.findByEmail(email);
     }

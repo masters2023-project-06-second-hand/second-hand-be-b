@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Assertions;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-public class AcceptanceSteps {
+public class ProductSteps {
 
     public static ExtractableResponse<Response> 상품을_등록한다() {
         Map<String, Object> body = new HashMap<>();

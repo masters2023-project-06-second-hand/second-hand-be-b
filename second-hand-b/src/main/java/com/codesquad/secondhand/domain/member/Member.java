@@ -1,9 +1,12 @@
 package com.codesquad.secondhand.domain.member;
 
+import com.codesquad.secondhand.domain.region.Region;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,6 +34,7 @@ public class Member implements Serializable {
     @Embedded
     private MemberRegions memberRegions;
 
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     public Member(String email, String nickname, String profileImage, MemberRegions memberRegions, Role role) {
@@ -51,5 +55,9 @@ public class Member implements Serializable {
 
     public Role getRole() {
         return role;
+    }
+
+    public void addRegion(Region region) {
+        memberRegions.addRegion(region);
     }
 }
