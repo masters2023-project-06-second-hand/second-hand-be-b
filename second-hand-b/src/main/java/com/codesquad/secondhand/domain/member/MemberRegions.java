@@ -23,4 +23,8 @@ public class MemberRegions implements Serializable {
     public void addRegion(Region region) {
         regions.add(region);
     }
+
+    public void removeRegion(Region region) {
+        regions.remove(region);
+    }
 }

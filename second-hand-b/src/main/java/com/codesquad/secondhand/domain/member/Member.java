@@ -64,4 +64,8 @@ public class Member implements Serializable {
     public void addRegion(Region region) {
         memberRegions.addRegion(region);
     }
+
+    public void removeRegion(Region region) {
+        memberRegions.removeRegion(region);
+    }
 }

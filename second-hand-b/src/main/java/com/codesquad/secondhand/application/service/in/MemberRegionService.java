@@ -24,4 +24,12 @@ public class MemberRegionService implements MemberRegionUseCase {
         Region region = regionRepository.findById(regionId).orElseThrow();
         member.addRegion(region);
     }
+
+    @Transactional
+    @Override
+    public void removeRegionFromMember(Long memberId, Long regionId) {
+        Member member = memberRepository.findById(memberId).orElseThrow();
+        Region region = regionRepository.findById(regionId).orElseThrow();
+        member.removeRegion(region);
+    }
 }
