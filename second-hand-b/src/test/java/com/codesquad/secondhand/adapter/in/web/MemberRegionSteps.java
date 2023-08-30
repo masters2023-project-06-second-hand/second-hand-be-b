@@ -17,4 +17,14 @@ public class MemberRegionSteps {
                 .when().post("/api/members/{memberId}/regions", memberId)
                 .then().log().all().extract();
     }
+
+    public static ExtractableResponse<Response> 멤버의_지역을_삭제한다(Long memberId, Long regionId) {
+        Map<String, Object> body = Map.of("id", regionId);
+
+        return RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(body)
+                .when().delete("/api/members/{memberId}/regions", memberId)
+                .then().log().all().extract();
+    }
 }
