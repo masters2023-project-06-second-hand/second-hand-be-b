@@ -53,6 +53,10 @@ public class Member implements Serializable {
         return email;
     }
 
+    public String getNickname() {
+        return nickname;
+    }
+
     public Role getRole() {
         return role;
     }
