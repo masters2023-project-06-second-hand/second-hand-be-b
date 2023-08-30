@@ -39,4 +39,12 @@ public class MemberRegionService implements MemberRegionUseCase {
         return memberRepository.findById(memberId).orElseThrow()
                 .fetchRegionListInfo();
     }
+
+    @Transactional
+    @Override
+    public void selectRegionForMember(Long memberId, Long regionId) {
+        Member member = memberRepository.findById(memberId).orElseThrow();
+        Region region = regionRepository.findById(regionId).orElseThrow();
+        member.selectRegion(region);
+    }
 }

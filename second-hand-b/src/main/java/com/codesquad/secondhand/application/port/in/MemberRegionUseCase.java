@@ -27,4 +27,12 @@ public interface MemberRegionUseCase {
      * @return 선택된 Region ID와 Region 목록을 가지는 DTO
      */
     MemberRegionList getRegionsOfMember(Long memberId);
+
+    /**
+     * memberId에 해당하는 멤버의 selectedRegionId를 regionId로 선택(수정)한다.
+     *
+     * @param memberId Member의 식별 ID
+     * @param regionId 선택되는 Region의 식별 ID
+     */
+    void selectRegionForMember(Long memberId, Long regionId);
 }

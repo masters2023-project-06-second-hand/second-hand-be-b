@@ -84,4 +84,8 @@ public class Member implements Serializable {
                 .collect(Collectors.toList());
         return new MemberRegionList(selectedRegion.getId(), regionInfoList);
     }
+
+    public void selectRegion(Region region) {
+        this.selectedRegion = region;
+    }
 }
