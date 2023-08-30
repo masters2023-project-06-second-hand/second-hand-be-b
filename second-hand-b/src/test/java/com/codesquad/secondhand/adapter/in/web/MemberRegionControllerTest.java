@@ -1,5 +1,7 @@
 package com.codesquad.secondhand.adapter.in.web;
 
+import static com.codesquad.secondhand.adapter.in.web.MemberRegionSteps.멤버의_지역목록_조회를_검증한다;
+import static com.codesquad.secondhand.adapter.in.web.MemberRegionSteps.멤버의_지역목록을_조회한다;
 import static com.codesquad.secondhand.adapter.in.web.MemberRegionSteps.멤버의_지역을_삭제한다;
 import static com.codesquad.secondhand.adapter.in.web.MemberRegionSteps.멤버의_지역을_추가한다;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -7,12 +9,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import java.util.Map;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 class MemberRegionControllerTest {
@@ -58,16 +62,32 @@ class MemberRegionControllerTest {
         멤버의_지역을_추가한다(memberId, regionId2);
 
         //when
+        var response = 멤버의_지역목록을_조회한다(memberId);
+
+        //then
+        멤버의_지역목록_조회를_검증한다(response);
+    }
+
+    @Test
+    @DisplayName("멤버의 지역 선택 요청이 오면 요청을 수행하고 200 상태코드로 응답한다.")
+    void selectRegionForMember() {
+        //given
+        Long memberId = 1L;
+        Long regionId = 2L;
+        Map<String, Object> body = Map.of("id", regionId);
+
+        //when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .when().get("/api/members/{memberId}/regions", memberId)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(body)
+                .when().put("/api/members/{memberId}/regions", memberId)
                 .then().log().all().extract();
 
         //then
+        var memberRegionList = 멤버의_지역목록을_조회한다(memberId);
         Assertions.assertAll(
                 () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
-                () -> assertThat(response.jsonPath().getLong("selectedRegionId")).isEqualTo(1L),
-                () -> assertThat(response.jsonPath().getList("regions.id")).hasSize(2),
-                () -> assertThat(response.jsonPath().getList("regions.id")).contains(1, 2)
+                () -> assertThat(memberRegionList.jsonPath().getLong("selectedRegionId")).isEqualTo(2)
         );
     }
 }

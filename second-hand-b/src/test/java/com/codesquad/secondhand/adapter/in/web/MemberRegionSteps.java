@@ -1,9 +1,13 @@
 package com.codesquad.secondhand.adapter.in.web;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.util.Map;
+import org.junit.jupiter.api.Assertions;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 public class MemberRegionSteps {
@@ -26,5 +30,20 @@ public class MemberRegionSteps {
                 .body(body)
                 .when().delete("/api/members/{memberId}/regions", memberId)
                 .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 멤버의_지역목록을_조회한다(Long memberId) {
+        return RestAssured.given().log().all()
+                .when().get("/api/members/{memberId}/regions", memberId)
+                .then().log().all().extract();
+    }
+
+    public static void 멤버의_지역목록_조회를_검증한다(ExtractableResponse<Response> response) {
+        Assertions.assertAll(
+                () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
+                () -> assertThat(response.jsonPath().getLong("selectedRegionId")).isEqualTo(1L),
+                () -> assertThat(response.jsonPath().getList("regions")).hasSize(2),
+                () -> assertThat(response.jsonPath().getList("regions.id")).contains(1, 2)
+        );
     }
 }
