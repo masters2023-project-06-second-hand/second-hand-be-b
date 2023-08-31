@@ -1,6 +1,5 @@
 package com.codesquad.secondhand.domain.member;
 
-import com.codesquad.secondhand.application.port.in.response.MemberRegionList;
 import com.codesquad.secondhand.application.port.in.response.RegionInfo;
 import com.codesquad.secondhand.domain.region.Region;
 import java.io.Serializable;
@@ -66,6 +65,10 @@ public class Member implements Serializable {
         return nickname;
     }
 
+    public Region getSelectedRegion() {
+        return selectedRegion;
+    }
+
     public Role getRole() {
         return role;
     }
@@ -78,11 +81,10 @@ public class Member implements Serializable {
         memberRegions.removeRegion(region);
     }
 
-    public MemberRegionList fetchRegionListInfo() {
-        List<RegionInfo> regionInfoList = memberRegions.getRegions().stream()
+    public List<RegionInfo> fetchRegionInfoList() {
+        return memberRegions.getRegions().stream()
                 .map(region -> new RegionInfo(region.getId(), region.getName()))
                 .collect(Collectors.toList());
-        return new MemberRegionList(selectedRegion.getId(), regionInfoList);
     }
 
     public void selectRegion(Region region) {

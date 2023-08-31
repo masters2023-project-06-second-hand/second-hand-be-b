@@ -42,9 +42,10 @@ public class MemberRegionService implements MemberRegionUseCase {
 
     @Override
     public MemberRegionList getRegionsOfMember(Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(MemberNotFoundException::new)
-                .fetchRegionListInfo();
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(MemberNotFoundException::new);
+        return new MemberRegionList(member.getSelectedRegion().getId(),
+                member.fetchRegionInfoList());
     }
 
     @Transactional
