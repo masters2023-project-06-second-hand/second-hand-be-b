@@ -18,4 +18,8 @@ public class Category {
     private String name;
     @Column(nullable = false)
     private String imgUrl;
+
+    public String getName() {
+        return name;
+    }
 }

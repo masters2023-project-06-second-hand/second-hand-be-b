@@ -12,16 +12,16 @@ import org.junit.jupiter.api.Assertions;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-public class AcceptanceSteps {
+public class ProductSteps {
 
     public static ExtractableResponse<Response> 상품을_등록한다() {
         Map<String, Object> body = new HashMap<>();
         body.put("name", "상품명");
-        body.put("categoryId", "1");
-        body.put("price", "100000");
+        body.put("categoryId", 1);
+        body.put("price", 100000);
         body.put("content", "상품 내용");
-        body.put("region", "2");
-        body.put("imagesId", List.of("1", "2"));
+        body.put("regionId", 1);
+        body.put("imagesId", List.of(1, 2));
 
         return RestAssured.given().contentType(MediaType.APPLICATION_JSON_VALUE)
                 .log().all().body(body)

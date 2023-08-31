@@ -46,13 +46,30 @@ public class ProductService implements ProductUseCase {
         product.modifyStatus(status);
     }
 
-    private static Product toProduct(ProductCreateRequest productCreateRequest) {
-        return new Product(productCreateRequest.getName(), productCreateRequest.getContent(),
-                productCreateRequest.getPrice(), null, null, null, null, Status.ONSALES, LocalDateTime.now());
+    private Product toProduct(ProductCreateRequest productCreateRequest) {
+        // TODO: writer, category, region, images Entity 추가
+        return new Product(productCreateRequest.getName(),
+                productCreateRequest.getContent(),
+                productCreateRequest.getPrice(),
+                null,
+                null,
+                null,
+                null,
+                Status.ONSALES,
+                LocalDateTime.now());
     }
 
     private static ProductDetail toProductDetail(Product product) {
-        return new ProductDetail(product.getId(), null, product.getName(), null, null,
-                product.getStatus().getName(), product.getContent(), product.getPrice(), null, product.getCreatedAt());
+        // TODO: writer, categoryName, region, images 추가
+        return new ProductDetail(product.getId(),
+                null,
+                product.getName(),
+                null,
+                null,
+                product.getStatus().getName(),
+                product.getContent(),
+                product.getPrice(),
+                null,
+                product.getCreatedAt());
     }
 }

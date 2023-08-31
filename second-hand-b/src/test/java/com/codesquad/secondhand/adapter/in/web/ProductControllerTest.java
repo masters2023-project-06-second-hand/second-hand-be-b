@@ -1,13 +1,13 @@
 package com.codesquad.secondhand.adapter.in.web;
 
-import static com.codesquad.secondhand.adapter.in.web.AcceptanceSteps.상품등록을_검증한다;
-import static com.codesquad.secondhand.adapter.in.web.AcceptanceSteps.상품상세를_조회한다;
-import static com.codesquad.secondhand.adapter.in.web.AcceptanceSteps.상품상세조회를_검증한다;
-import static com.codesquad.secondhand.adapter.in.web.AcceptanceSteps.상품상태를_수정한다;
-import static com.codesquad.secondhand.adapter.in.web.AcceptanceSteps.상품상태수정을_검증한다;
-import static com.codesquad.secondhand.adapter.in.web.AcceptanceSteps.상품수정을_검증한다;
-import static com.codesquad.secondhand.adapter.in.web.AcceptanceSteps.상품을_등록한다;
-import static com.codesquad.secondhand.adapter.in.web.AcceptanceSteps.상품을_수정한다;
+import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품등록을_검증한다;
+import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품상세를_조회한다;
+import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품상세조회를_검증한다;
+import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품상태를_수정한다;
+import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품상태수정을_검증한다;
+import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품수정을_검증한다;
+import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품을_등록한다;
+import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품을_수정한다;
 
 import com.codesquad.secondhand.utils.DatabaseCleanup;
 import org.junit.jupiter.api.BeforeEach;
