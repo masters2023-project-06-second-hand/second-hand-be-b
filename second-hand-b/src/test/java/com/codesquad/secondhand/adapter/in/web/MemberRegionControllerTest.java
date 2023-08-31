@@ -6,13 +6,16 @@ import static com.codesquad.secondhand.adapter.in.web.MemberRegionSteps.멤버�
 import static com.codesquad.secondhand.adapter.in.web.MemberRegionSteps.멤버의_지역을_추가한다;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.codesquad.secondhand.utils.DatabaseCleanup;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.util.Map;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.HttpStatus;
@@ -21,6 +24,14 @@ import org.springframework.http.MediaType;
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 class MemberRegionControllerTest {
 
+    @Autowired
+    private DatabaseCleanup databaseCleanup;
+
+    @BeforeEach
+    public void setUp() {
+        databaseCleanup.execute();
+    }
+    
     @Test
     @DisplayName("멤버에 대한 지역 추가 요청을 받으면 요청을 수행하고 201 상태코드로 응답한다.")
     void addRegionToMember() {

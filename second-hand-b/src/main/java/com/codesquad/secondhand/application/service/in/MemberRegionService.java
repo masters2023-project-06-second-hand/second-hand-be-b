@@ -4,7 +4,7 @@ package com.codesquad.secondhand.application.service.in;
 import com.codesquad.secondhand.application.port.in.MemberRegionUseCase;
 import com.codesquad.secondhand.application.port.in.exception.MemberNotFoundException;
 import com.codesquad.secondhand.application.port.in.exception.RegionNotFoundException;
-import com.codesquad.secondhand.application.port.in.response.MemberRegionList;
+import com.codesquad.secondhand.application.port.in.response.MemberRegionInfos;
 import com.codesquad.secondhand.application.port.out.MemberRepository;
 import com.codesquad.secondhand.application.port.out.RegionRepository;
 import com.codesquad.secondhand.domain.member.Member;
@@ -41,11 +41,11 @@ public class MemberRegionService implements MemberRegionUseCase {
     }
 
     @Override
-    public MemberRegionList getRegionsOfMember(Long memberId) {
+    public MemberRegionInfos getRegionsOfMember(Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(MemberNotFoundException::new);
-        return new MemberRegionList(member.getSelectedRegion().getId(),
-                member.fetchRegionInfoList());
+        return new MemberRegionInfos(member.getSelectedRegion().getId(),
+                member.fetchRegionInfos());
     }
 
     @Transactional

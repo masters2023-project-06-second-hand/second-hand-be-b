@@ -1,6 +1,6 @@
 package com.codesquad.secondhand.application.port.in;
 
-import com.codesquad.secondhand.application.port.in.response.MemberRegionList;
+import com.codesquad.secondhand.application.port.in.response.MemberRegionInfos;
 
 public interface MemberRegionUseCase {
 
@@ -26,7 +26,7 @@ public interface MemberRegionUseCase {
      * @param memberId Member의 식별 ID
      * @return 선택된 Region ID와 Region 목록을 가지는 DTO
      */
-    MemberRegionList getRegionsOfMember(Long memberId);
+    MemberRegionInfos getRegionsOfMember(Long memberId);
 
     /**
      * memberId에 해당하는 멤버의 selectedRegionId를 regionId로 선택(수정)한다.

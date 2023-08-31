@@ -1,7 +1,7 @@
 package com.codesquad.secondhand.adapter.in.web;
 
 import com.codesquad.secondhand.application.port.in.MemberRegionUseCase;
-import com.codesquad.secondhand.application.port.in.response.MemberRegionList;
+import com.codesquad.secondhand.application.port.in.response.MemberRegionInfos;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -37,8 +37,8 @@ public class MemberRegionController {
     }
 
     @GetMapping
-    public ResponseEntity<MemberRegionList> getRegionsOfMember(@PathVariable Long memberId) {
-        MemberRegionList memberRegionList = memberRegionUseCase.getRegionsOfMember(memberId);
+    public ResponseEntity<MemberRegionInfos> getRegionsOfMember(@PathVariable Long memberId) {
+        MemberRegionInfos memberRegionList = memberRegionUseCase.getRegionsOfMember(memberId);
         return ResponseEntity.ok()
                 .body(memberRegionList);
     }

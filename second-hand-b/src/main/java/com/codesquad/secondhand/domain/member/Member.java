@@ -81,7 +81,7 @@ public class Member implements Serializable {
         memberRegions.removeRegion(region);
     }
 
-    public List<RegionInfo> fetchRegionInfoList() {
+    public List<RegionInfo> fetchRegionInfos() {
         return memberRegions.getRegions().stream()
                 .map(region -> new RegionInfo(region.getId(), region.getName()))
                 .collect(Collectors.toList());
