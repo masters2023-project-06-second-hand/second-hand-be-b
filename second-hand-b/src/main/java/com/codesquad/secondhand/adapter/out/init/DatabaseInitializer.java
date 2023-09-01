@@ -21,9 +21,11 @@ import org.springframework.util.StringUtils;
 @Component
 public class DatabaseInitializer implements ApplicationRunner {
 
-    private static final int REGION_NAME = 0;
-    private static final int CATEGORY_NAME = 0;
-    private static final int CATEGORY_IMGURL = 1;
+    private static final int REGION_NAME_INDEX = 0;
+    private static final int CATEGORY_NAME_INDEX = 0;
+    private static final int CATEGORY_IMG_URL_INDEX = 1;
+    private static final String REGION_FILE_PATH = "/data/region_data.csv";
+    private static final String CATEGORY_FILE_PATH = "/data/category_data.csv";
 
     @Autowired
     private RegionRepository regionRepository;
@@ -38,7 +40,7 @@ public class DatabaseInitializer implements ApplicationRunner {
     }
 
     private void initializeRegion() throws IOException {
-        ClassPathResource resource = new ClassPathResource("/data/region_data.csv");
+        ClassPathResource resource = new ClassPathResource(REGION_FILE_PATH);
         InputStream is = resource.getInputStream();
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
@@ -46,7 +48,7 @@ public class DatabaseInitializer implements ApplicationRunner {
         String line;
         while ((line = br.readLine()) != null) {
             String[] row = StringUtils.commaDelimitedListToStringArray(line);
-            String name = row[REGION_NAME];
+            String name = row[REGION_NAME_INDEX];
             Region region = new Region(name);
             regionsToSave.add(region);
         }
@@ -55,7 +57,7 @@ public class DatabaseInitializer implements ApplicationRunner {
     }
 
     private void initializeCategory() throws IOException {
-        ClassPathResource resource = new ClassPathResource("/data/category_data.csv");
+        ClassPathResource resource = new ClassPathResource(CATEGORY_FILE_PATH);
         InputStream is = resource.getInputStream();
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
@@ -63,8 +65,8 @@ public class DatabaseInitializer implements ApplicationRunner {
         String line;
         while ((line = br.readLine()) != null) {
             String[] row = StringUtils.commaDelimitedListToStringArray(line);
-            String name = row[CATEGORY_NAME];
-            String imgUrl = row[CATEGORY_IMGURL];
+            String name = row[CATEGORY_NAME_INDEX];
+            String imgUrl = row[CATEGORY_IMG_URL_INDEX];
             Category category = new Category(name, imgUrl);
             categoriesToSave.add(category);
         }
