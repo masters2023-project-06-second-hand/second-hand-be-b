@@ -19,6 +19,11 @@ public class Category {
     @Column(nullable = false)
     private String imgUrl;
 
+    public Category(String name, String imgUrl) {
+        this.name = name;
+        this.imgUrl = imgUrl;
+    }
+
     public String getName() {
         return name;
     }

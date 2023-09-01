@@ -28,4 +28,8 @@ public class Region implements Serializable {
     public String getName() {
         return name;
     }
+
+    public Region(String name) {
+        this.name = name;
+    }
 }
