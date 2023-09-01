@@ -14,13 +14,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtTokenProvider {
 
-    public static final SecretKey KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    public static final String IS_REGISTERED_CLAIM = "isRegistered";
-    public static final String EMAIL_CLAIM = "email";
-    public static final String SECOND_HAND_CLAIM = "second_hand";
-    public static final long THIRTY_MIN = 30 * 60 * 1000L;
+    private static final SecretKey KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private static final String IS_REGISTERED_CLAIM = "isRegistered";
+    private static final String EMAIL_CLAIM = "email";
+    private static final String SECOND_HAND_CLAIM = "second_hand";
+    private static final long THIRTY_MIN = 30 * 60 * 1000L;
+    private static final String TOKEN_DELIMITER = " ";
+    private static final int TOKEN_INDEX = 1;
 
-    public String createSignUpToken(String email, String id) {
+    public String createAccessToken(String email, String id) {
         Date startDate = new Date();
         return Jwts.builder()
                 .claim(EMAIL_CLAIM, email)
@@ -34,7 +36,11 @@ public class JwtTokenProvider {
     }
 
     public String resolveToken(HttpServletRequest request) {
-        return request.getHeader(HttpHeaders.AUTHORIZATION);
+        String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (header == null) {
+            return null;
+        }
+        return header.split(TOKEN_DELIMITER)[TOKEN_INDEX].trim();
     }
 
     public boolean validateToken(String jwtToken) {

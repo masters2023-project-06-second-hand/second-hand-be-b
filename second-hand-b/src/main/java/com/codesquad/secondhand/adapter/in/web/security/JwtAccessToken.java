@@ -5,13 +5,13 @@ import java.util.Collection;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
-public class JwtAuthenticationToken implements Authentication {
+public class JwtAccessToken implements Authentication {
 
     private final Member member;
     private final Collection<? extends GrantedAuthority> authorities;
     private boolean isAuthenticated;
 
-    public JwtAuthenticationToken(Member member, Collection<? extends GrantedAuthority> authorities) {
+    public JwtAccessToken(Member member, Collection<? extends GrantedAuthority> authorities) {
         this.member = member;
         this.authorities = authorities;
     }

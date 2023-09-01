@@ -10,20 +10,20 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class MemberRepositoryImpl implements MemberRepository {
 
-    private final UserJpaRepository userJpaRepository;
+    private final MemberJpaRepository memberJpaRepository;
 
     @Override
     public Optional<Member> findById(Long id) {
-        return userJpaRepository.findById(id);
+        return memberJpaRepository.findById(id);
     }
 
     @Override
     public Optional<Member> findByEmail(String email) {
-        return userJpaRepository.findByEmail(email);
+        return memberJpaRepository.findByEmail(email);
     }
 
     @Override
     public Member save(Member member) {
-        return userJpaRepository.save(member);
+        return memberJpaRepository.save(member);
     }
 }
