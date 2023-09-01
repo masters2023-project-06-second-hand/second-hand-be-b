@@ -4,10 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
-import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Table;
 import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -24,9 +22,8 @@ public class DatabaseCleanup {
 
     @PostConstruct
     public void init() {
-        tabelNames = entityManager.getMetamodel().getEntities().stream()
-                .filter(entity -> entity.getJavaType().getAnnotation(Entity.class) != null)
-                .map(entity -> entity.getJavaType().getAnnotation(Table.class).name())
+        tabelNames = (List<String>) entityManager.createNativeQuery("SHOW TABLES").getResultList()
+                .stream()
                 .filter(tableName -> !excludeTables.contains(tableName))
                 .collect(Collectors.toList());
     }
@@ -35,7 +32,7 @@ public class DatabaseCleanup {
     public void execute() {
         entityManager.flush();
         entityManager.createNativeQuery("SET FOREIGN_KEY_CHECKS = 0").executeUpdate();
-        for (Object tableName : tabelNames) {
+        for (String tableName : tabelNames) {
             entityManager.createNativeQuery("TRUNCATE TABLE " + tableName).executeUpdate();
             entityManager.createNativeQuery("ALTER TABLE " + tableName + " AUTO_INCREMENT = 1")
                     .executeUpdate();

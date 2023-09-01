@@ -22,7 +22,7 @@ public class MemberService implements MemberUseCase {
     @Override
     public String signIn(String email) {
         Member member = getByEmail(email);
-        return jwtTokenProvider.createSignUpToken(member.getEmail(), String.valueOf(member.getId()));
+        return jwtTokenProvider.createAccessToken(member.getEmail(), String.valueOf(member.getId()));
     }
 
     @Transactional
@@ -30,7 +30,7 @@ public class MemberService implements MemberUseCase {
     public String signUp(String email, SignUpRequest signUpRequest) {
         Member member = toMember(email, signUpRequest);
         Member savedMember = memberRepository.save(member);
-        return jwtTokenProvider.createSignUpToken(savedMember.getEmail(), String.valueOf(savedMember.getId()));
+        return jwtTokenProvider.createAccessToken(savedMember.getEmail(), String.valueOf(savedMember.getId()));
     }
 
     private Member getByEmail(String email) {

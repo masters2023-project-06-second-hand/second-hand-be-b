@@ -3,6 +3,8 @@ package com.codesquad.secondhand.domain.member;
 import com.codesquad.secondhand.application.port.in.response.RegionInfo;
 import com.codesquad.secondhand.domain.region.Region;
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.Column;
@@ -18,6 +20,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -27,16 +31,13 @@ public class Member implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(nullable = false)
     private String email;
-
     @Column(nullable = false)
     private String nickname;
     private String profileImage;
-
     @Embedded
-    private MemberRegions memberRegions;
+    private MemberRegions memberRegions = new MemberRegions();
 
     @ManyToOne
     @JoinColumn(name = "selected_region_id")
@@ -45,11 +46,12 @@ public class Member implements Serializable {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public Member(String email, String nickname, String profileImage, MemberRegions memberRegions, Role role) {
+    public Member(String email, String nickname, String profileImage, Region region, Role role) {
         this.email = email;
         this.nickname = nickname;
         this.profileImage = profileImage;
-        this.memberRegions = memberRegions;
+        this.memberRegions.addRegion(region);
+        this.selectedRegion = region;
         this.role = role;
     }
 
@@ -89,5 +91,10 @@ public class Member implements Serializable {
 
     public void selectRegion(Region region) {
         this.selectedRegion = region;
+    }
+
+
+    public Collection<GrantedAuthority> getRoleAuthority() {
+        return Collections.singleton(new SimpleGrantedAuthority(role.getKey()));
     }
 }
