@@ -1,7 +1,10 @@
 package com.codesquad.secondhand.adapter.in.web.exception;
 
-import com.codesquad.secondhand.application.port.in.exception.BusinessException;
-import com.codesquad.secondhand.application.port.in.exception.ErrorResponse;
+import com.codesquad.secondhand.application.port.in.exception.NotRegisteredMemberException;
+import java.net.URI;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -9,9 +12,15 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class BusinessExceptionHandler {
 
-    @ExceptionHandler(value = BusinessException.class)
-    public ResponseEntity<ErrorResponse> businessExceptionHandler(BusinessException businessException) {
-        return ResponseEntity.badRequest()
-                .body(businessException.getErrorResponse());
+    private static final String BEARER_TYPE = "bearer ";
+    @Value(value = "${front.server.address}")
+    private String frontAddress;
+
+    @ExceptionHandler(value = NotRegisteredMemberException.class)
+    public ResponseEntity<Void> businessExceptionHandler(NotRegisteredMemberException notRegisteredMemberException) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create(frontAddress));
+        headers.set(HttpHeaders.AUTHORIZATION, BEARER_TYPE + notRegisteredMemberException.getToken());
+        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
     }
 }

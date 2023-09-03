@@ -1,16 +1,14 @@
 package com.codesquad.secondhand.adapter.in.web.config;
 
-import static org.springframework.security.config.Customizer.withDefaults;
-
 import com.codesquad.secondhand.adapter.in.web.config.jwt.JwtSignInAuthenticationFilter;
 import com.codesquad.secondhand.adapter.in.web.config.jwt.JwtSignUpAuthenticationFilter;
 import com.codesquad.secondhand.application.port.out.MemberRepository;
 import com.codesquad.secondhand.domain.member.Role;
 import com.codesquad.secondhand.domain.units.JwtTokenProvider;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -22,20 +20,18 @@ import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizedCli
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-@RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
+@Profile("!test")
 public class OAuth2LoginSecurityConfig {
 
-    @Autowired
-    JwtTokenProvider jwtTokenProvider;
-
-    @Autowired
-    MemberRepository memberRepository;
-
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity, JwtTokenProvider jwtTokenProvider,
+            MemberRepository memberRepository) throws Exception {
         return httpSecurity
                 .authorizeHttpRequests(
                         requestMatcherRegistry -> requestMatcherRegistry
@@ -53,8 +49,10 @@ public class OAuth2LoginSecurityConfig {
                 .addFilterBefore(
                         new JwtSignInAuthenticationFilter(jwtTokenProvider, memberRepository),
                         JwtSignUpAuthenticationFilter.class)
-                .oauth2Login(withDefaults())
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
+                .oauth2Login(configurer -> configurer.defaultSuccessUrl("/api/members/signin"))
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .cors().configurationSource(corsConfigurationSource())
                 .and()
                 .build();
     }
@@ -63,7 +61,6 @@ public class OAuth2LoginSecurityConfig {
     public DefaultOAuth2AuthorizedClientManager authorizedClientManager(
             ClientRegistrationRepository clientRegistrationRepository,
             OAuth2AuthorizedClientRepository authorizedClientRepository) {
-
         var authorizedClientProvider = OAuth2AuthorizedClientProviderBuilder.builder()
                 .authorizationCode()
                 .clientCredentials()
@@ -77,5 +74,17 @@ public class OAuth2LoginSecurityConfig {
         authorizedClientManager.setAuthorizedClientProvider(authorizedClientProvider);
 
         return authorizedClientManager;
+    }
+
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        var configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("*"));
+        configuration.setAllowedMethods(List.of("*"));
+        configuration.setAllowedHeaders(List.of("*"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }

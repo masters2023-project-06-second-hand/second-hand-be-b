@@ -1,18 +1,16 @@
 package com.codesquad.secondhand.adapter.in.web.config.jwt;
 
-import com.codesquad.secondhand.adapter.in.web.security.JwtAuthenticationToken;
+import com.codesquad.secondhand.adapter.in.web.security.JwtAccessToken;
 import com.codesquad.secondhand.application.port.out.MemberRepository;
 import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.units.JwtTokenProvider;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Optional;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -35,13 +33,15 @@ public class JwtSignInAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
         String token = jwtTokenProvider.resolveToken(request);
-        if (token != null && jwtTokenProvider.validateToken(token.split(" ")[1].trim())
-                && jwtTokenProvider.isAccessToken(token.split(" ")[1].trim())) {
-            String email = jwtTokenProvider.getEmail(token.split(" ")[1].trim());
+        if (token == null) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        if (jwtTokenProvider.validateToken(token) && jwtTokenProvider.isAccessToken(token)) {
+            String email = jwtTokenProvider.getEmail(token);
             Optional<Member> member = memberRepository.findByEmail(email);
             if (member.isPresent()) {
-                Authentication authentication = new JwtAuthenticationToken(member.get(),
-                        Collections.singleton(new SimpleGrantedAuthority(member.get().getRole().getKey())));
+                Authentication authentication = new JwtAccessToken(member.get(), member.get().getRoleAuthority());
                 authentication.setAuthenticated(true);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 filterChain.doFilter(request, response);
