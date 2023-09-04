@@ -31,35 +31,49 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(nullable = false)
     private String name;
+
     @Column(nullable = false)
     private String content;
+
     @Column(nullable = false)
     private int price;
+
     @ManyToOne
     @JoinColumn(name = "writer_id")
     private Member writer;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
     @Embedded
     private Images images = new Images();
+
+    @ManyToOne
+    @JoinColumn(name = "thumbnail_id")
+    private Image thumbnailImage;
+
     @ManyToOne
     @JoinColumn(name = "region_id")
     private Region region;
+
     @Enumerated(EnumType.STRING)
     private Status status;
+
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    public Product(String name, String content, int price, Member writer, Category category, List<Image> images,
-            Region region, Status status, LocalDateTime createdAt) {
+    public Product(String name, String content, int price, Member writer, Category category, Image thumbnailImage,
+            List<Image> images, Region region, Status status, LocalDateTime createdAt) {
         this.name = name;
         this.content = content;
         this.price = price;
         this.writer = writer;
         this.category = category;
+        this.thumbnailImage = thumbnailImage;
         modifyImages(images);
         this.region = region;
         this.status = status;

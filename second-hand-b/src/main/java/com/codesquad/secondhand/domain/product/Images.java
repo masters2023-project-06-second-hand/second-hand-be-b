@@ -3,8 +3,10 @@ package com.codesquad.secondhand.domain.product;
 import com.codesquad.secondhand.domain.image.Image;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CollectionTable;
+import javax.persistence.ElementCollection;
 import javax.persistence.Embeddable;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -12,7 +14,9 @@ import lombok.NoArgsConstructor;
 @Embeddable
 public class Images {
 
-    @OneToMany(mappedBy = "id")
+    @ElementCollection
+    @CollectionTable(name = "product_image",
+            joinColumns = @JoinColumn(name = "product_id"))
     private List<Image> imageList = new ArrayList<>();
 
     public List<Image> getImageList() {

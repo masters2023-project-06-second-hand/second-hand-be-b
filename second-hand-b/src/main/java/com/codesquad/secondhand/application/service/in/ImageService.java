@@ -37,6 +37,13 @@ public class ImageService implements ImageUseCase {
         cloudStorageService.delete(image.getUrl());
     }
 
+    public Image getById(Long id) {
+        return imageRepository.findById(id)
+                .orElseThrow(() -> {
+                    throw new ImageNotFoundException();
+                });
+    }
+
     public List<Image> getImageListById(List<Long> ids) {
         List<Image> images = imageRepository.findAllById(ids);
         if (images.size() != ids.size()) {

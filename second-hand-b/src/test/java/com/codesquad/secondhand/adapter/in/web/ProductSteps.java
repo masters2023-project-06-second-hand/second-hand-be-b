@@ -59,7 +59,8 @@ public class ProductSteps {
                 () -> assertThat(response.jsonPath().getString("content")).isEqualTo("상품 내용"),
                 () -> assertThat(response.jsonPath().getInt("price")).isEqualTo(100000),
                 () -> assertThat(response.jsonPath().getString("categoryName")).isEqualTo("인기매물"),
-                () -> assertThat(response.jsonPath().getString("regionName")).isEqualTo("서울 강남구 역삼1동")
+                () -> assertThat(response.jsonPath().getString("regionName")).isEqualTo("서울 강남구 역삼1동"),
+                () -> assertThat(response.jsonPath().getList("images.id")).containsExactly(1, 2)
         );
     }
 

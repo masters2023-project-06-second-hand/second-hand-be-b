@@ -66,12 +66,16 @@ public class ProductService implements ProductUseCase {
         // TODO: jwt id를 이용해서 writer 추가
         Region region = regionService.getById(productCreateRequest.getRegionId());
         Category category = categoryService.getById(productCreateRequest.getCategoryId());
-        List<Image> images = imageService.getImageListById(productCreateRequest.getImagesId());
+        List<Long> imagesId = productCreateRequest.getImagesId();
+        // 이미지 목록의 첫번째는 썸네일 이미지
+        Image thumbnailImage = imageService.getById(imagesId.get(0));
+        List<Image> images = imageService.getImageListById(imagesId);
         return new Product(productCreateRequest.getName(),
                 productCreateRequest.getContent(),
                 productCreateRequest.getPrice(),
                 null,
                 category,
+                thumbnailImage,
                 images,
                 region,
                 Status.ONSALES,
