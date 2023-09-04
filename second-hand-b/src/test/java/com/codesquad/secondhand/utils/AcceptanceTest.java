@@ -1,7 +1,7 @@
 package com.codesquad.secondhand.utils;
 
-import com.codesquad.secondhand.adapter.out.persistence.imports.MemberJpaRepository;
-import com.codesquad.secondhand.adapter.out.persistence.imports.RegionJpaRepository;
+import com.codesquad.secondhand.application.port.out.MemberRepository;
+import com.codesquad.secondhand.application.port.out.RegionRepository;
 import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.member.Role;
 import com.codesquad.secondhand.domain.region.Region;
@@ -27,9 +27,9 @@ public class AcceptanceTest {
     @Autowired
     private DatabaseCleanup databaseCleanup;
     @Autowired
-    private MemberJpaRepository memberJpaRepository;
+    private MemberRepository memberRepository;
     @Autowired
-    private RegionJpaRepository regionJpaRepository;
+    private RegionRepository regionRepository;
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
@@ -41,8 +41,8 @@ public class AcceptanceTest {
     }
 
     private void initAccessToken() {
-        Region region = regionJpaRepository.findById(TEST_DEFAULT_REGION_ID).orElseThrow();
-        Member member = memberJpaRepository.save(
+        Region region = regionRepository.findById(TEST_DEFAULT_REGION_ID).orElseThrow();
+        Member member = memberRepository.save(
                 new Member(TEST_EMAIL, TEST_NICKNAME, TEST_PROFILE_IMAGE, region, Role.MEMBER));
         final Date startDate = new Date();
         accessToken = jwtTokenProvider.createAccessToken(TEST_EMAIL, member.getIdStringValue(), startDate,
