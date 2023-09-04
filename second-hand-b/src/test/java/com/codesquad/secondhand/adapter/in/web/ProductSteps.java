@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -95,5 +96,14 @@ public class ProductSteps {
                 () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
                 () -> assertThat(modifiedProduct.jsonPath().getString("status")).isEqualTo("판매완료")
         );
+    }
+
+    public static ExtractableResponse<Response> 이미지를_업로드한다(File file, String accessToken) {
+        return RestAssured.given().log().all()
+                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                .multiPart("file", file)
+                .header("Authorization", "Bearer " + accessToken)
+                .when().post("/api/images")
+                .then().log().all().extract();
     }
 }
