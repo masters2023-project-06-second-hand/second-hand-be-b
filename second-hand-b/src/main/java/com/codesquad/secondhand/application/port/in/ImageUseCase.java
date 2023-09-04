@@ -1,4 +1,4 @@
-package com.codesquad.secondhand.application.port;
+package com.codesquad.secondhand.application.port.in;
 
 import com.codesquad.secondhand.application.port.in.response.ImageUploadResponse;
 import org.springframework.web.multipart.MultipartFile;

@@ -1,6 +1,6 @@
 package com.codesquad.secondhand.adapter.in.web;
 
-import com.codesquad.secondhand.application.port.ImageUseCase;
+import com.codesquad.secondhand.application.port.in.ImageUseCase;
 import com.codesquad.secondhand.application.port.in.response.ImageUploadResponse;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;

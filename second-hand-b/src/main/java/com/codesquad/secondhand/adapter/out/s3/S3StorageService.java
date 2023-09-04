@@ -2,6 +2,7 @@ package com.codesquad.secondhand.adapter.out.s3;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.codesquad.secondhand.application.port.out.CloudStorageService;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Component
 @RequiredArgsConstructor
-public class S3ImageManager {
+public class S3StorageService implements CloudStorageService {
 
     private final AmazonS3Client amazonS3Client;
 
@@ -32,7 +33,7 @@ public class S3ImageManager {
         }
     }
 
-    public void delete(String imgUrl) {
-        amazonS3Client.deleteObject(bucket, imgUrl);
+    public void delete(String url) {
+        amazonS3Client.deleteObject(bucket, url);
     }
 }
