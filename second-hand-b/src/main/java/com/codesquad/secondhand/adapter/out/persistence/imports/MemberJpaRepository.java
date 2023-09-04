@@ -1,4 +1,4 @@
-package com.codesquad.secondhand.adapter.out.persistence;
+package com.codesquad.secondhand.adapter.out.persistence.imports;
 
 import com.codesquad.secondhand.domain.member.Member;
 import java.util.Optional;

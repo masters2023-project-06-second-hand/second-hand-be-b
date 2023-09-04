@@ -95,4 +95,8 @@ public class Member implements Serializable {
     public Collection<GrantedAuthority> getRoleAuthority() {
         return Collections.singleton(new SimpleGrantedAuthority(role.getKey()));
     }
+
+    public String getIdStringValue() {
+        return String.valueOf(id);
+    }
 }
