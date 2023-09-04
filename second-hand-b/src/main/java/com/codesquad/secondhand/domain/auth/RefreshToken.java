@@ -1,13 +1,15 @@
 package com.codesquad.secondhand.domain.auth;
 
 import com.codesquad.secondhand.domain.member.Member;
-import java.time.Instant;
+import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -20,14 +22,15 @@ public class RefreshToken {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String tokenValue;
-    private Instant expiryDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date expireTime;
     @OneToOne
     private Member member;
     private String email;
 
-    public RefreshToken(String tokenValue, Instant expiryDate, Member member, String email) {
+    public RefreshToken(String tokenValue, Date expireTime, Member member, String email) {
         this.tokenValue = tokenValue;
-        this.expiryDate = expiryDate;
+        this.expireTime = expireTime;
         this.member = member;
         this.email = email;
     }

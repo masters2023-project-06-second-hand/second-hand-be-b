@@ -12,6 +12,7 @@ import com.codesquad.secondhand.domain.member.Role;
 import com.codesquad.secondhand.domain.units.JwtTokenProvider;
 import java.util.Date;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AuthService implements AuthUseCase {
 
+    private static final int CLEANUP_ROUND_TIME = 5000;
     private final MemberService memberService;
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
@@ -38,6 +40,12 @@ public class AuthService implements AuthUseCase {
         return getTokens(email, savedMember);
     }
 
+    @Scheduled(fixedDelay = CLEANUP_ROUND_TIME)
+    public void cleanupExpiredRefreshTokens() {
+        Date now = new Date();
+        refreshTokenRepository.deleteByExpireTimeBefore(now);
+    }
+
     private Tokens getTokens(String email, Member member) {
         Date startDate = new Date();
         var accessToken = getAccessToken(email, member.getIdStringValue(), startDate);
@@ -54,7 +62,7 @@ public class AuthService implements AuthUseCase {
         Date expiryDate = JwtTokenProvider.getRefreshTokenExpiryDate(startDate);
         String refreshToken = jwtTokenProvider.createRefreshToken(email, member.getIdStringValue(), startDate,
                 expiryDate);
-        refreshTokenRepository.save(new RefreshToken(refreshToken, expiryDate.toInstant(), member, email));
+        refreshTokenRepository.save(new RefreshToken(refreshToken, expiryDate, member, email));
         return refreshToken;
     }
 
