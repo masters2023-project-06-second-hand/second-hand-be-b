@@ -1,0 +1,11 @@
+cloud:
+  aws:
+    s3:
+      bucket: second-hand-be-b
+    credentials:
+      accessKey:
+      secretKey:
+    stack:
+      auto: false
+    region:
+      static: ap-northeast-2
