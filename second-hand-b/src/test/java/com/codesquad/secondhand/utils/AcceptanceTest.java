@@ -2,7 +2,6 @@ package com.codesquad.secondhand.utils;
 
 import com.codesquad.secondhand.adapter.out.persistence.MemberJpaRepository;
 import com.codesquad.secondhand.adapter.out.persistence.RegionJpaRepository;
-import com.codesquad.secondhand.config.SecurityTestConfig;
 import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.member.Role;
 import com.codesquad.secondhand.domain.region.Region;
@@ -13,9 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.context.annotation.Import;
 
-@Import(value = SecurityTestConfig.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class AcceptanceTest {
 
