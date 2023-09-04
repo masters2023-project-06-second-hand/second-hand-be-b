@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class BusinessExceptionHandler {
 
-    private static final String BEARER_TYPE = "bearer ";
+    private static final String BEARER_TYPE = "Bearer ";
     @Value(value = "${front.server.address}")
     private String frontAddress;
 
