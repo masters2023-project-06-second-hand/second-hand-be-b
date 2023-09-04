@@ -6,10 +6,12 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Assertions;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
@@ -98,12 +100,24 @@ public class ProductSteps {
         );
     }
 
-    public static ExtractableResponse<Response> 이미지를_업로드한다(File file, String accessToken) {
+    public static ExtractableResponse<Response> 이미지를_업로드한다(String accessToken) throws IOException {
+        String filePath = "/image/test.jpg";
+        File file = new ClassPathResource(filePath).getFile();
         return RestAssured.given().log().all()
                 .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                 .multiPart("file", file)
                 .header("Authorization", "Bearer " + accessToken)
                 .when().post("/api/images")
+                .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 이미지를_삭제한다(Long id, String accessToken) {
+        Map<String, Long> body = Map.of("id", id);
+        return RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", "Bearer " + accessToken)
+                .body(body)
+                .when().delete("/api/images")
                 .then().log().all().extract();
     }
 }

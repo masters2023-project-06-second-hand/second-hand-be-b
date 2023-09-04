@@ -12,4 +12,11 @@ public interface ImageUseCase {
      * @return DB에 저장한 이미지 ID와 업로드한 이미지 URL을 담은 객체
      */
     ImageUploadResponse upload(MultipartFile file);
+
+    /**
+     * 이미지를 DB와 클라우드에서 삭제한다.
+     *
+     * @param id 삭제할 이미지의 식별자 ID
+     */
+    void delete(Long id);
 }

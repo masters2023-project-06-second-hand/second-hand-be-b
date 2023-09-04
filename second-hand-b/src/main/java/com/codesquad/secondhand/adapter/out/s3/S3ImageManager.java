@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Component
 @RequiredArgsConstructor
-public class S3ImageUploader {
+public class S3ImageManager {
 
     private final AmazonS3Client amazonS3Client;
 
@@ -30,5 +30,9 @@ public class S3ImageUploader {
             // TODO: CUSTOM EXCEPTION 처리
             throw new RuntimeException(e);
         }
+    }
+
+    public void delete(String imgUrl) {
+        amazonS3Client.deleteObject(bucket, imgUrl);
     }
 }
