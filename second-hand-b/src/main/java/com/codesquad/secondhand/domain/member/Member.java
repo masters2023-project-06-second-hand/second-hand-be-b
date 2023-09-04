@@ -38,11 +38,9 @@ public class Member implements Serializable {
     private String profileImage;
     @Embedded
     private MemberRegions memberRegions = new MemberRegions();
-
     @ManyToOne
     @JoinColumn(name = "selected_region_id")
     private Region selectedRegion;
-
     @Enumerated(EnumType.STRING)
     private Role role;
 

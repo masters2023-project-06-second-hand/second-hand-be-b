@@ -31,9 +31,9 @@ public class JwtSignUpAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
         String token = jwtTokenProvider.resolveToken(request);
-        if (token != null && jwtTokenProvider.validateToken(token.split(" ")[1].trim())
-                && !jwtTokenProvider.isAccessToken(token.split(" ")[1].trim())) {
-            String email = jwtTokenProvider.getEmail(token.split(" ")[1].trim());
+        if (token != null && jwtTokenProvider.validateToken(token)
+                && !jwtTokenProvider.isAccessToken(token)) {
+            String email = jwtTokenProvider.getEmail(token);
             Authentication authentication = new JwtSignUpToken(email, Collections.singleton(new SimpleGrantedAuthority(
                     Role.USER.getKey())));
             authentication.setAuthenticated(true);
