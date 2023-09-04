@@ -8,4 +8,6 @@ public interface AuthUseCase {
     Tokens signIn(String email);
 
     Tokens signUp(String email, SignUpRequest signUpRequest);
+
+    Tokens getAccessToken(String authentication);
 }

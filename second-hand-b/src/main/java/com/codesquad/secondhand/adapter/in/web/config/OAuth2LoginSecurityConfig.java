@@ -33,6 +33,8 @@ public class OAuth2LoginSecurityConfig {
         return httpSecurity
                 .authorizeHttpRequests(
                         requestMatcherRegistry -> requestMatcherRegistry
+                                .mvcMatchers(HttpMethod.GET, "/api/members/accesstoken")
+                                .permitAll()
                                 .mvcMatchers(HttpMethod.GET, "/api/members/signin")
                                 .authenticated()
                                 .mvcMatchers(HttpMethod.POST, "/api/members/signup")

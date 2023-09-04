@@ -16,6 +16,9 @@ import com.codesquad.secondhand.domain.member.Role;
 import com.codesquad.secondhand.domain.units.JwtTokenProvider;
 import com.codesquad.secondhand.oauth.WithTestUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.hamcrest.Matcher;
@@ -68,11 +71,21 @@ class AuthControllerTest {
         ;
     }
 
-    @WithTestUser(email = TEST_EMAIL)
+    private String getTestRefreshToken(Member member, Date startDate) {
+        return jwtTokenProvider.createRefreshToken(TEST_EMAIL, member.getIdStringValue(), startDate,
+                JwtTokenProvider.getRefreshTokenExpiryDate(startDate));
+    }
+
+    private Member getTestMember() {
+        return memberRepository.save(
+                new Member(TEST_EMAIL, TEST_NICKNAME, TEST_PROFILE_IMAGE, null, Role.USER));
+    }
+
+    @WithTestUser
     @DisplayName("Oauth2.0 인증 했고 행당 유저가 있으면 AccessToken를 Authtication Header로 RefreshToken은 Cookie Header에 담은 다음 Redirect한다")
     @Test
     void givenOAuth2Authentication_whenUserExists_thenSetTokensInHeadersAndRedirect() throws Exception {
-        memberRepository.save(new Member(TEST_EMAIL, TEST_NICKNAME, TEST_PROFILE_IMAGE, null, Role.USER));
+        getTestMember();
 
         mockMvc.perform(get("/api/members/signin"))
                 .andDo(print())
@@ -89,7 +102,7 @@ class AuthControllerTest {
         String signUpToken = jwtTokenProvider.createSignUpToken(TEST_EMAIL);
         SignUpRequest signUpRequest = new SignUpRequest(TEST_NICKNAME, TEST_PROFILE_IMAGE, List.of(1L));
 
-        // then
+        // when,then
         mockMvc.perform(post("/api/members/signup")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + signUpToken)
                         .content(objectMapper.writeValueAsString(signUpRequest))
@@ -99,5 +112,43 @@ class AuthControllerTest {
                 .andExpect(jsonPath("accessToken").exists())
                 .andExpect(jsonPath("refreshToken").exists())
                 .andExpect(status().isOk());
+    }
+
+    @DisplayName("refreshToken으로 AccessToken을 요청하면 새로 만든 Tokens를 보낸다")
+    @Test
+    void shouldReturnNewTokensWhenRequestedWithRefreshToken() throws Exception {
+        // given
+        Member member = getTestMember();
+        Date startDate = new Date();
+        String refreshToken = getTestRefreshToken(member, startDate);
+
+        // when,then
+        mockMvc.perform(get("/api/members/accesstoken")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + refreshToken)
+                )
+                .andDo(print())
+                .andExpect(jsonPath("accessToken").exists())
+                .andExpect(jsonPath("refreshToken").exists())
+                .andExpect(status().isOk());
+    }
+
+    @DisplayName("만료된 refreshToken으로 AccessToken을 요청하면 에러 메시지를 보낸다")
+    @Test
+    void shouldReturnErrorMessageWhenRequestedAccessTokenWithExpiredRefreshToken() throws Exception {
+        // given
+        Member member = getTestMember();
+        LocalDate localDate = LocalDate.of(2023, 1, 1);
+        Date startDate = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        String refreshToken = getTestRefreshToken(member, startDate);
+
+        // when,then
+        mockMvc.perform(get("/api/members/accesstoken")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + refreshToken)
+                )
+                .andDo(print())
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("status").exists())
+                .andExpect(jsonPath("message").exists())
+        ;
     }
 }

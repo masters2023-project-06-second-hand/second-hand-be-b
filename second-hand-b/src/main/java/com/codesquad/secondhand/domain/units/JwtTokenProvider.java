@@ -55,15 +55,19 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+    public static String parseTokenFromAuthorization(String header) {
+        return header.split(TOKEN_DELIMITER)[TOKEN_INDEX].trim();
+    }
+
     public String resolveToken(HttpServletRequest request) {
         String header = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (header == null) {
             return null;
         }
-        return header.split(TOKEN_DELIMITER)[TOKEN_INDEX].trim();
+        return parseTokenFromAuthorization(header);
     }
 
-    public boolean validateToken(String jwtToken) {
+    public boolean validateToken(String jwtToken, Date now) {
         try {
             Jws<Claims> claims = Jwts.parserBuilder()
                     .setSigningKey(KEY)
@@ -71,7 +75,7 @@ public class JwtTokenProvider {
                     .parseClaimsJws(jwtToken);
             return !claims.getBody()
                     .getExpiration()
-                    .before(new Date());
+                    .before(now);
         } catch (Exception e) {
             return false;
         }

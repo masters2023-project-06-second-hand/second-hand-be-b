@@ -3,6 +3,7 @@ package com.codesquad.secondhand.application.service.in;
 import com.codesquad.secondhand.application.port.in.AuthUseCase;
 import com.codesquad.secondhand.application.port.in.exception.MemberNotFoundException;
 import com.codesquad.secondhand.application.port.in.exception.NotRegisteredMemberException;
+import com.codesquad.secondhand.application.port.in.exception.TokenExpiredException;
 import com.codesquad.secondhand.application.port.in.request.SignUpRequest;
 import com.codesquad.secondhand.application.port.in.response.Tokens;
 import com.codesquad.secondhand.application.port.out.RefreshTokenRepository;
@@ -38,6 +39,18 @@ public class AuthService implements AuthUseCase {
         Member member = toMember(email, signUpRequest);
         Member savedMember = memberService.save(member);
         return getTokens(email, savedMember);
+    }
+
+    @Override
+    public Tokens getAccessToken(String authentication) {
+        String token = JwtTokenProvider.parseTokenFromAuthorization(authentication);
+        Date now = new Date();
+        if (!jwtTokenProvider.validateToken(token, now)) {
+            throw new TokenExpiredException();
+        }
+        String email = jwtTokenProvider.getEmail(token);
+        Member member = memberService.findByEmail(email);
+        return getTokens(email, member);
     }
 
     @Scheduled(fixedDelay = CLEANUP_ROUND_TIME)

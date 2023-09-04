@@ -5,6 +5,7 @@ import com.codesquad.secondhand.application.port.out.MemberRepository;
 import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.units.JwtTokenProvider;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Optional;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -37,7 +38,8 @@ public class JwtSignInAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        if (jwtTokenProvider.validateToken(token) && jwtTokenProvider.isAccessToken(token)) {
+        Date now = new Date();
+        if (jwtTokenProvider.validateToken(token, now) && jwtTokenProvider.isAccessToken(token)) {
             String email = jwtTokenProvider.getEmail(token);
             Optional<Member> member = memberRepository.findByEmail(email);
             if (member.isPresent()) {

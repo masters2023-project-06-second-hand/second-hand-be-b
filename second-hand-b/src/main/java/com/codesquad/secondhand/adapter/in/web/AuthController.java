@@ -13,6 +13,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
@@ -42,6 +43,15 @@ public class AuthController {
             @RequestBody SignUpRequest signUpRequest
     ) {
         Tokens tokens = authUseCase.signUp(email, signUpRequest);
+        return ResponseEntity.ok(tokens);
+    }
+
+
+    @GetMapping("/accesstoken")
+    public ResponseEntity<Tokens> getAccessToken(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authentication
+    ) {
+        Tokens tokens = authUseCase.getAccessToken(authentication);
         return ResponseEntity.ok(tokens);
     }
 
