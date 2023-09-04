@@ -1,6 +1,6 @@
 package com.codesquad.secondhand.application.port.in;
 
-import com.codesquad.secondhand.application.port.in.response.ImageUploadResponse;
+import com.codesquad.secondhand.application.port.in.response.ImageInfo;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface ImageUseCase {
@@ -11,7 +11,7 @@ public interface ImageUseCase {
      * @param file 업로드 할 이미지 파일
      * @return DB에 저장한 이미지 ID와 업로드한 이미지 URL을 담은 객체
      */
-    ImageUploadResponse upload(MultipartFile file);
+    ImageInfo upload(MultipartFile file);
 
     /**
      * 이미지를 DB와 클라우드에서 삭제한다.

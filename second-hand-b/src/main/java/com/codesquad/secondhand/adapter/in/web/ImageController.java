@@ -1,7 +1,7 @@
 package com.codesquad.secondhand.adapter.in.web;
 
 import com.codesquad.secondhand.application.port.in.ImageUseCase;
-import com.codesquad.secondhand.application.port.in.response.ImageUploadResponse;
+import com.codesquad.secondhand.application.port.in.response.ImageInfo;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +21,10 @@ public class ImageController {
     private final ImageUseCase imageUseCase;
 
     @PostMapping
-    public ResponseEntity<ImageUploadResponse> upload(@RequestParam("file") MultipartFile file) {
-        ImageUploadResponse imageUploadResponse = imageUseCase.upload(file);
+    public ResponseEntity<ImageInfo> upload(@RequestParam("file") MultipartFile file) {
+        ImageInfo imageInfo = imageUseCase.upload(file);
         return ResponseEntity.ok()
-                .body(imageUploadResponse);
+                .body(imageInfo);
     }
 
     @DeleteMapping

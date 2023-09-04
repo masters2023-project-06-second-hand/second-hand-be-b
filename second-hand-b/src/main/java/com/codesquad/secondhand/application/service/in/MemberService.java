@@ -1,6 +1,7 @@
 package com.codesquad.secondhand.application.service.in;
 
 import com.codesquad.secondhand.application.port.in.MemberUseCase;
+import com.codesquad.secondhand.application.port.in.exception.MemberNotFoundException;
 import com.codesquad.secondhand.application.port.in.exception.NotRegisteredMemberException;
 import com.codesquad.secondhand.application.port.in.request.SignUpRequest;
 import com.codesquad.secondhand.application.port.out.MemberRepository;
@@ -31,6 +32,13 @@ public class MemberService implements MemberUseCase {
         Member member = toMember(email, signUpRequest);
         Member savedMember = memberRepository.save(member);
         return jwtTokenProvider.createAccessToken(savedMember.getEmail(), String.valueOf(savedMember.getId()));
+    }
+
+    public Member getById(Long id) {
+        return memberRepository.findById(id)
+                .orElseThrow(() -> {
+                    throw new MemberNotFoundException();
+                });
     }
 
     private Member getByEmail(String email) {

@@ -17,7 +17,14 @@ import org.springframework.http.MediaType;
 
 public class ProductSteps {
 
-    public static ExtractableResponse<Response> 상품을_등록한다(String accessToken) {
+    public static ExtractableResponse<Response> 상품을_등록한다(String accessToken) throws IOException {
+        String filePath = "/image/test.jpg";
+        File file = new ClassPathResource(filePath).getFile();
+        이미지를_업로드한다(file, accessToken);
+        filePath = "/image/test2.jpg";
+        file = new ClassPathResource(filePath).getFile();
+        이미지를_업로드한다(file, accessToken);
+
         Map<String, Object> body = new HashMap<>();
         body.put("name", "상품명");
         body.put("categoryId", 1);
@@ -50,7 +57,9 @@ public class ProductSteps {
                 () -> assertThat(response.jsonPath().getString("id")).isEqualTo("1"),
                 () -> assertThat(response.jsonPath().getString("productName")).isEqualTo("상품명"),
                 () -> assertThat(response.jsonPath().getString("content")).isEqualTo("상품 내용"),
-                () -> assertThat(response.jsonPath().getInt("price")).isEqualTo(100000)
+                () -> assertThat(response.jsonPath().getInt("price")).isEqualTo(100000),
+                () -> assertThat(response.jsonPath().getString("categoryName")).isEqualTo("인기매물"),
+                () -> assertThat(response.jsonPath().getString("regionName")).isEqualTo("서울 강남구 역삼1동")
         );
     }
 
@@ -60,8 +69,8 @@ public class ProductSteps {
         body.put("categoryId", 2);
         body.put("price", 200000);
         body.put("content", "상품 내용을 수정");
-        body.put("region", 3);
-        body.put("imagesId", List.of(2, 3, 4));
+        body.put("regionId", 3);
+        body.put("imagesId", List.of(1));
 
         return RestAssured.given().log().all()
                 .header("Authorization", "Bearer " + accessToken)
@@ -78,7 +87,10 @@ public class ProductSteps {
                 () -> assertThat(modifiedProduct.jsonPath().getString("id")).isEqualTo("1"),
                 () -> assertThat(modifiedProduct.jsonPath().getString("productName")).isEqualTo("상품명 수정"),
                 () -> assertThat(modifiedProduct.jsonPath().getString("content")).isEqualTo("상품 내용을 수정"),
-                () -> assertThat(modifiedProduct.jsonPath().getInt("price")).isEqualTo(200000)
+                () -> assertThat(modifiedProduct.jsonPath().getInt("price")).isEqualTo(200000),
+                () -> assertThat(modifiedProduct.jsonPath().getString("categoryName")).isEqualTo("부동산"),
+                () -> assertThat(modifiedProduct.jsonPath().getString("regionName")).isEqualTo("서울 강남구 역삼동"),
+                () -> assertThat(modifiedProduct.jsonPath().getList("images.id")).containsExactly(1)
         );
     }
 
@@ -100,9 +112,7 @@ public class ProductSteps {
         );
     }
 
-    public static ExtractableResponse<Response> 이미지를_업로드한다(String accessToken) throws IOException {
-        String filePath = "/image/test.jpg";
-        File file = new ClassPathResource(filePath).getFile();
+    public static ExtractableResponse<Response> 이미지를_업로드한다(File file, String accessToken) throws IOException {
         return RestAssured.given().log().all()
                 .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                 .multiPart("file", file)

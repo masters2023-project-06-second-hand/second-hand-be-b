@@ -4,11 +4,16 @@ package com.codesquad.secondhand.application.service.in;
 import com.codesquad.secondhand.application.port.in.ProductUseCase;
 import com.codesquad.secondhand.application.port.in.request.ProductCreateRequest;
 import com.codesquad.secondhand.application.port.in.request.ProductModifyRequest;
+import com.codesquad.secondhand.application.port.in.response.ImageInfo;
 import com.codesquad.secondhand.application.port.in.response.ProductDetail;
 import com.codesquad.secondhand.application.port.out.ProductRepository;
+import com.codesquad.secondhand.domain.image.Image;
+import com.codesquad.secondhand.domain.product.Category;
 import com.codesquad.secondhand.domain.product.Product;
 import com.codesquad.secondhand.domain.product.Status;
+import com.codesquad.secondhand.domain.region.Region;
 import java.time.LocalDateTime;
+import java.util.List;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +23,9 @@ import org.springframework.stereotype.Service;
 public class ProductService implements ProductUseCase {
 
     private final ProductRepository productRepository;
+    private final RegionService regionService;
+    private final CategoryService categoryService;
+    private final ImageService imageService;
 
     @Transactional
     @Override
@@ -36,7 +44,15 @@ public class ProductService implements ProductUseCase {
     @Override
     public void modify(Long id, ProductModifyRequest request) {
         Product product = productRepository.findById(id).orElseThrow();
-        product.modifyProduct(request.getName(), request.getContent(), request.getPrice(), null, null, null);
+        Category category = categoryService.getById(request.getCategoryId());
+        List<Image> images = imageService.getImageListById(request.getImagesId());
+        Region region = regionService.getById(request.getRegionId());
+        product.modifyProduct(request.getName(),
+                request.getContent(),
+                request.getPrice(),
+                category,
+                images,
+                region);
     }
 
     @Transactional
@@ -47,29 +63,35 @@ public class ProductService implements ProductUseCase {
     }
 
     private Product toProduct(ProductCreateRequest productCreateRequest) {
-        // TODO: writer, category, region, images Entity 추가
+        // TODO: jwt id를 이용해서 writer 추가
+        Region region = regionService.getById(productCreateRequest.getRegionId());
+        Category category = categoryService.getById(productCreateRequest.getCategoryId());
+        List<Image> images = imageService.getImageListById(productCreateRequest.getImagesId());
         return new Product(productCreateRequest.getName(),
                 productCreateRequest.getContent(),
                 productCreateRequest.getPrice(),
                 null,
-                null,
-                null,
-                null,
+                category,
+                images,
+                region,
                 Status.ONSALES,
                 LocalDateTime.now());
     }
 
-    private static ProductDetail toProductDetail(Product product) {
-        // TODO: writer, categoryName, region, images 추가
+    private ProductDetail toProductDetail(Product product) {
+        Category category = product.getCategory();
+        Region region = product.getRegion();
+        Status status = product.getStatus();
+        List<ImageInfo> imageInfos = product.fetchImageInfos();
         return new ProductDetail(product.getId(),
                 null,
                 product.getName(),
-                null,
-                null,
-                product.getStatus().getName(),
+                category.getName(),
+                region.getName(),
+                status.getName(),
                 product.getContent(),
                 product.getPrice(),
-                null,
+                imageInfos,
                 product.getCreatedAt());
     }
 }

@@ -1,8 +1,12 @@
 package com.codesquad.secondhand.domain.product;
 
+import com.codesquad.secondhand.application.port.in.response.ImageInfo;
+import com.codesquad.secondhand.domain.image.Image;
 import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.region.Region;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -40,7 +44,7 @@ public class Product {
     @JoinColumn(name = "category_id")
     private Category category;
     @Embedded
-    private Images images;
+    private Images images = new Images();
     @ManyToOne
     @JoinColumn(name = "region_id")
     private Region region;
@@ -49,30 +53,40 @@ public class Product {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    public Product(String name, String content, int price, Member writer, Category category, Images images,
+    public Product(String name, String content, int price, Member writer, Category category, List<Image> images,
             Region region, Status status, LocalDateTime createdAt) {
         this.name = name;
         this.content = content;
         this.price = price;
         this.writer = writer;
         this.category = category;
-        this.images = images;
+        modifyImages(images);
         this.region = region;
         this.status = status;
         this.createdAt = createdAt;
     }
 
-    public void modifyProduct(String name, String content, int price, Category category, Images images,
+    public void modifyProduct(String name, String content, int price, Category category, List<Image> images,
             Region region) {
         this.name = name;
         this.content = content;
         this.price = price;
         this.category = category;
-        this.images = images;
+        modifyImages(images);
         this.region = region;
     }
 
     public void modifyStatus(String status) {
         this.status = Status.findByName(status);
+    }
+
+    public void modifyImages(List<Image> images) {
+        this.images.modify(images);
+    }
+
+    public List<ImageInfo> fetchImageInfos() {
+        return images.getImageList().stream()
+                .map(image -> new ImageInfo(image.getId(), image.getUrl()))
+                .collect(Collectors.toUnmodifiableList());
     }
 }

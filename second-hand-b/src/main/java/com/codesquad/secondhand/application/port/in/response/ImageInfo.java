@@ -3,12 +3,12 @@ package com.codesquad.secondhand.application.port.in.response;
 import lombok.Getter;
 
 @Getter
-public class ImageUploadResponse {
+public class ImageInfo {
 
     private Long id;
     private String imgUrl;
 
-    public ImageUploadResponse(Long id, String imgUrl) {
+    public ImageInfo(Long id, String imgUrl) {
         this.id = id;
         this.imgUrl = imgUrl;
     }

@@ -1,10 +1,12 @@
 package com.codesquad.secondhand.application.service.in;
 
 import com.codesquad.secondhand.application.port.in.ImageUseCase;
-import com.codesquad.secondhand.application.port.in.response.ImageUploadResponse;
+import com.codesquad.secondhand.application.port.in.exception.ImageNotFoundException;
+import com.codesquad.secondhand.application.port.in.response.ImageInfo;
 import com.codesquad.secondhand.application.port.out.CloudStorageService;
 import com.codesquad.secondhand.application.port.out.ImageRepository;
 import com.codesquad.secondhand.domain.image.Image;
+import java.util.List;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,18 +21,27 @@ public class ImageService implements ImageUseCase {
 
     @Transactional
     @Override
-    public ImageUploadResponse upload(MultipartFile file) {
+    public ImageInfo upload(MultipartFile file) {
         String imgUrl = cloudStorageService.upload(file);
         Image savedImage = imageRepository.save(new Image(imgUrl));
-        return new ImageUploadResponse(savedImage.getId(), savedImage.getUrl());
+        return new ImageInfo(savedImage.getId(), savedImage.getUrl());
     }
 
     @Override
     public void delete(Long id) {
-        // TODO: Custom Exception 처리
         Image image = imageRepository.findById(id)
-                .orElseThrow();
+                .orElseThrow(() -> {
+                    throw new ImageNotFoundException();
+                });
         imageRepository.deleteById(id);
         cloudStorageService.delete(image.getUrl());
+    }
+
+    public List<Image> getImageListById(List<Long> ids) {
+        List<Image> images = imageRepository.findAllById(ids);
+        if (images.size() != ids.size()) {
+            throw new ImageNotFoundException();
+        }
+        return images;
     }
 }
