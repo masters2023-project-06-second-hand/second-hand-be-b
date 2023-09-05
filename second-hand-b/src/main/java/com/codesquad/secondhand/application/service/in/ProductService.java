@@ -2,6 +2,7 @@ package com.codesquad.secondhand.application.service.in;
 
 
 import com.codesquad.secondhand.application.port.in.ProductUseCase;
+import com.codesquad.secondhand.application.port.in.exception.ProductNotFoundException;
 import com.codesquad.secondhand.application.port.in.request.ProductCreateRequest;
 import com.codesquad.secondhand.application.port.in.request.ProductModifyRequest;
 import com.codesquad.secondhand.application.port.in.response.ImageInfo;
@@ -62,6 +63,11 @@ public class ProductService implements ProductUseCase {
     public void modifyStatus(Long id, String status) {
         Product product = productRepository.findById(id).orElseThrow();
         product.modifyStatus(status);
+    }
+
+    public Product getById(Long productId) {
+        return productRepository.findById(productId)
+                .orElseThrow(ProductNotFoundException::new);
     }
 
     private Product toProduct(ProductCreateRequest productCreateRequest) {

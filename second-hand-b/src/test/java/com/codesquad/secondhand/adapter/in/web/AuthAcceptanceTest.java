@@ -18,7 +18,7 @@ class AuthAcceptanceTest extends AcceptanceTest {
     @Test
     void shouldReturnTokensWhenSignUpWithSignUpToken() {
         // signUpToken을 만든다
-        String signUpToken = jwtTokenProvider.createSignUpToken(TEST_EMAIL);
+        String signUpToken = jwtTokenProvider.createSignUpToken(AYAAN_EMAIL);
 
         // when
         var 회원_토큰 = 회원_가입_한다(signUpToken);
