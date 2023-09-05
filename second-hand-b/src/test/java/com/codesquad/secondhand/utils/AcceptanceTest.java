@@ -6,14 +6,18 @@ import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.member.Role;
 import com.codesquad.secondhand.domain.region.Region;
 import com.codesquad.secondhand.domain.units.JwtTokenProvider;
+import io.findify.s3mock.S3Mock;
 import io.restassured.RestAssured;
 import java.util.Date;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.context.annotation.Import;
 
+@Import(S3MockConfig.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class AcceptanceTest {
 
@@ -32,12 +36,19 @@ public class AcceptanceTest {
     private RegionRepository regionRepository;
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
+    @Autowired
+    private S3Mock s3Mock;
 
     @BeforeEach
     public void setUp() {
         RestAssured.port = port;
         databaseCleanup.execute();
         initAccessToken();
+    }
+
+    @AfterEach
+    void tearDown() {
+        s3Mock.stop();
     }
 
     private void initAccessToken() {

@@ -31,38 +31,28 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(nullable = false)
     private String name;
-
     @Column(nullable = false)
     private String content;
-
     @Column(nullable = false)
     private int price;
-
     @ManyToOne
     @JoinColumn(name = "writer_id")
     private Member writer;
-
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
-
     @Embedded
     private Images images = new Images();
-
     @ManyToOne
     @JoinColumn(name = "thumbnail_id")
     private Image thumbnailImage;
-
     @ManyToOne
     @JoinColumn(name = "region_id")
     private Region region;
-
     @Enumerated(EnumType.STRING)
     private Status status;
-
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
