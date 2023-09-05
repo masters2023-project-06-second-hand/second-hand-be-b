@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.io.ClassPathResource;
@@ -24,8 +25,10 @@ public class DatabaseInitializer implements ApplicationRunner {
     private static final int REGION_NAME_INDEX = 0;
     private static final int CATEGORY_NAME_INDEX = 0;
     private static final int CATEGORY_IMG_URL_INDEX = 1;
-    private static final String REGION_FILE_PATH = "/data/region_data.csv";
-    private static final String CATEGORY_FILE_PATH = "/data/category_data.csv";
+    @Value(value = "${data.init.path.region}")
+    private String regionFilePath;
+    @Value(value = "${data.init.path.category}")
+    private String categoryFilePath;
 
     @Autowired
     private RegionRepository regionRepository;
@@ -40,7 +43,7 @@ public class DatabaseInitializer implements ApplicationRunner {
     }
 
     private void initializeRegion() throws IOException {
-        ClassPathResource resource = new ClassPathResource(REGION_FILE_PATH);
+        ClassPathResource resource = new ClassPathResource(regionFilePath);
         InputStream is = resource.getInputStream();
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
@@ -57,7 +60,7 @@ public class DatabaseInitializer implements ApplicationRunner {
     }
 
     private void initializeCategory() throws IOException {
-        ClassPathResource resource = new ClassPathResource(CATEGORY_FILE_PATH);
+        ClassPathResource resource = new ClassPathResource(categoryFilePath);
         InputStream is = resource.getInputStream();
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
 

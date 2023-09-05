@@ -19,4 +19,16 @@ public class Image {
     private Long id;
     @Column(nullable = false)
     private String url;
+
+    public Image(String url) {
+        this.url = url;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getUrl() {
+        return url;
+    }
 }

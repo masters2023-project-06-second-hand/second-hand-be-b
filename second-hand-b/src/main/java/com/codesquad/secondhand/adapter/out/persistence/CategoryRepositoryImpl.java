@@ -4,6 +4,7 @@ import com.codesquad.secondhand.adapter.out.persistence.imports.CategoryJpaRepos
 import com.codesquad.secondhand.application.port.out.CategoryRepository;
 import com.codesquad.secondhand.domain.product.Category;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -16,5 +17,10 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     @Override
     public void saveAll(List<Category> categories) {
         categoryJpaRepository.saveAll(categories);
+    }
+
+    @Override
+    public Optional<Category> findById(Long id) {
+        return categoryJpaRepository.findById(id);
     }
 }

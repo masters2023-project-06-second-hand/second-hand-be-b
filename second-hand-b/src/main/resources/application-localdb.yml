@@ -12,3 +12,9 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+data:
+  init:
+    path:
+      region: /data/region_data.csv
+      category: /data/category_data.csv

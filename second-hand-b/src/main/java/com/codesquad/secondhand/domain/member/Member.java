@@ -37,7 +37,7 @@ public class Member implements Serializable {
     private String nickname;
     private String profileImage;
     @Embedded
-    private MemberRegions memberRegions = new MemberRegions();
+    private MemberRegions myRegions = new MemberRegions();
     @ManyToOne
     @JoinColumn(name = "selected_region_id")
     private Region selectedRegion;
@@ -48,7 +48,7 @@ public class Member implements Serializable {
         this.email = email;
         this.nickname = nickname;
         this.profileImage = profileImage;
-        this.memberRegions.addRegion(region);
+        this.myRegions.addRegion(region);
         this.selectedRegion = region;
         this.role = role;
     }
@@ -74,17 +74,17 @@ public class Member implements Serializable {
     }
 
     public void addRegion(Region region) {
-        memberRegions.addRegion(region);
+        myRegions.addRegion(region);
     }
 
     public void removeRegion(Region region) {
-        memberRegions.removeRegion(region);
+        myRegions.removeRegion(region);
     }
 
     public List<RegionInfo> fetchRegionInfos() {
-        return memberRegions.getRegions().stream()
+        return myRegions.getRegions().stream()
                 .map(region -> new RegionInfo(region.getId(), region.getName()))
-                .collect(Collectors.toList());
+                .collect(Collectors.toUnmodifiableList());
     }
 
     public void selectRegion(Region region) {
