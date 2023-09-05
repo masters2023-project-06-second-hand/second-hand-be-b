@@ -18,8 +18,11 @@ public class MemberService {
 
     public Member findByEmail(String email) {
         return memberRepository.findByEmail(email)
-                .orElseThrow(() -> {
-                    throw new MemberNotFoundException();
-                });
+                .orElseThrow(MemberNotFoundException::new);
+    }
+
+    public Member getById(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(MemberNotFoundException::new);
     }
 }
