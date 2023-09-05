@@ -2,20 +2,16 @@ package com.codesquad.secondhand.adapter.in.web;
 
 import static com.codesquad.secondhand.adapter.in.web.MemberRegionSteps.멤버의_지역목록_조회를_검증한다;
 import static com.codesquad.secondhand.adapter.in.web.MemberRegionSteps.멤버의_지역목록을_조회한다;
+import static com.codesquad.secondhand.adapter.in.web.MemberRegionSteps.멤버의_지역선택을_검증한다;
 import static com.codesquad.secondhand.adapter.in.web.MemberRegionSteps.멤버의_지역을_삭제한다;
+import static com.codesquad.secondhand.adapter.in.web.MemberRegionSteps.멤버의_지역을_선택한다;
 import static com.codesquad.secondhand.adapter.in.web.MemberRegionSteps.멤버의_지역을_추가한다;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.codesquad.secondhand.utils.AcceptanceTest;
-import io.restassured.RestAssured;
-import io.restassured.response.ExtractableResponse;
-import io.restassured.response.Response;
-import java.util.Map;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 
 class MemberRegionControllerTest extends AcceptanceTest {
 
@@ -24,7 +20,6 @@ class MemberRegionControllerTest extends AcceptanceTest {
     @DisplayName("멤버에 대한 지역 추가 요청을 받으면 요청을 수행하고 201 상태코드로 응답한다.")
     void addRegionToMember() {
         //given
-        // TODO: 멤버 생성, 지역 생성 추가
         Long memberId = 1L;
         Long regionId = 1L;
 
@@ -56,9 +51,7 @@ class MemberRegionControllerTest extends AcceptanceTest {
         //given
         Long memberId = 1L;
         Long regionId1 = 1L;
-        Long regionId2 = 2L;
         멤버의_지역을_추가한다(memberId, regionId1, accessToken);
-        멤버의_지역을_추가한다(memberId, regionId2, accessToken);
 
         //when
         var response = 멤버의_지역목록을_조회한다(memberId, accessToken);
@@ -73,21 +66,12 @@ class MemberRegionControllerTest extends AcceptanceTest {
         //given
         Long memberId = 1L;
         Long regionId = 2L;
-        Map<String, Object> body = Map.of("id", regionId);
+        멤버의_지역을_추가한다(memberId, regionId, accessToken);
 
         //when
-        ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", "Bearer " + accessToken)
-                .body(body)
-                .when().put("/api/members/{memberId}/regions", memberId)
-                .then().log().all().extract();
+        var response = 멤버의_지역을_선택한다(memberId, regionId, accessToken);
 
         //then
-        var memberRegionList = 멤버의_지역목록을_조회한다(memberId, accessToken);
-        Assertions.assertAll(
-                () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
-                () -> assertThat(memberRegionList.jsonPath().getLong("selectedRegionId")).isEqualTo(2)
-        );
+        멤버의_지역선택을_검증한다(memberId, accessToken, response);
     }
 }

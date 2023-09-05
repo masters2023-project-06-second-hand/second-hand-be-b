@@ -10,6 +10,7 @@ import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품을_등
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품을_수정한다;
 
 import com.codesquad.secondhand.utils.AcceptanceTest;
+import java.io.IOException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +18,7 @@ class ProductControllerTest extends AcceptanceTest {
 
     @Test
     @DisplayName("상품 등록 요청이 오면 상품 아이디를 반환한다.")
-    void create() {
+    void create() throws IOException {
         var response = 상품을_등록한다(accessToken);
 
         상품등록을_검증한다(response);
@@ -25,7 +26,7 @@ class ProductControllerTest extends AcceptanceTest {
 
     @Test
     @DisplayName("상품 상세 조회 요청이 오면 상품 상세 정보를 반환한다.")
-    void getDetails() {
+    void getDetails() throws IOException {
         // given
         Long id = 상품을_등록한다(accessToken).jsonPath().getLong("id");
         // when
@@ -36,7 +37,7 @@ class ProductControllerTest extends AcceptanceTest {
 
     @Test
     @DisplayName("상품 수정 요청이 오면 상품 정보를 수정한다.")
-    void modify() {
+    void modify() throws IOException {
         //given
         Long id = 상품을_등록한다(accessToken).jsonPath().getLong("id");
 
@@ -49,7 +50,7 @@ class ProductControllerTest extends AcceptanceTest {
 
     @Test
     @DisplayName("상품 상태 수정 요청이 오면 상품 상태를 수정한다.")
-    void modifyStatus() {
+    void modifyStatus() throws IOException {
         //given
         Long id = 상품을_등록한다(accessToken).jsonPath().getLong("id");
 
