@@ -1,5 +1,6 @@
 package com.codesquad.secondhand.application.port.in;
 
+import com.codesquad.secondhand.application.port.in.request.DeleteImageRequest;
 import com.codesquad.secondhand.application.port.in.response.ImageInfo;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,8 +16,6 @@ public interface ImageUseCase {
 
     /**
      * 이미지를 DB와 클라우드에서 삭제한다.
-     *
-     * @param id 삭제할 이미지의 식별자 ID
      */
-    void delete(Long id);
+    void delete(DeleteImageRequest deleteImageRequest);
 }

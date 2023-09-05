@@ -22,6 +22,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ProductService implements ProductUseCase {
 
+    private static final int IMAGES_FIRST_INDEX = 0;
+
     private final ProductRepository productRepository;
     private final RegionService regionService;
     private final CategoryService categoryService;
@@ -68,7 +70,7 @@ public class ProductService implements ProductUseCase {
         Category category = categoryService.getById(productCreateRequest.getCategoryId());
         List<Long> imagesId = productCreateRequest.getImagesId();
         // 이미지 목록의 첫번째는 썸네일 이미지
-        Image thumbnailImage = imageService.getById(imagesId.get(0));
+        Image thumbnailImage = imageService.getById(imagesId.get(IMAGES_FIRST_INDEX));
         List<Image> images = imageService.getImageListById(imagesId);
         return new Product(productCreateRequest.getName(),
                 productCreateRequest.getContent(),
