@@ -13,9 +13,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
-class MemberRegionControllerTest extends AcceptanceTest {
-
-
+class MemberRegionAcceptanceTest extends AcceptanceTest {
+    
     @Test
     @DisplayName("멤버에 대한 지역 추가 요청을 받으면 요청을 수행하고 201 상태코드로 응답한다.")
     void addRegionToMember() {

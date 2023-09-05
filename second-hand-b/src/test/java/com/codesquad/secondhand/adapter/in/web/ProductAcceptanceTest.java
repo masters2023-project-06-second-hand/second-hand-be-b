@@ -14,7 +14,7 @@ import java.io.IOException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class ProductControllerTest extends AcceptanceTest {
+class ProductAcceptanceTest extends AcceptanceTest {
 
     @Test
     @DisplayName("상품 등록 요청이 오면 상품 아이디를 반환한다.")

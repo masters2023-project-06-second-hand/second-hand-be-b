@@ -4,10 +4,10 @@ import com.codesquad.secondhand.domain.region.Region;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.CollectionTable;
-import javax.persistence.ElementCollection;
 import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -15,9 +15,10 @@ import lombok.NoArgsConstructor;
 @Embeddable
 public class MemberRegions implements Serializable {
 
-    @ElementCollection
-    @CollectionTable(name = "member_region",
-            joinColumns = @JoinColumn(name = "member_id", referencedColumnName = "id"))
+    @ManyToMany
+    @JoinTable(name = "member_region",
+            joinColumns = @JoinColumn(name = "member_id"),
+            inverseJoinColumns = @JoinColumn(name = "region_id"))
     private List<Region> regions = new ArrayList<>();
 
     public List<Region> getRegions() {
