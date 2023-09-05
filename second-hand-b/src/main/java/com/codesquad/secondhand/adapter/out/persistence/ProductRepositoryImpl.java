@@ -1,5 +1,6 @@
 package com.codesquad.secondhand.adapter.out.persistence;
 
+import com.codesquad.secondhand.adapter.out.persistence.imports.ProductJpaRepository;
 import com.codesquad.secondhand.application.port.out.ProductRepository;
 import com.codesquad.secondhand.domain.product.Product;
 import java.util.Optional;

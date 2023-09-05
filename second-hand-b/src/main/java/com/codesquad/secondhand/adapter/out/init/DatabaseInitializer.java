@@ -26,9 +26,9 @@ public class DatabaseInitializer implements ApplicationRunner {
     private static final int CATEGORY_NAME_INDEX = 0;
     private static final int CATEGORY_IMG_URL_INDEX = 1;
     @Value(value = "${data.init.path.region}")
-    private String REGION_FILE_PATH;
+    private String regionFilePath;
     @Value(value = "${data.init.path.category}")
-    private String CATEGORY_FILE_PATH;
+    private String categoryFilePath;
 
     @Autowired
     private RegionRepository regionRepository;
@@ -43,7 +43,7 @@ public class DatabaseInitializer implements ApplicationRunner {
     }
 
     private void initializeRegion() throws IOException {
-        ClassPathResource resource = new ClassPathResource(REGION_FILE_PATH);
+        ClassPathResource resource = new ClassPathResource(regionFilePath);
         InputStream is = resource.getInputStream();
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
@@ -60,7 +60,7 @@ public class DatabaseInitializer implements ApplicationRunner {
     }
 
     private void initializeCategory() throws IOException {
-        ClassPathResource resource = new ClassPathResource(CATEGORY_FILE_PATH);
+        ClassPathResource resource = new ClassPathResource(categoryFilePath);
         InputStream is = resource.getInputStream();
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
 

@@ -1,5 +1,6 @@
 package com.codesquad.secondhand.adapter.out.persistence;
 
+import com.codesquad.secondhand.adapter.out.persistence.imports.RegionJpaRepository;
 import com.codesquad.secondhand.application.port.out.RegionRepository;
 import com.codesquad.secondhand.domain.region.Region;
 import java.util.List;

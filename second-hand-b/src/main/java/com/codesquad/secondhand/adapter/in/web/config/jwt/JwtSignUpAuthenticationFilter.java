@@ -5,6 +5,7 @@ import com.codesquad.secondhand.domain.member.Role;
 import com.codesquad.secondhand.domain.units.JwtTokenProvider;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Date;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -31,9 +32,10 @@ public class JwtSignUpAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
         String token = jwtTokenProvider.resolveToken(request);
-        if (token != null && jwtTokenProvider.validateToken(token.split(" ")[1].trim())
-                && !jwtTokenProvider.isAccessToken(token.split(" ")[1].trim())) {
-            String email = jwtTokenProvider.getEmail(token.split(" ")[1].trim());
+        Date now = new Date();
+        if (token != null && jwtTokenProvider.validateToken(token, now)
+                && !jwtTokenProvider.isAccessToken(token)) {
+            String email = jwtTokenProvider.getEmail(token);
             Authentication authentication = new JwtSignUpToken(email, Collections.singleton(new SimpleGrantedAuthority(
                     Role.USER.getKey())));
             authentication.setAuthenticated(true);

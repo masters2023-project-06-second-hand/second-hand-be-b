@@ -38,11 +38,9 @@ public class Member implements Serializable {
     private String profileImage;
     @Embedded
     private MemberRegions myRegions = new MemberRegions();
-
     @ManyToOne
     @JoinColumn(name = "selected_region_id")
     private Region selectedRegion;
-
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -96,5 +94,9 @@ public class Member implements Serializable {
 
     public Collection<GrantedAuthority> getRoleAuthority() {
         return Collections.singleton(new SimpleGrantedAuthority(role.getKey()));
+    }
+
+    public String getIdStringValue() {
+        return String.valueOf(id);
     }
 }
