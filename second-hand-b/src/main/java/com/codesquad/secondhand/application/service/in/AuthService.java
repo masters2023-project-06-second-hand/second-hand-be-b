@@ -67,14 +67,12 @@ public class AuthService implements AuthUseCase {
     }
 
     private String getAccessToken(String email, String id, Date startDate) {
-        Date expiryDate = JwtTokenProvider.getAccessTokenExpiryDate(startDate);
-        return jwtTokenProvider.createAccessToken(email, id, startDate, expiryDate);
+        return jwtTokenProvider.createAccessToken(email, id, startDate);
     }
 
     private String getRefreshToken(String email, Member member, Date startDate) {
         Date expiryDate = JwtTokenProvider.getRefreshTokenExpiryDate(startDate);
-        String refreshToken = jwtTokenProvider.createRefreshToken(email, member.getIdStringValue(), startDate,
-                expiryDate);
+        String refreshToken = jwtTokenProvider.createRefreshToken(email, member.getIdStringValue(), startDate);
         refreshTokenRepository.save(new RefreshToken(refreshToken, expiryDate, member, email));
         return refreshToken;
     }

@@ -45,8 +45,7 @@ public class AcceptanceTest {
         Member member = memberRepository.save(
                 new Member(TEST_EMAIL, TEST_NICKNAME, TEST_PROFILE_IMAGE, region, Role.MEMBER));
         final Date startDate = new Date();
-        accessToken = jwtTokenProvider.createAccessToken(TEST_EMAIL, member.getIdStringValue(), startDate,
-                JwtTokenProvider.getAccessTokenExpiryDate(startDate));
+        accessToken = jwtTokenProvider.createAccessToken(TEST_EMAIL, member.getIdStringValue(), startDate);
     }
 
 }

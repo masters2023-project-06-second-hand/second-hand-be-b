@@ -23,36 +23,36 @@ public class JwtTokenProvider {
     private static final String TOKEN_DELIMITER = " ";
     private static final int TOKEN_INDEX = 1;
 
-    public static Date getAccessTokenExpiryDate(Date startDate) {
-        return new Date(startDate.getTime() + JwtTokenProvider.THIRTY_MIN);
-    }
-
     public static Date getRefreshTokenExpiryDate(Date startDate) {
         return new Date(startDate.getTime() + JwtTokenProvider.THIRTY_DAYS);
     }
 
-    public String createAccessToken(String email, String id, Date startDate, Date expiryDate) {
+    public String createAccessToken(String email, String id, Date startDate) {
         return Jwts.builder()
                 .claim(EMAIL_CLAIM, email)
                 .claim(IS_REGISTERED_CLAIM, true)
                 .setIssuer(SECOND_HAND_CLAIM)
                 .setSubject(id)
                 .setIssuedAt(startDate)
-                .setExpiration(expiryDate)
+                .setExpiration(getAccessTokenExpiryDate(startDate))
                 .signWith(KEY)
                 .compact();
     }
 
-    public String createRefreshToken(String email, String id, Date startDate, Date expiryDate) {
+    public String createRefreshToken(String email, String id, Date startDate) {
         return Jwts.builder()
                 .claim(EMAIL_CLAIM, email)
                 .claim(IS_REGISTERED_CLAIM, true)
                 .setIssuer(SECOND_HAND_CLAIM)
                 .setSubject(id)
                 .setIssuedAt(startDate)
-                .setExpiration(expiryDate)
+                .setExpiration(JwtTokenProvider.getRefreshTokenExpiryDate(startDate))
                 .signWith(KEY)
                 .compact();
+    }
+
+    private static Date getAccessTokenExpiryDate(Date startDate) {
+        return new Date(startDate.getTime() + JwtTokenProvider.THIRTY_MIN);
     }
 
     public static String parseTokenFromAuthorization(String header) {

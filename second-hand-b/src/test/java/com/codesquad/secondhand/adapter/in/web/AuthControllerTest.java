@@ -72,8 +72,7 @@ class AuthControllerTest {
     }
 
     private String getTestRefreshToken(Member member, Date startDate) {
-        return jwtTokenProvider.createRefreshToken(TEST_EMAIL, member.getIdStringValue(), startDate,
-                JwtTokenProvider.getRefreshTokenExpiryDate(startDate));
+        return jwtTokenProvider.createRefreshToken(TEST_EMAIL, member.getIdStringValue(), startDate);
     }
 
     private Member getTestMember() {
