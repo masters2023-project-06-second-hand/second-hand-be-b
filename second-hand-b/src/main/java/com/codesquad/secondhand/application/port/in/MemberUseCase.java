@@ -6,7 +6,9 @@ import java.util.List;
 
 public interface MemberUseCase {
 
-    void toggleProductLikeStatus(Member member, Long productId, boolean isLiked);
+    void toggleProductLikeStatus(Member member, long productId, boolean isLiked);
 
-    List<ProductDetail> fetchMemberFavoriteProducts(Member member, Long memberId, long categoryId);
+    List<ProductDetail> fetchMemberFavoriteProducts(Member member, long memberId);
+
+    List<ProductDetail> fetchMemberFavoriteProducts(Member member, long memberId, long categoryId);
 }

@@ -19,7 +19,7 @@ class ProductControllerTest extends AcceptanceTest {
     @Test
     @DisplayName("상품 등록 요청이 오면 상품 아이디를 반환한다.")
     void create() throws IOException {
-        var response = 상품을_등록한다(ayaanAccessToken);
+        var response = 상품을_등록한다(ayaanAccessToken, 1);
 
         상품등록을_검증한다(response);
     }
@@ -28,7 +28,7 @@ class ProductControllerTest extends AcceptanceTest {
     @DisplayName("상품 상세 조회 요청이 오면 상품 상세 정보를 반환한다.")
     void getDetails() throws IOException {
         // given
-        Long id = 상품을_등록한다(ayaanAccessToken).jsonPath().getLong("id");
+        Long id = 상품을_등록한다(ayaanAccessToken, 1).jsonPath().getLong("id");
         // when
         var response = 상품상세를_조회한다(id, ayaanAccessToken);
         // then
@@ -39,7 +39,7 @@ class ProductControllerTest extends AcceptanceTest {
     @DisplayName("상품 수정 요청이 오면 상품 정보를 수정한다.")
     void modify() throws IOException {
         //given
-        Long id = 상품을_등록한다(ayaanAccessToken).jsonPath().getLong("id");
+        Long id = 상품을_등록한다(ayaanAccessToken, 1).jsonPath().getLong("id");
 
         // when
         var response = 상품을_수정한다(id, ayaanAccessToken);
@@ -52,7 +52,7 @@ class ProductControllerTest extends AcceptanceTest {
     @DisplayName("상품 상태 수정 요청이 오면 상품 상태를 수정한다.")
     void modifyStatus() throws IOException {
         //given
-        Long id = 상품을_등록한다(ayaanAccessToken).jsonPath().getLong("id");
+        Long id = 상품을_등록한다(ayaanAccessToken, 1).jsonPath().getLong("id");
 
         //when
         var response = 상품상태를_수정한다(id, ayaanAccessToken);

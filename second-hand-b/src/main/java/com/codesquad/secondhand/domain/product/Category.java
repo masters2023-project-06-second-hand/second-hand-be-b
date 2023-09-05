@@ -30,4 +30,8 @@ public class Category {
     public String getName() {
         return name;
     }
+
+    public boolean isSameId(long categoryId) {
+        return id.equals(categoryId);
+    }
 }

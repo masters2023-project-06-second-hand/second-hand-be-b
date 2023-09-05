@@ -115,4 +115,8 @@ public class Member implements Serializable {
     public Set<Product> getProducts() {
         return likes.getProducts();
     }
+
+    public Set<Product> getProductsByCategoryId(long categoryId) {
+        return likes.getProductsByCategoryId(categoryId);
+    }
 }

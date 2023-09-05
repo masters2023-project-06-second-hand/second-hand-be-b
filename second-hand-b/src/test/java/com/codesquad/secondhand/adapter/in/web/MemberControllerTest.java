@@ -5,6 +5,7 @@ import static com.codesquad.secondhand.adapter.in.web.MemberSteps.관심상품�
 import static com.codesquad.secondhand.adapter.in.web.MemberSteps.관심상품은_담은_응답_검증;
 import static com.codesquad.secondhand.adapter.in.web.MemberSteps.나의_관심상품_목록_조회_검증한다;
 import static com.codesquad.secondhand.adapter.in.web.MemberSteps.나의_광심상품_목록_조회한다;
+import static com.codesquad.secondhand.adapter.in.web.MemberSteps.나의_카테고리별_관심상품_목록_조회_검증한다;
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품을_등록한다;
 
 import com.codesquad.secondhand.utils.AcceptanceTest;
@@ -17,7 +18,7 @@ class MemberControllerTest extends AcceptanceTest {
     @Test
     void shouldAddProductToInterestedProductsList() {
         // given
-        var id = 상품을_등록한다(ayaanAccessToken).jsonPath().getString("id");
+        var id = 상품을_등록한다(ayaanAccessToken, 1).jsonPath().getString("id");
 
         // when
         var response = 관심상품에_담는다(id, albertAccessToken);
@@ -30,7 +31,7 @@ class MemberControllerTest extends AcceptanceTest {
     @Test
     void shouldRemoveProductToInterestedProductsList() {
         // given
-        var id = 상품을_등록한다(ayaanAccessToken).jsonPath().getString("id");
+        var id = 상품을_등록한다(ayaanAccessToken, 1).jsonPath().getString("id");
         관심상품에_담는다(id, albertAccessToken);
 
         // when
@@ -44,8 +45,8 @@ class MemberControllerTest extends AcceptanceTest {
     @Test
     void shouldReturnListOfInterestedProductsWhenRequested() {
         // given
-        var 상품_아이디_1 = 상품을_등록한다(ayaanAccessToken).jsonPath().getString("id");
-        var 상품_아이디_2 = 상품을_등록한다(ayaanAccessToken).jsonPath().getString("id");
+        var 상품_아이디_1 = 상품을_등록한다(ayaanAccessToken, 1).jsonPath().getString("id");
+        var 상품_아이디_2 = 상품을_등록한다(ayaanAccessToken, 2).jsonPath().getString("id");
         관심상품에_담는다(상품_아이디_1, albertAccessToken);
         관심상품에_담는다(상품_아이디_2, albertAccessToken);
 
@@ -54,5 +55,21 @@ class MemberControllerTest extends AcceptanceTest {
 
         // then
         나의_관심상품_목록_조회_검증한다(response);
+    }
+
+    @DisplayName("나의 관심상품을 카테고리 별 목록을 조회 요청하면 카테고리 별 목록을 보여준다")
+    @Test
+    void shouldReturnProductsGroupedByCategoryWhenFetchingFavorites() {
+        // given
+        var 상품_아이디_1 = 상품을_등록한다(ayaanAccessToken, 1).jsonPath().getString("id");
+        var 상품_아이디_2 = 상품을_등록한다(ayaanAccessToken, 2).jsonPath().getString("id");
+        관심상품에_담는다(상품_아이디_1, albertAccessToken);
+        관심상품에_담는다(상품_아이디_2, albertAccessToken);
+
+        // when
+        var response = 나의_광심상품_목록_조회한다(albertAccessToken, 1);
+
+        // then
+        나의_카테고리별_관심상품_목록_조회_검증한다(response);
     }
 }

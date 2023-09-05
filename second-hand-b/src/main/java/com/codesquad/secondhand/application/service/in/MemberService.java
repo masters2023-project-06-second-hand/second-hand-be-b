@@ -36,7 +36,7 @@ public class MemberService implements MemberUseCase {
 
     @Transactional
     @Override
-    public void toggleProductLikeStatus(Member member, Long productId, boolean isLiked) {
+    public void toggleProductLikeStatus(Member member, long productId, boolean isLiked) {
         Product product = productService.getById(productId);
         Member savedMember = getById(member.getId());
         if (isLiked) {
@@ -48,12 +48,22 @@ public class MemberService implements MemberUseCase {
 
     @Transactional(readOnly = true)
     @Override
-    public List<ProductDetail> fetchMemberFavoriteProducts(Member member, Long memberId, long categoryId) {
+    public List<ProductDetail> fetchMemberFavoriteProducts(Member member, long memberId) {
         if (!member.getId().equals(memberId)) {
             throw new PermissionDeniedException();
         }
         Member savedMember = getById(memberId);
         Set<Product> products = savedMember.getProducts();
         return productService.toProductDetails(products);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<ProductDetail> fetchMemberFavoriteProducts(Member member, long memberId, long categoryId) {
+        if (!member.getId().equals(memberId)) {
+            throw new PermissionDeniedException();
+        }
+        return productService.findProductsByMemberIdAndCategoryId(memberId,
+                categoryId);
     }
 }

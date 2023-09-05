@@ -2,6 +2,7 @@ package com.codesquad.secondhand.domain.member;
 
 import com.codesquad.secondhand.domain.product.Product;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.persistence.Embeddable;
 import javax.persistence.ManyToMany;
 
@@ -22,5 +23,11 @@ public class Likes {
 
     public Set<Product> getProducts() {
         return products;
+    }
+
+    public Set<Product> getProductsByCategoryId(long categoryId) {
+        return products.stream()
+                .filter(product -> product.getCategory().isSameId(categoryId))
+                .collect(Collectors.toSet());
     }
 }

@@ -4,6 +4,7 @@ import com.codesquad.secondhand.adapter.out.persistence.imports.ProductJpaReposi
 import com.codesquad.secondhand.application.port.out.ProductRepository;
 import com.codesquad.secondhand.domain.product.Product;
 import java.util.Optional;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -21,5 +22,10 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     public Optional<Product> findById(Long id) {
         return productJpaRepository.findById(id);
+    }
+
+    @Override
+    public Set<Product> findProductsByMemberIdAndCategoryId(long memberId, long categoryId) {
+        return productJpaRepository.findProductsByMemberIdAndCategoryId(memberId, categoryId);
     }
 }

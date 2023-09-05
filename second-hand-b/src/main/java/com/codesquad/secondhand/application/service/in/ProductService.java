@@ -89,6 +89,10 @@ public class ProductService implements ProductUseCase {
                 .orElseThrow(ProductNotFoundException::new);
     }
 
+    public List<ProductDetail> findProductsByMemberIdAndCategoryId(long memberId, long categoryId) {
+        return toProductDetails(productRepository.findProductsByMemberIdAndCategoryId(memberId, categoryId));
+    }
+
     private Product toProduct(ProductCreateRequest productCreateRequest) {
         // TODO: jwt id를 이용해서 writer 추가
         Region region = regionService.getById(productCreateRequest.getRegionId());
