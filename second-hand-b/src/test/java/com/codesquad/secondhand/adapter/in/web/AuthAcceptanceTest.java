@@ -1,7 +1,7 @@
 package com.codesquad.secondhand.adapter.in.web;
 
-import static com.codesquad.secondhand.adapter.in.web.MemberSteps.토큰_검증;
-import static com.codesquad.secondhand.adapter.in.web.MemberSteps.회원_가입_한다;
+import static com.codesquad.secondhand.adapter.in.web.AuthSteps.토큰_검증;
+import static com.codesquad.secondhand.adapter.in.web.AuthSteps.회원_가입_한다;
 
 import com.codesquad.secondhand.domain.units.JwtTokenProvider;
 import com.codesquad.secondhand.utils.AcceptanceTest;

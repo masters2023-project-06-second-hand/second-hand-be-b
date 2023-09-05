@@ -18,4 +18,9 @@ public class Likes {
     public boolean remove(Product product) {
         return products.remove(product);
     }
+
+
+    public Set<Product> getProducts() {
+        return products;
+    }
 }

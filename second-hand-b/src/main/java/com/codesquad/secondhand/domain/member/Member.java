@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -109,5 +110,9 @@ public class Member implements Serializable {
 
     public boolean removeLikes(Product product) {
         return likes.remove(product);
+    }
+
+    public Set<Product> getProducts() {
+        return likes.getProducts();
     }
 }

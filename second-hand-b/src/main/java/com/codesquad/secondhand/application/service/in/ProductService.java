@@ -15,6 +15,8 @@ import com.codesquad.secondhand.domain.product.Status;
 import com.codesquad.secondhand.domain.region.Region;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -65,6 +67,23 @@ public class ProductService implements ProductUseCase {
         product.modifyStatus(status);
     }
 
+    public static ProductDetail toProductDetail(Product product) {
+        Category category = product.getCategory();
+        Region region = product.getRegion();
+        Status status = product.getStatus();
+        List<ImageInfo> imageInfos = product.fetchImageInfos();
+        return new ProductDetail(product.getId(),
+                null,
+                product.getName(),
+                category.getName(),
+                region.getName(),
+                status.getName(),
+                product.getContent(),
+                product.getPrice(),
+                imageInfos,
+                product.getCreatedAt());
+    }
+
     public Product getById(Long productId) {
         return productRepository.findById(productId)
                 .orElseThrow(ProductNotFoundException::new);
@@ -90,20 +109,9 @@ public class ProductService implements ProductUseCase {
                 LocalDateTime.now());
     }
 
-    private ProductDetail toProductDetail(Product product) {
-        Category category = product.getCategory();
-        Region region = product.getRegion();
-        Status status = product.getStatus();
-        List<ImageInfo> imageInfos = product.fetchImageInfos();
-        return new ProductDetail(product.getId(),
-                null,
-                product.getName(),
-                category.getName(),
-                region.getName(),
-                status.getName(),
-                product.getContent(),
-                product.getPrice(),
-                imageInfos,
-                product.getCreatedAt());
+    public List<ProductDetail> toProductDetails(Set<Product> products) {
+        return products.stream()
+                .map(ProductService::toProductDetail)
+                .collect(Collectors.toList());
     }
 }
