@@ -34,7 +34,7 @@ public class ProductSteps {
         body.put("imagesId", List.of(1, 2));
 
         return RestAssured.given().contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", "Bearer " + accessToken)
+                .auth().oauth2(accessToken)
                 .log().all().body(body)
                 .when().post("/api/products")
                 .then().log().all().extract();
@@ -46,7 +46,7 @@ public class ProductSteps {
 
     public static ExtractableResponse<Response> 상품상세를_조회한다(Long id, String accessToken) {
         return RestAssured.given().log().all()
-                .header("Authorization", "Bearer " + accessToken)
+                .auth().oauth2(accessToken)
                 .when().get("/api/products/{productId}", id)
                 .then().log().all().extract();
     }
@@ -74,7 +74,7 @@ public class ProductSteps {
         body.put("imagesId", List.of(1));
 
         return RestAssured.given().log().all()
-                .header("Authorization", "Bearer " + accessToken)
+                .auth().oauth2(accessToken)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(body)
                 .when().put("/api/products/{productId}", id)
@@ -98,7 +98,7 @@ public class ProductSteps {
     public static ExtractableResponse<Response> 상품상태를_수정한다(Long id, String accessToken) {
         Map<String, String> body = Map.of("status", "판매완료");
         return RestAssured.given().log().all()
-                .header("Authorization", "Bearer " + accessToken)
+                .auth().oauth2(accessToken)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(body)
                 .when().put("/api/products/{productId}/status", id)
@@ -117,7 +117,7 @@ public class ProductSteps {
         return RestAssured.given().log().all()
                 .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                 .multiPart("file", file)
-                .header("Authorization", "Bearer " + accessToken)
+                .auth().oauth2(accessToken)
                 .when().post("/api/images")
                 .then().log().all().extract();
     }
@@ -126,7 +126,7 @@ public class ProductSteps {
         Map<String, Long> body = Map.of("id", id);
         return RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", "Bearer " + accessToken)
+                .auth().oauth2(accessToken)
                 .body(body)
                 .when().delete("/api/images")
                 .then().log().all().extract();

@@ -17,7 +17,7 @@ public class MemberRegionSteps {
 
         return RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", "Bearer " + accessToken)
+                .auth().oauth2(accessToken)
                 .body(body)
                 .when().post("/api/members/{memberId}/regions", memberId)
                 .then().log().all().extract();
@@ -28,7 +28,7 @@ public class MemberRegionSteps {
 
         return RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", "Bearer " + accessToken)
+                .auth().oauth2(accessToken)
                 .body(body)
                 .when().delete("/api/members/{memberId}/regions", memberId)
                 .then().log().all().extract();
@@ -36,7 +36,7 @@ public class MemberRegionSteps {
 
     public static ExtractableResponse<Response> 멤버의_지역목록을_조회한다(Long memberId, String accessToken) {
         return RestAssured.given().log().all()
-                .header("Authorization", "Bearer " + accessToken)
+                .auth().oauth2(accessToken)
                 .when().get("/api/members/{memberId}/regions", memberId)
                 .then().log().all().extract();
     }
@@ -54,7 +54,7 @@ public class MemberRegionSteps {
         Map<String, Object> body = Map.of("id", regionId);
         return RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", "Bearer " + accessToken)
+                .auth().oauth2(accessToken)
                 .body(body)
                 .when().put("/api/members/{memberId}/regions", memberId)
                 .then().log().all().extract();
