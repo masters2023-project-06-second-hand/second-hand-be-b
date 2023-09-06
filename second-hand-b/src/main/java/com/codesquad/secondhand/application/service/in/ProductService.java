@@ -7,6 +7,7 @@ import com.codesquad.secondhand.application.port.in.request.ProductCreateRequest
 import com.codesquad.secondhand.application.port.in.request.ProductModifyRequest;
 import com.codesquad.secondhand.application.port.in.response.ImageInfo;
 import com.codesquad.secondhand.application.port.in.response.ProductDetail;
+import com.codesquad.secondhand.application.port.in.response.ProductWriter;
 import com.codesquad.secondhand.application.port.out.ProductRepository;
 import com.codesquad.secondhand.domain.image.Image;
 import com.codesquad.secondhand.domain.member.Member;
@@ -69,12 +70,13 @@ public class ProductService implements ProductUseCase {
     }
 
     public static ProductDetail toProductDetail(Product product) {
+        Member member = product.getWriter();
         Category category = product.getCategory();
         Region region = product.getRegion();
         Status status = product.getStatus();
         List<ImageInfo> imageInfos = product.fetchImageInfos();
         return new ProductDetail(product.getId(),
-                null,
+                new ProductWriter(member.getId(), member.getNickname()),
                 product.getName(),
                 category.getName(),
                 region.getName(),
@@ -107,7 +109,6 @@ public class ProductService implements ProductUseCase {
     }
 
     private Product toProduct(ProductCreateRequest productCreateRequest, Member member) {
-        // TODO: jwt id를 이용해서 writer 추가
         Region region = regionService.getById(productCreateRequest.getRegionId());
         Category category = categoryService.getById(productCreateRequest.getCategoryId());
         List<Long> imagesId = productCreateRequest.getImagesId();
