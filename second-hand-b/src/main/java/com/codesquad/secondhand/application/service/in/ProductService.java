@@ -94,8 +94,16 @@ public class ProductService implements ProductUseCase {
         return toProductDetails(productRepository.findProductsByMemberIdAndCategoryId(memberId, categoryId));
     }
 
-    public List<ProductDetail> findByWriterId(long memberId) {
+    public List<ProductDetail> getByWriterId(long memberId) {
         return toProductDetails(productRepository.findByWriterId(memberId));
+    }
+
+    public List<ProductDetail> getSoldOutByWriterId(long memberId) {
+        return toProductDetails(productRepository.findByWriterIdAndStatus(memberId, Status.SOLDOUT));
+    }
+
+    public List<ProductDetail> getSalesByWriterId(long memberId) {
+        return toProductDetails(productRepository.findByWriterIdAndStatusNot(memberId, Status.SOLDOUT));
     }
 
     private Product toProduct(ProductCreateRequest productCreateRequest, Member member) {

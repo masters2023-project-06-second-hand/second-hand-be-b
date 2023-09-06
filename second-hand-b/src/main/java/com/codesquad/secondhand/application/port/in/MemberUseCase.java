@@ -16,4 +16,6 @@ public interface MemberUseCase {
     List<CategorySimpleDetail> fetchMemberInterestCategories(Member member, long memberId);
 
     List<ProductDetail> getMySellingProducts(Member member, long memberId);
+
+    List<ProductDetail> getMySellingProductsByStatus(Member member, long memberId, String statusName);
 }

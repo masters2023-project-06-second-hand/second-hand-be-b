@@ -8,6 +8,7 @@ import com.codesquad.secondhand.application.port.in.response.ProductDetail;
 import com.codesquad.secondhand.application.port.out.MemberRepository;
 import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.product.Product;
+import com.codesquad.secondhand.domain.product.Status;
 import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
@@ -74,7 +75,17 @@ public class MemberService implements MemberUseCase {
     @Override
     public List<ProductDetail> getMySellingProducts(Member member, long memberId) {
         validateMemberPermission(member, memberId);
-        return productService.findByWriterId(memberId);
+        return productService.getByWriterId(memberId);
+    }
+
+    @Override
+    public List<ProductDetail> getMySellingProductsByStatus(Member member, long memberId, String statusName) {
+        validateMemberPermission(member, memberId);
+        Status status = Status.findByName(statusName);
+        if (Status.isSoldOut(status)) {
+            return productService.getSoldOutByWriterId(memberId);
+        }
+        return productService.getSalesByWriterId(memberId);
     }
 
     private static void validateMemberPermission(Member member, long memberId) {

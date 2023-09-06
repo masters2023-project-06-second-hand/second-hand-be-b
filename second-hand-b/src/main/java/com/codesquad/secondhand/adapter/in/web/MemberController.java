@@ -42,10 +42,10 @@ public class MemberController {
         if (categoryId.isPresent()) {
             List<ProductDetail> productDetails = memberUseCase.fetchMemberFavoriteProducts(member, memberId,
                     categoryId.get());
-            return ResponseEntity.ok().body(productDetails);
+            return ResponseEntity.ok(productDetails);
         }
         List<ProductDetail> productDetails = memberUseCase.fetchMemberFavoriteProducts(member, memberId);
-        return ResponseEntity.ok().body(productDetails);
+        return ResponseEntity.ok(productDetails);
     }
 
     @GetMapping("/api/members/{memberId}/likes/categories")
@@ -60,8 +60,13 @@ public class MemberController {
     @GetMapping("/api/members/{memberId}/sales")
     public ResponseEntity<List<ProductDetail>> getMySellingProducts(
             @AuthenticationPrincipal Member member,
+            @RequestParam Optional<String> status,
             @PathVariable long memberId
     ) {
+        if (status.isPresent()) {
+            List<ProductDetail> categories = memberUseCase.getMySellingProductsByStatus(member, memberId, status.get());
+            return ResponseEntity.ok(categories);
+        }
         List<ProductDetail> categories = memberUseCase.getMySellingProducts(member, memberId);
         return ResponseEntity.ok(categories);
     }
