@@ -1,0 +1,38 @@
+# 워크플로우의 이름을 정의합니다. 이 이름은 GitHub Actions 탭에서 표시됩니다.
+name: be server
+
+# 워크플로우 실행의 트리거 조건을 정의합니다.
+on:
+  # 'main' 브랜치에 pull request 이벤트가 발생할 때 워크플로우를 실행합니다.
+  pull_request:
+    branches: [ main,be-server-cicd ]
+  # 워크플로우를 수동으로 실행할 수 있는 옵션을 제공합니다. GitHub 웹 인터페이스에서 "Run workflow" 버튼을 통해 실행할 수 있습니다.
+  workflow_dispatch:
+
+# 워크플로우에서 실행될 작업들을 정의합니다.
+jobs:
+  # 'build'라는 이름의 작업을 정의합니다.
+  build:
+    # 이 작업은 GitHub-hosted runner의 'ubuntu-latest' 환경에서 실행됩니다.
+    runs-on: ubuntu-latest
+
+    # 작업에서 실행될 순차적인 단계를 정의합니다.
+    steps:
+      # 첫 번째 단계: 현재 레포지토리의 코드를 runner에 체크아웃합니다.
+      - uses: actions/checkout@v4  # 'actions/checkout' 액션의 버전 4를 사용합니다.
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'corretto'
+          java-version: '11'
+
+      - run: |
+          echo "${{ secrets.CLOUD }}" > second-hand-b/src/main/resources/application-cloud.yml
+          echo "${{ secrets.TESTDB }}" > second-hand-b/src/main/resources/application-db.yml
+          echo "${{ secrets.OAUTH2 }}" > second-hand-b/src/main/resources/application-cloud.yml
+
+      - run: |
+          cd second-hand-b
+          chmod +x gradlew
+          ./gradlew build
+      
+          
