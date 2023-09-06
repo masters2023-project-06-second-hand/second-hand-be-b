@@ -23,7 +23,7 @@ class RegionAcceptanceTest extends AcceptanceTest {
                 .queryParam("page", page)
                 .queryParam("size", size)
                 .queryParam("word", word)
-                .auth().oauth2(accessToken)
+                .auth().oauth2(ayaanAccessToken)
                 .when().get("/api/regions")
                 .then().log().all().extract();
 
