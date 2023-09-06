@@ -44,4 +44,14 @@ public class ProductRepositoryImpl implements ProductRepository {
     public Set<Product> findByWriterIdAndStatusNot(long memberId, Status status) {
         return productJpaRepository.findByWriterIdAndStatusNot(memberId, status);
     }
+
+    @Override
+    public Set<Product> findByRegionId(long regionId) {
+        return productJpaRepository.findByRegionId(regionId);
+    }
+
+    @Override
+    public Set<Product> findByRegionIdAndCategoryId(long regionId, long categoryId) {
+        return productJpaRepository.findByRegionIdAndCategoryId(regionId, categoryId);
+    }
 }

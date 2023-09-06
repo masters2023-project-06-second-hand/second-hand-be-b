@@ -20,4 +20,8 @@ public interface ProductJpaRepository extends JpaRepository<Product, Long> {
     Set<Product> findByWriterIdAndStatus(long memberId, Status status);
 
     Set<Product> findByWriterIdAndStatusNot(long memberId, Status status);
+
+    Set<Product> findByRegionId(long regionId);
+
+    Set<Product> findByRegionIdAndCategoryId(long regionId, long categoryId);
 }

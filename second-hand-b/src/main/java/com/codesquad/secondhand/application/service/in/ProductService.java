@@ -7,6 +7,7 @@ import com.codesquad.secondhand.application.port.in.request.ProductCreateRequest
 import com.codesquad.secondhand.application.port.in.request.ProductModifyRequest;
 import com.codesquad.secondhand.application.port.in.response.ImageInfo;
 import com.codesquad.secondhand.application.port.in.response.ProductDetail;
+import com.codesquad.secondhand.application.port.in.response.ProductInfo;
 import com.codesquad.secondhand.application.port.in.response.ProductWriter;
 import com.codesquad.secondhand.application.port.out.ProductRepository;
 import com.codesquad.secondhand.domain.image.Image;
@@ -69,7 +70,19 @@ public class ProductService implements ProductUseCase {
         product.modifyStatus(status);
     }
 
-    public static ProductDetail toProductDetail(Product product) {
+    @Override
+    public List<ProductInfo> getProductsByRegion(Long regionId) {
+        Set<Product> products = productRepository.findByRegionId(regionId);
+        return toProductInfos(products);
+    }
+
+    @Override
+    public List<ProductInfo> getProductsByRegionAndCategory(Long regionId, Long categoryId) {
+        Set<Product> products = productRepository.findByRegionIdAndCategoryId(regionId, categoryId);
+        return toProductInfos(products);
+    }
+
+    private static ProductDetail toProductDetail(Product product) {
         Member member = product.getWriter();
         Category category = product.getCategory();
         Region region = product.getRegion();
@@ -85,6 +98,23 @@ public class ProductService implements ProductUseCase {
                 product.getPrice(),
                 imageInfos,
                 product.getCreatedAt());
+    }
+
+    public static ProductInfo toProductInfo(Product product) {
+        Member member = product.getWriter();
+        Region region = product.getRegion();
+        Status status = product.getStatus();
+        Image thumbnail = product.getThumbnailImage();
+        return new ProductInfo(product.getId(),
+                member.getId(),
+                thumbnail.getUrl(),
+                product.getName(),
+                region.getName(),
+                product.getCreatedAt(),
+                status.getName(),
+                product.getPrice(),
+                0,
+                0);
     }
 
     public Product getById(Long productId) {
@@ -130,6 +160,12 @@ public class ProductService implements ProductUseCase {
     public List<ProductDetail> toProductDetails(Set<Product> products) {
         return products.stream()
                 .map(ProductService::toProductDetail)
+                .collect(Collectors.toList());
+    }
+
+    public List<ProductInfo> toProductInfos(Set<Product> products) {
+        return products.stream()
+                .map(ProductService::toProductInfo)
                 .collect(Collectors.toList());
     }
 }
