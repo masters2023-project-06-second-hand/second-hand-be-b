@@ -23,7 +23,7 @@ class MemberRegionAcceptanceTest extends AcceptanceTest {
         Long regionId = 1L;
 
         //when
-        var response = 멤버의_지역을_추가한다(memberId, regionId, accessToken);
+        var response = 멤버의_지역을_추가한다(memberId, regionId, ayaanAccessToken);
 
         //then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
@@ -35,10 +35,10 @@ class MemberRegionAcceptanceTest extends AcceptanceTest {
         //given
         Long memberId = 1L;
         Long regionId = 1L;
-        멤버의_지역을_추가한다(memberId, regionId, accessToken);
+        멤버의_지역을_추가한다(memberId, regionId, ayaanAccessToken);
 
         //when
-        var response = 멤버의_지역을_삭제한다(memberId, regionId, accessToken);
+        var response = 멤버의_지역을_삭제한다(memberId, regionId, ayaanAccessToken);
 
         //then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
@@ -50,10 +50,10 @@ class MemberRegionAcceptanceTest extends AcceptanceTest {
         //given
         Long memberId = 1L;
         Long regionId1 = 1L;
-        멤버의_지역을_추가한다(memberId, regionId1, accessToken);
+        멤버의_지역을_추가한다(memberId, regionId1, ayaanAccessToken);
 
         //when
-        var response = 멤버의_지역목록을_조회한다(memberId, accessToken);
+        var response = 멤버의_지역목록을_조회한다(memberId, ayaanAccessToken);
 
         //then
         멤버의_지역목록_조회를_검증한다(response);
@@ -65,12 +65,12 @@ class MemberRegionAcceptanceTest extends AcceptanceTest {
         //given
         Long memberId = 1L;
         Long regionId = 2L;
-        멤버의_지역을_추가한다(memberId, regionId, accessToken);
+        멤버의_지역을_추가한다(memberId, regionId, ayaanAccessToken);
 
         //when
-        var response = 멤버의_지역을_선택한다(memberId, regionId, accessToken);
+        var response = 멤버의_지역을_선택한다(memberId, regionId, ayaanAccessToken);
 
         //then
-        멤버의_지역선택을_검증한다(memberId, accessToken, response);
+        멤버의_지역선택을_검증한다(memberId, ayaanAccessToken, response);
     }
 }

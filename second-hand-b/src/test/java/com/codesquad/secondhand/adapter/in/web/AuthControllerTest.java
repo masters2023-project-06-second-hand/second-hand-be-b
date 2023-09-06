@@ -44,9 +44,6 @@ class AuthControllerTest {
     MockMvc mockMvc;
 
     @Autowired
-    JwtTokenProvider jwtTokenProvider;
-
-    @Autowired
     ObjectMapper objectMapper;
 
     @Autowired
@@ -72,7 +69,7 @@ class AuthControllerTest {
     }
 
     private String getTestRefreshToken(Member member, Date startDate) {
-        return jwtTokenProvider.createRefreshToken(TEST_EMAIL, member.getIdStringValue(), startDate);
+        return JwtTokenProvider.createRefreshToken(TEST_EMAIL, member.getIdStringValue(), startDate);
     }
 
     private Member getTestMember() {
@@ -98,7 +95,7 @@ class AuthControllerTest {
     @Test
     void shouldReturnTokensWhenSignUpWithSignUpToken() throws Exception {
         // given
-        String signUpToken = jwtTokenProvider.createSignUpToken(TEST_EMAIL);
+        String signUpToken = JwtTokenProvider.createSignUpToken(TEST_EMAIL);
         SignUpRequest signUpRequest = new SignUpRequest(TEST_NICKNAME, TEST_PROFILE_IMAGE, List.of(1L));
 
         // when,then

@@ -2,18 +2,22 @@ package com.codesquad.secondhand.application.service.in;
 
 
 import com.codesquad.secondhand.application.port.in.ProductUseCase;
+import com.codesquad.secondhand.application.port.in.exception.ProductNotFoundException;
 import com.codesquad.secondhand.application.port.in.request.ProductCreateRequest;
 import com.codesquad.secondhand.application.port.in.request.ProductModifyRequest;
 import com.codesquad.secondhand.application.port.in.response.ImageInfo;
 import com.codesquad.secondhand.application.port.in.response.ProductDetail;
 import com.codesquad.secondhand.application.port.out.ProductRepository;
 import com.codesquad.secondhand.domain.image.Image;
+import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.product.Category;
 import com.codesquad.secondhand.domain.product.Product;
 import com.codesquad.secondhand.domain.product.Status;
 import com.codesquad.secondhand.domain.region.Region;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,8 +35,8 @@ public class ProductService implements ProductUseCase {
 
     @Transactional
     @Override
-    public Long save(ProductCreateRequest productCreateRequest, String email) {
-        Product product = toProduct(productCreateRequest);
+    public Long save(ProductCreateRequest productCreateRequest, Member member) {
+        Product product = toProduct(productCreateRequest, member);
         return productRepository.save(product).getId();
     }
 
@@ -64,27 +68,7 @@ public class ProductService implements ProductUseCase {
         product.modifyStatus(status);
     }
 
-    private Product toProduct(ProductCreateRequest productCreateRequest) {
-        // TODO: jwt id를 이용해서 writer 추가
-        Region region = regionService.getById(productCreateRequest.getRegionId());
-        Category category = categoryService.getById(productCreateRequest.getCategoryId());
-        List<Long> imagesId = productCreateRequest.getImagesId();
-        // 이미지 목록의 첫번째는 썸네일 이미지
-        Image thumbnailImage = imageService.getById(imagesId.get(IMAGES_FIRST_INDEX));
-        List<Image> images = imageService.getImageListById(imagesId);
-        return new Product(productCreateRequest.getName(),
-                productCreateRequest.getContent(),
-                productCreateRequest.getPrice(),
-                null,
-                category,
-                thumbnailImage,
-                images,
-                region,
-                Status.ONSALES,
-                LocalDateTime.now());
-    }
-
-    private ProductDetail toProductDetail(Product product) {
+    public static ProductDetail toProductDetail(Product product) {
         Category category = product.getCategory();
         Region region = product.getRegion();
         Status status = product.getStatus();
@@ -99,5 +83,52 @@ public class ProductService implements ProductUseCase {
                 product.getPrice(),
                 imageInfos,
                 product.getCreatedAt());
+    }
+
+    public Product getById(Long productId) {
+        return productRepository.findById(productId)
+                .orElseThrow(ProductNotFoundException::new);
+    }
+
+    public List<ProductDetail> getProductsByMemberIdAndCategoryId(long memberId, long categoryId) {
+        return toProductDetails(productRepository.findProductsByMemberIdAndCategoryId(memberId, categoryId));
+    }
+
+    public List<ProductDetail> getByWriterId(long memberId) {
+        return toProductDetails(productRepository.findByWriterId(memberId));
+    }
+
+    public List<ProductDetail> getSoldOutByWriterId(long memberId) {
+        return toProductDetails(productRepository.findByWriterIdAndStatus(memberId, Status.SOLDOUT));
+    }
+
+    public List<ProductDetail> getSalesByWriterId(long memberId) {
+        return toProductDetails(productRepository.findByWriterIdAndStatusNot(memberId, Status.SOLDOUT));
+    }
+
+    private Product toProduct(ProductCreateRequest productCreateRequest, Member member) {
+        // TODO: jwt id를 이용해서 writer 추가
+        Region region = regionService.getById(productCreateRequest.getRegionId());
+        Category category = categoryService.getById(productCreateRequest.getCategoryId());
+        List<Long> imagesId = productCreateRequest.getImagesId();
+        // 이미지 목록의 첫번째는 썸네일 이미지
+        Image thumbnailImage = imageService.getById(imagesId.get(IMAGES_FIRST_INDEX));
+        List<Image> images = imageService.getImageListById(imagesId);
+        return new Product(productCreateRequest.getName(),
+                productCreateRequest.getContent(),
+                productCreateRequest.getPrice(),
+                member,
+                category,
+                thumbnailImage,
+                images,
+                region,
+                Status.ONSALES,
+                LocalDateTime.now());
+    }
+
+    public List<ProductDetail> toProductDetails(Set<Product> products) {
+        return products.stream()
+                .map(ProductService::toProductDetail)
+                .collect(Collectors.toList());
     }
 }

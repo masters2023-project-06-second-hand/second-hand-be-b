@@ -1,11 +1,13 @@
 package com.codesquad.secondhand.domain.member;
 
 import com.codesquad.secondhand.application.port.in.response.RegionInfo;
+import com.codesquad.secondhand.domain.product.Product;
 import com.codesquad.secondhand.domain.region.Region;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -43,6 +45,8 @@ public class Member implements Serializable {
     private Region selectedRegion;
     @Enumerated(EnumType.STRING)
     private Role role;
+    @Embedded
+    private Likes likes = new Likes();
 
     public Member(String email, String nickname, String profileImage, Region region, Role role) {
         this.email = email;
@@ -98,5 +102,25 @@ public class Member implements Serializable {
 
     public String getIdStringValue() {
         return String.valueOf(id);
+    }
+
+    public boolean addLikes(Product product) {
+        return likes.add(product);
+    }
+
+    public boolean removeLikes(Product product) {
+        return likes.remove(product);
+    }
+
+    public Set<Product> getProducts() {
+        return likes.getProducts();
+    }
+
+    public Set<Product> getProductsByCategoryId(long categoryId) {
+        return likes.getProductsByCategoryId(categoryId);
+    }
+
+    public boolean isSameId(long memberId) {
+        return id.equals(memberId);
     }
 }
