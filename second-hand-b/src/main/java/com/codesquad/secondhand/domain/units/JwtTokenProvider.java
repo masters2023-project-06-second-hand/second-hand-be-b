@@ -1,5 +1,6 @@
 package com.codesquad.secondhand.domain.units;
 
+import com.codesquad.secondhand.application.port.in.exception.TokenExpiredException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -9,9 +10,7 @@ import java.util.Date;
 import javax.crypto.SecretKey;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
-import org.springframework.stereotype.Component;
 
-@Component
 public class JwtTokenProvider {
 
     private static final SecretKey KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
@@ -23,11 +22,15 @@ public class JwtTokenProvider {
     private static final String TOKEN_DELIMITER = " ";
     private static final int TOKEN_INDEX = 1;
 
+    private JwtTokenProvider() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static Date getRefreshTokenExpiryDate(Date startDate) {
         return new Date(startDate.getTime() + JwtTokenProvider.THIRTY_DAYS);
     }
 
-    public String createAccessToken(String email, String id, Date startDate) {
+    public static String createAccessToken(String email, String id, Date startDate) {
         return Jwts.builder()
                 .claim(EMAIL_CLAIM, email)
                 .claim(IS_REGISTERED_CLAIM, true)
@@ -39,7 +42,7 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public String createRefreshToken(String email, String id, Date startDate) {
+    public static String createRefreshToken(String email, String id, Date startDate) {
         return Jwts.builder()
                 .claim(EMAIL_CLAIM, email)
                 .claim(IS_REGISTERED_CLAIM, true)
@@ -59,7 +62,7 @@ public class JwtTokenProvider {
         return header.split(TOKEN_DELIMITER)[TOKEN_INDEX].trim();
     }
 
-    public String resolveToken(HttpServletRequest request) {
+    public static String resolveToken(HttpServletRequest request) {
         String header = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (header == null) {
             return null;
@@ -67,7 +70,7 @@ public class JwtTokenProvider {
         return parseTokenFromAuthorization(header);
     }
 
-    public boolean validateToken(String jwtToken, Date now) {
+    public static boolean validateToken(String jwtToken, Date now) {
         try {
             Jws<Claims> claims = Jwts.parserBuilder()
                     .setSigningKey(KEY)
@@ -81,7 +84,13 @@ public class JwtTokenProvider {
         }
     }
 
-    public String createSignUpToken(String email) {
+    public static void validate(String jwtToken, Date now) {
+        if (!validateToken(jwtToken, now)) {
+            throw new TokenExpiredException();
+        }
+    }
+
+    public static String createSignUpToken(String email) {
         Date startDate = new Date();
         return Jwts.builder()
                 .claim(EMAIL_CLAIM, email)
@@ -93,7 +102,7 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public boolean isAccessToken(String jwtToken) {
+    public static boolean isAccessToken(String jwtToken) {
         Jws<Claims> claims = Jwts.parserBuilder()
                 .setSigningKey(KEY)
                 .build()
@@ -102,7 +111,7 @@ public class JwtTokenProvider {
                 .get(IS_REGISTERED_CLAIM, Boolean.class);
     }
 
-    public String getEmail(String jwtToken) {
+    public static String getEmail(String jwtToken) {
         Jws<Claims> claims = Jwts.parserBuilder()
                 .setSigningKey(KEY)
                 .build()

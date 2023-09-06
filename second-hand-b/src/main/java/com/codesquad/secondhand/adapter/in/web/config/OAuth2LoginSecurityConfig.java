@@ -4,7 +4,6 @@ import com.codesquad.secondhand.adapter.in.web.config.jwt.JwtSignInAuthenticatio
 import com.codesquad.secondhand.adapter.in.web.config.jwt.JwtSignUpAuthenticationFilter;
 import com.codesquad.secondhand.application.port.out.MemberRepository;
 import com.codesquad.secondhand.domain.member.Role;
-import com.codesquad.secondhand.domain.units.JwtTokenProvider;
 import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,7 +27,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class OAuth2LoginSecurityConfig {
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity, JwtTokenProvider jwtTokenProvider,
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity,
             MemberRepository memberRepository) throws Exception {
         return httpSecurity
                 .authorizeHttpRequests(
@@ -44,10 +43,10 @@ public class OAuth2LoginSecurityConfig {
                 )
                 .csrf(AbstractHttpConfigurer::disable)
                 .addFilterBefore(
-                        new JwtSignUpAuthenticationFilter(jwtTokenProvider),
+                        new JwtSignUpAuthenticationFilter(),
                         OAuth2AuthorizationRequestRedirectFilter.class)
                 .addFilterBefore(
-                        new JwtSignInAuthenticationFilter(jwtTokenProvider, memberRepository),
+                        new JwtSignInAuthenticationFilter(memberRepository),
                         JwtSignUpAuthenticationFilter.class)
                 .oauth2Login(configurer -> configurer.defaultSuccessUrl("/api/members/signin"))
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

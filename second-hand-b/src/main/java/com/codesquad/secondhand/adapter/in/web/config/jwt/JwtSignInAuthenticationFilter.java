@@ -17,11 +17,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 public class JwtSignInAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtTokenProvider jwtTokenProvider;
     private final MemberRepository memberRepository;
 
-    public JwtSignInAuthenticationFilter(JwtTokenProvider jwtTokenProvider, MemberRepository memberRepository) {
-        this.jwtTokenProvider = jwtTokenProvider;
+    public JwtSignInAuthenticationFilter(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
     }
 
@@ -33,14 +31,14 @@ public class JwtSignInAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        String token = jwtTokenProvider.resolveToken(request);
+        String token = JwtTokenProvider.resolveToken(request);
         if (token == null) {
             filterChain.doFilter(request, response);
             return;
         }
         Date now = new Date();
-        if (jwtTokenProvider.validateToken(token, now) && jwtTokenProvider.isAccessToken(token)) {
-            String email = jwtTokenProvider.getEmail(token);
+        if (JwtTokenProvider.validateToken(token, now) && JwtTokenProvider.isAccessToken(token)) {
+            String email = JwtTokenProvider.getEmail(token);
             Optional<Member> member = memberRepository.findByEmail(email);
             if (member.isPresent()) {
                 Authentication authentication = new JwtAccessToken(member.get(), member.get().getRoleAuthority());

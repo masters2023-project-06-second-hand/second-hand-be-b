@@ -3,7 +3,6 @@ package com.codesquad.secondhand.application.service.in;
 import com.codesquad.secondhand.application.port.in.AuthUseCase;
 import com.codesquad.secondhand.application.port.in.exception.MemberNotFoundException;
 import com.codesquad.secondhand.application.port.in.exception.NotRegisteredMemberException;
-import com.codesquad.secondhand.application.port.in.exception.TokenExpiredException;
 import com.codesquad.secondhand.application.port.in.request.SignUpRequest;
 import com.codesquad.secondhand.application.port.in.response.Tokens;
 import com.codesquad.secondhand.application.port.out.RefreshTokenRepository;
@@ -23,7 +22,6 @@ public class AuthService implements AuthUseCase {
 
     private static final int CLEANUP_ROUND_TIME = 5000;
     private final MemberService memberService;
-    private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
 
     @Transactional
@@ -45,10 +43,8 @@ public class AuthService implements AuthUseCase {
     public Tokens getAccessToken(String authentication) {
         String token = JwtTokenProvider.parseTokenFromAuthorization(authentication);
         Date now = new Date();
-        if (!jwtTokenProvider.validateToken(token, now)) {
-            throw new TokenExpiredException();
-        }
-        String email = jwtTokenProvider.getEmail(token);
+        JwtTokenProvider.validate(token, now);
+        String email = JwtTokenProvider.getEmail(token);
         Member member = memberService.findByEmail(email);
         return getTokens(email, member);
     }
@@ -67,12 +63,12 @@ public class AuthService implements AuthUseCase {
     }
 
     private String getAccessToken(String email, String id, Date startDate) {
-        return jwtTokenProvider.createAccessToken(email, id, startDate);
+        return JwtTokenProvider.createAccessToken(email, id, startDate);
     }
 
     private String getRefreshToken(String email, Member member, Date startDate) {
         Date expiryDate = JwtTokenProvider.getRefreshTokenExpiryDate(startDate);
-        String refreshToken = jwtTokenProvider.createRefreshToken(email, member.getIdStringValue(), startDate);
+        String refreshToken = JwtTokenProvider.createRefreshToken(email, member.getIdStringValue(), startDate);
         refreshTokenRepository.save(new RefreshToken(refreshToken, expiryDate, member, email));
         return refreshToken;
     }
@@ -81,7 +77,7 @@ public class AuthService implements AuthUseCase {
         try {
             return memberService.findByEmail(email);
         } catch (MemberNotFoundException e) {
-            throw new NotRegisteredMemberException(jwtTokenProvider.createSignUpToken(email));
+            throw new NotRegisteredMemberException(JwtTokenProvider.createSignUpToken(email));
         }
     }
 

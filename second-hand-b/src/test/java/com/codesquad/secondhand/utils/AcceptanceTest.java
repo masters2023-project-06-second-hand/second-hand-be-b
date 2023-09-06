@@ -35,8 +35,6 @@ public class AcceptanceTest {
     private MemberRepository memberRepository;
     @Autowired
     private RegionRepository regionRepository;
-    @Autowired
-    private JwtTokenProvider jwtTokenProvider;
 
     @BeforeEach
     public void setUp() {
@@ -53,8 +51,8 @@ public class AcceptanceTest {
         Member albert = memberRepository.save(
                 new Member(ALBERT_EMAIL, ALBERT_NICKNAME, ALBERT_PROFILE_IMAGE, albertRegion, Role.MEMBER));
         final Date startDate = new Date();
-        ayaanAccessToken = jwtTokenProvider.createAccessToken(AYAAN_EMAIL, ayaan.getIdStringValue(), startDate);
-        albertAccessToken = jwtTokenProvider.createAccessToken(ALBERT_EMAIL, albert.getIdStringValue(), startDate);
+        ayaanAccessToken = JwtTokenProvider.createAccessToken(AYAAN_EMAIL, ayaan.getIdStringValue(), startDate);
+        albertAccessToken = JwtTokenProvider.createAccessToken(ALBERT_EMAIL, albert.getIdStringValue(), startDate);
     }
 
 }
