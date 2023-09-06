@@ -14,21 +14,21 @@ class RegionAcceptanceTest extends AcceptanceTest {
     @DisplayName("지역 조회 요청을 받으면 page에 해당하는 지역을 offset 만큼 word로 필터링된 목록을 반환한다.")
     void searchRegionsByName() {
         //given
-        int page = 0;
-        int offset = 20;
-        String word = "강남";
+        int page = 1;
+        int size = 20;
+        String word = "";
 
         //when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .queryParam("page", page)
-                .queryParam("offset", offset)
+                .queryParam("size", size)
                 .queryParam("word", word)
                 .auth().oauth2(accessToken)
                 .when().get("/api/regions")
                 .then().log().all().extract();
 
         //then
-        Assertions.assertThat(response.jsonPath().getList(".")).hasSize(offset);
+        Assertions.assertThat(response.jsonPath().getList(".")).hasSize(size);
     }
 
 }
