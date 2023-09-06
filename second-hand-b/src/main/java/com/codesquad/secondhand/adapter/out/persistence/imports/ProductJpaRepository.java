@@ -8,13 +8,9 @@ import org.springframework.data.jpa.repository.Query;
 public interface ProductJpaRepository extends JpaRepository<Product, Long> {
 
     @Query(
-            "select product from Product product"
-                    + " where  product in ("
-                    + " select member_product from Member member_ "
+            " select member_product from Member member_ "
                     + " join member_.likes.products member_product"
-                    + " where member_.id = :memberId"
-                    + ")"
-                    + " and product.category.id = :categoryId"
+                    + " where member_.id = :memberId and member_product.category.id = :categoryId"
     )
     Set<Product> findProductsByMemberIdAndCategoryId(long memberId, long categoryId);
 }
