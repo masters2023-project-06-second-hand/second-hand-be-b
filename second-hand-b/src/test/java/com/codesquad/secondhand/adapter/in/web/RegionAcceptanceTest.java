@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 class RegionAcceptanceTest extends AcceptanceTest {
 
     @Test
-    @DisplayName("지역 조회 요청을 받으면 page에 해당하는 지역을 offset 만큼 word로 필터링된 목록을 반환한다.")
+    @DisplayName("지역 조회 요청을 받으면 page에 해당하는 지역을 size 만큼 조회하여 반환한다.")
     void searchRegionsByName() {
         //given
         int page = 1;
