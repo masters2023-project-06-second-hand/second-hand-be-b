@@ -9,6 +9,7 @@ import com.codesquad.secondhand.application.port.in.response.ImageInfo;
 import com.codesquad.secondhand.application.port.in.response.ProductDetail;
 import com.codesquad.secondhand.application.port.out.ProductRepository;
 import com.codesquad.secondhand.domain.image.Image;
+import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.product.Category;
 import com.codesquad.secondhand.domain.product.Product;
 import com.codesquad.secondhand.domain.product.Status;
@@ -34,8 +35,8 @@ public class ProductService implements ProductUseCase {
 
     @Transactional
     @Override
-    public Long save(ProductCreateRequest productCreateRequest, String email) {
-        Product product = toProduct(productCreateRequest);
+    public Long save(ProductCreateRequest productCreateRequest, Member member) {
+        Product product = toProduct(productCreateRequest, member);
         return productRepository.save(product).getId();
     }
 
@@ -93,7 +94,11 @@ public class ProductService implements ProductUseCase {
         return toProductDetails(productRepository.findProductsByMemberIdAndCategoryId(memberId, categoryId));
     }
 
-    private Product toProduct(ProductCreateRequest productCreateRequest) {
+    public List<ProductDetail> findByWriterId(long memberId) {
+        return toProductDetails(productRepository.findByWriterId(memberId));
+    }
+
+    private Product toProduct(ProductCreateRequest productCreateRequest, Member member) {
         // TODO: jwt id를 이용해서 writer 추가
         Region region = regionService.getById(productCreateRequest.getRegionId());
         Category category = categoryService.getById(productCreateRequest.getCategoryId());
@@ -104,7 +109,7 @@ public class ProductService implements ProductUseCase {
         return new Product(productCreateRequest.getName(),
                 productCreateRequest.getContent(),
                 productCreateRequest.getPrice(),
-                null,
+                member,
                 category,
                 thumbnailImage,
                 images,

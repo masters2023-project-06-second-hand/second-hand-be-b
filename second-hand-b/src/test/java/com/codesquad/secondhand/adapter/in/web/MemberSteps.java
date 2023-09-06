@@ -53,6 +53,11 @@ public class MemberSteps {
                 .containsExactlyInAnyOrder("1", "2");
     }
 
+    public static void 나의_판매상품의_목록_조회_결과_검증한다(ExtractableResponse<Response> response) {
+        assertThat(response.jsonPath().getList("id", String.class))
+                .containsExactlyInAnyOrder("1", "2");
+    }
+
     public static ExtractableResponse<Response> 나의_광심상품_목록_조회한다(String accessToken) {
         return RestAssured.given().log().all()
                 .auth().oauth2(accessToken)
@@ -73,6 +78,14 @@ public class MemberSteps {
         return RestAssured.given().log().all()
                 .auth().oauth2(accessToken)
                 .when().get("/api/members/{memberId}/likes/categories", 2)
+                .then().log().all()
+                .extract();
+    }
+
+    public static ExtractableResponse<Response> 나의_판매상품_목록_조회한다(String accessToken) {
+        return RestAssured.given().log().all()
+                .auth().oauth2(accessToken)
+                .when().get("/api/members/{memberId}/sales", 1)
                 .then().log().all()
                 .extract();
     }

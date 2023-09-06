@@ -51,9 +51,7 @@ public class MemberService implements MemberUseCase {
     @Transactional(readOnly = true)
     @Override
     public List<ProductDetail> fetchMemberFavoriteProducts(Member member, long memberId) {
-        if (!member.getId().equals(memberId)) {
-            throw new PermissionDeniedException();
-        }
+        validateMemberPermission(member, memberId);
         Member savedMember = getById(memberId);
         Set<Product> products = savedMember.getProducts();
         return productService.toProductDetails(products);
@@ -62,18 +60,26 @@ public class MemberService implements MemberUseCase {
     @Transactional(readOnly = true)
     @Override
     public List<ProductDetail> fetchMemberFavoriteProducts(Member member, long memberId, long categoryId) {
-        if (!member.getId().equals(memberId)) {
-            throw new PermissionDeniedException();
-        }
+        validateMemberPermission(member, memberId);
         return productService.getProductsByMemberIdAndCategoryId(memberId,
                 categoryId);
     }
 
     @Override
     public List<CategorySimpleDetail> fetchMemberInterestCategories(Member member, long memberId) {
+        validateMemberPermission(member, memberId);
+        return categoryService.getCategoryByMemberId(memberId);
+    }
+
+    @Override
+    public List<ProductDetail> getMySellingProducts(Member member, long memberId) {
+        validateMemberPermission(member, memberId);
+        return productService.findByWriterId(memberId);
+    }
+
+    private static void validateMemberPermission(Member member, long memberId) {
         if (!member.getId().equals(memberId)) {
             throw new PermissionDeniedException();
         }
-        return categoryService.getCategoryByMemberId(memberId);
     }
 }

@@ -8,6 +8,8 @@ import static com.codesquad.secondhand.adapter.in.web.MemberSteps.나의_광심�
 import static com.codesquad.secondhand.adapter.in.web.MemberSteps.나의_광심상품의_카테고리_목록_조회_결과_검증한다;
 import static com.codesquad.secondhand.adapter.in.web.MemberSteps.나의_광심상품의_카테고리_목록_조회한다;
 import static com.codesquad.secondhand.adapter.in.web.MemberSteps.나의_카테고리별_관심상품_목록_조회_결과_검증한다;
+import static com.codesquad.secondhand.adapter.in.web.MemberSteps.나의_판매상품_목록_조회한다;
+import static com.codesquad.secondhand.adapter.in.web.MemberSteps.나의_판매상품의_목록_조회_결과_검증한다;
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품을_등록한다;
 
 import com.codesquad.secondhand.utils.AcceptanceTest;
@@ -16,7 +18,7 @@ import org.junit.jupiter.api.Test;
 
 class MemberControllerTest extends AcceptanceTest {
 
-    @DisplayName("특정 상품에 대하여 내 관심상품에 담는다.")
+    @DisplayName("특정 상품에 대하여 내 관심상품에 담는다")
     @Test
     void shouldAddProductToInterestedProductsList() {
         // given
@@ -29,7 +31,7 @@ class MemberControllerTest extends AcceptanceTest {
         관심상품은_담은_응답_검증(response);
     }
 
-    @DisplayName("내 관심상품에 담고 낸 관심상품에 삭제한다.")
+    @DisplayName("내 관심상품에 담고 낸 관심상품에 삭제한다")
     @Test
     void shouldRemoveProductToInterestedProductsList() {
         // given
@@ -43,7 +45,7 @@ class MemberControllerTest extends AcceptanceTest {
         관심상품은_담은_응답_검증(response);
     }
 
-    @DisplayName("나의 관심상품을 목록을 조회 요청하면 목록을 보여준다")
+    @DisplayName("나의 관심상품을 목록을 조회 요청하면 목록을 보낸다")
     @Test
     void shouldReturnListOfInterestedProductsWhenRequested() {
         // given
@@ -59,7 +61,7 @@ class MemberControllerTest extends AcceptanceTest {
         나의_관심상품_목록_조회_검증한다(response);
     }
 
-    @DisplayName("나의 관심상품을 카테고리 별 목록을 조회 요청하면 카테고리 별 목록을 보여준다")
+    @DisplayName("나의 관심상품을 카테고리 별 목록을 조회 요청하면 카테고리 별 목록을 보낸다")
     @Test
     void shouldReturnProductsGroupedByCategoryWhenFetchingFavorites() {
         // given
@@ -75,7 +77,7 @@ class MemberControllerTest extends AcceptanceTest {
         나의_카테고리별_관심상품_목록_조회_결과_검증한다(response);
     }
 
-    @DisplayName("나의 관심상품의 카테고리 목록을 조회 요청하면 관심상품의 카테고리 목록을 보여준다")
+    @DisplayName("나의 관심상품의 카테고리 목록을 조회 요청하면 관심상품의 카테고리 목록을 보낸다")
     @Test
     void shouldReturnCategoriesOfInterestedProductsWhenRequested() {
         // given
@@ -89,5 +91,19 @@ class MemberControllerTest extends AcceptanceTest {
 
         // then
         나의_광심상품의_카테고리_목록_조회_결과_검증한다(response);
+    }
+
+    @DisplayName("나의 판매상품 목록을 조회 요청하면 나의 판매 상품 목록을 보낸다")
+    @Test
+    void shouldReturnMySellingProductsWhenRequested() {
+        // given
+        상품을_등록한다(ayaanAccessToken, 1);
+        상품을_등록한다(ayaanAccessToken, 2);
+
+        // when
+        var response = 나의_판매상품_목록_조회한다(ayaanAccessToken);
+
+        // then
+        나의_판매상품의_목록_조회_결과_검증한다(response);
     }
 }

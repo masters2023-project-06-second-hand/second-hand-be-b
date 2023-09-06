@@ -13,4 +13,6 @@ public interface ProductJpaRepository extends JpaRepository<Product, Long> {
                     + " where member_.id = :memberId and member_product.category.id = :categoryId"
     )
     Set<Product> findProductsByMemberIdAndCategoryId(long memberId, long categoryId);
+
+    Set<Product> findByWriterId(long writerId);
 }

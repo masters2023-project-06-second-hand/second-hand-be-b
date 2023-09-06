@@ -28,4 +28,9 @@ public class ProductRepositoryImpl implements ProductRepository {
     public Set<Product> findProductsByMemberIdAndCategoryId(long memberId, long categoryId) {
         return productJpaRepository.findProductsByMemberIdAndCategoryId(memberId, categoryId);
     }
+
+    @Override
+    public Set<Product> findByWriterId(long writerId) {
+        return productJpaRepository.findByWriterId(writerId);
+    }
 }

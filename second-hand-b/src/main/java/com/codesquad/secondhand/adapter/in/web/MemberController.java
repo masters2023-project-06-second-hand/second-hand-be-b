@@ -56,4 +56,13 @@ public class MemberController {
         List<CategorySimpleDetail> categories = memberUseCase.fetchMemberInterestCategories(member, memberId);
         return ResponseEntity.ok(categories);
     }
+
+    @GetMapping("/api/members/{memberId}/sales")
+    public ResponseEntity<List<ProductDetail>> getMySellingProducts(
+            @AuthenticationPrincipal Member member,
+            @PathVariable long memberId
+    ) {
+        List<ProductDetail> categories = memberUseCase.getMySellingProducts(member, memberId);
+        return ResponseEntity.ok(categories);
+    }
 }
