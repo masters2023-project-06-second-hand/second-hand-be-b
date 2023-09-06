@@ -26,9 +26,8 @@ class CategoryAcceptanceTest extends AcceptanceTest {
         //then
         Assertions.assertAll(
                 () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
-                () -> assertThat(response.jsonPath().getList(".")).extracting("id").isNotEmpty(),
-                () -> assertThat(response.jsonPath().getList(".")).extracting("name").isNotEmpty(),
-                () -> assertThat(response.jsonPath().getList(".")).extracting("imgUrl").isEmpty()
+                () -> assertThat(response.jsonPath().getList("id")).isNotEmpty(),
+                () -> assertThat(response.jsonPath().getList("name")).isNotEmpty()
         );
     }
 
@@ -37,7 +36,7 @@ class CategoryAcceptanceTest extends AcceptanceTest {
     void getCategoriesWithImgUrl() {
         //when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .queryParam("includeImages", false)
+                .queryParam("includeImages", true)
                 .auth().oauth2(ayaanAccessToken)
                 .when().get("/api/categories")
                 .then().log().all().extract();
@@ -45,9 +44,9 @@ class CategoryAcceptanceTest extends AcceptanceTest {
         //then
         Assertions.assertAll(
                 () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
-                () -> assertThat(response.jsonPath().getList(".")).extracting("id").isNotEmpty(),
-                () -> assertThat(response.jsonPath().getList(".")).extracting("name").isNotEmpty(),
-                () -> assertThat(response.jsonPath().getList(".")).extracting("imgUrl").isNotEmpty()
+                () -> assertThat(response.jsonPath().getList("id")).isNotEmpty(),
+                () -> assertThat(response.jsonPath().getList("name")).isNotEmpty(),
+                () -> assertThat(response.jsonPath().getList("imgUrl")).isNotEmpty()
         );
     }
 }

@@ -28,4 +28,9 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     public List<Category> findCategoryByMemberId(long memberId) {
         return categoryJpaRepository.findCategoryByMemberId(memberId);
     }
+
+    @Override
+    public List<Category> findAll() {
+        return categoryJpaRepository.findAll();
+    }
 }
