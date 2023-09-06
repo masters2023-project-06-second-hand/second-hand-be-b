@@ -45,7 +45,7 @@ public class AuthService implements AuthUseCase {
         Date now = new Date();
         JwtTokenProvider.validate(token, now);
         String email = JwtTokenProvider.getEmail(token);
-        Member member = memberService.findByEmail(email);
+        Member member = memberService.getByEmail(email);
         return getTokens(email, member);
     }
 
@@ -75,7 +75,7 @@ public class AuthService implements AuthUseCase {
 
     private Member getByEmail(String email) {
         try {
-            return memberService.findByEmail(email);
+            return memberService.getByEmail(email);
         } catch (MemberNotFoundException e) {
             throw new NotRegisteredMemberException(JwtTokenProvider.createSignUpToken(email));
         }

@@ -27,9 +27,10 @@ public class MemberService implements MemberUseCase {
         return memberRepository.save(member);
     }
 
-    public Member findByEmail(String email) {
-        return memberRepository.findByEmail(email)
-                .orElseThrow(MemberNotFoundException::new);
+    public static void validateMemberPermission(Member member, long memberId) {
+        if (!member.isSameId(memberId)) {
+            throw new PermissionDeniedException();
+        }
     }
 
     public Member getById(Long memberId) {
@@ -88,9 +89,8 @@ public class MemberService implements MemberUseCase {
         return productService.getSalesByWriterId(memberId);
     }
 
-    private static void validateMemberPermission(Member member, long memberId) {
-        if (!member.getId().equals(memberId)) {
-            throw new PermissionDeniedException();
-        }
+    public Member getByEmail(String email) {
+        return memberRepository.findByEmail(email)
+                .orElseThrow(MemberNotFoundException::new);
     }
 }

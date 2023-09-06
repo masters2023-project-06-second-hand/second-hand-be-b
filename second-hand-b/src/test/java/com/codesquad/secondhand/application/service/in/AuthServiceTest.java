@@ -26,7 +26,7 @@ class AuthServiceTest {
     void signIn() {
         // given
         String notExistsEmail = "notExists@email.com";
-        given(memberService.findByEmail(notExistsEmail)).willThrow(MemberNotFoundException.class);
+        given(memberService.getByEmail(notExistsEmail)).willThrow(MemberNotFoundException.class);
 
         // when,then
         assertThatThrownBy(() -> authService.signIn(notExistsEmail)).isInstanceOf(NotRegisteredMemberException.class);
