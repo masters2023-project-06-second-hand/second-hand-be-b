@@ -4,10 +4,12 @@ import com.codesquad.secondhand.application.port.in.ProductUseCase;
 import com.codesquad.secondhand.application.port.in.request.ProductCreateRequest;
 import com.codesquad.secondhand.application.port.in.request.ProductModifyRequest;
 import com.codesquad.secondhand.application.port.in.response.ProductDetail;
+import com.codesquad.secondhand.domain.member.Member;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,8 +26,11 @@ public class ProductController {
     private final ProductUseCase productUseCase;
 
     @PostMapping
-    public ResponseEntity<Map<String, Long>> create(@RequestBody ProductCreateRequest productCreateRequest) {
-        Long id = productUseCase.save(productCreateRequest, null);
+    public ResponseEntity<Map<String, Long>> create(
+            @AuthenticationPrincipal Member member,
+            @RequestBody ProductCreateRequest productCreateRequest
+    ) {
+        Long id = productUseCase.save(productCreateRequest, member);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Map.of("id", id));
     }

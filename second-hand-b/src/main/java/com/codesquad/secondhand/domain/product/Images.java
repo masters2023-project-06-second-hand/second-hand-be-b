@@ -3,10 +3,9 @@ package com.codesquad.secondhand.domain.product;
 import com.codesquad.secondhand.domain.image.Image;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.CollectionTable;
-import javax.persistence.ElementCollection;
+import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
-import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -14,9 +13,7 @@ import lombok.NoArgsConstructor;
 @Embeddable
 public class Images {
 
-    @ElementCollection
-    @CollectionTable(name = "product_image",
-            joinColumns = @JoinColumn(name = "product_id"))
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     private List<Image> imageList = new ArrayList<>();
 
     public List<Image> getImageList() {

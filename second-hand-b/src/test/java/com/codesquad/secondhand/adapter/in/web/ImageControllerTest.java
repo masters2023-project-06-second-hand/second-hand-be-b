@@ -20,7 +20,7 @@ class ImageControllerTest extends AcceptanceTest {
         //when
         String filePath = "/image/test.jpg";
         File file = new ClassPathResource(filePath).getFile();
-        var response = 이미지를_업로드한다(file, accessToken);
+        var response = 이미지를_업로드한다(file, ayaanAccessToken);
 
         //then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
@@ -33,11 +33,11 @@ class ImageControllerTest extends AcceptanceTest {
         //given
         String filePath = "/image/test.jpg";
         File file = new ClassPathResource(filePath).getFile();
-        var uploadImg = 이미지를_업로드한다(file, accessToken);
+        var uploadImg = 이미지를_업로드한다(file, ayaanAccessToken);
         Long imgId = uploadImg.jsonPath().getLong("id");
 
         //when
-        var response = 이미지를_삭제한다(imgId, accessToken);
+        var response = 이미지를_삭제한다(imgId, ayaanAccessToken);
 
         //then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());

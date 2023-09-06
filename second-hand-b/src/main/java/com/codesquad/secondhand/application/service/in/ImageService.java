@@ -32,10 +32,7 @@ public class ImageService implements ImageUseCase {
     @Override
     public void delete(DeleteImageRequest deleteImageRequest) {
         Long id = deleteImageRequest.getId();
-        Image image = imageRepository.findById(id)
-                .orElseThrow(() -> {
-                    throw new ImageNotFoundException();
-                });
+        Image image = getById(id);
         imageRepository.deleteById(id);
         cloudStorageService.delete(image.getUrl());
     }

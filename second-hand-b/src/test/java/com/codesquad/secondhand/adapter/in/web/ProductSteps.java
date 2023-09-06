@@ -17,17 +17,21 @@ import org.springframework.http.MediaType;
 
 public class ProductSteps {
 
-    public static ExtractableResponse<Response> 상품을_등록한다(String accessToken) throws IOException {
+    public static ExtractableResponse<Response> 상품을_등록한다(String accessToken, int categoryId) {
         String filePath = "/image/test.jpg";
-        File file = new ClassPathResource(filePath).getFile();
-        이미지를_업로드한다(file, accessToken);
-        filePath = "/image/test2.jpg";
-        file = new ClassPathResource(filePath).getFile();
-        이미지를_업로드한다(file, accessToken);
+        try {
+            File file = new ClassPathResource(filePath).getFile();
+            이미지를_업로드한다(file, accessToken);
+            filePath = "/image/test2.jpg";
+            file = new ClassPathResource(filePath).getFile();
+            이미지를_업로드한다(file, accessToken);
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
 
         Map<String, Object> body = new HashMap<>();
         body.put("name", "상품명");
-        body.put("categoryId", 1);
+        body.put("categoryId", categoryId);
         body.put("price", 100000);
         body.put("content", "상품 내용");
         body.put("regionId", 1);
