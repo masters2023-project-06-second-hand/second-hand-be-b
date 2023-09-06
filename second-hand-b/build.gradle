@@ -75,3 +75,10 @@ asciidoctor {
     configurations 'asciidoctorExt'
     dependsOn test
 }
+
+bootJar {
+    enabled = true
+}
+jar {
+    enabled = false
+}
