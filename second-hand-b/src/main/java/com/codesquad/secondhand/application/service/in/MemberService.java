@@ -3,6 +3,7 @@ package com.codesquad.secondhand.application.service.in;
 import com.codesquad.secondhand.application.port.in.MemberUseCase;
 import com.codesquad.secondhand.application.port.in.exception.MemberNotFoundException;
 import com.codesquad.secondhand.application.port.in.exception.PermissionDeniedException;
+import com.codesquad.secondhand.application.port.in.response.CategorySimpleDetail;
 import com.codesquad.secondhand.application.port.in.response.ProductDetail;
 import com.codesquad.secondhand.application.port.out.MemberRepository;
 import com.codesquad.secondhand.domain.member.Member;
@@ -19,6 +20,7 @@ public class MemberService implements MemberUseCase {
 
     private final MemberRepository memberRepository;
     private final ProductService productService;
+    private final CategoryService categoryService;
 
     public Member save(Member member) {
         return memberRepository.save(member);
@@ -63,7 +65,15 @@ public class MemberService implements MemberUseCase {
         if (!member.getId().equals(memberId)) {
             throw new PermissionDeniedException();
         }
-        return productService.findProductsByMemberIdAndCategoryId(memberId,
+        return productService.getProductsByMemberIdAndCategoryId(memberId,
                 categoryId);
+    }
+
+    @Override
+    public List<CategorySimpleDetail> fetchMemberInterestCategories(Member member, long memberId) {
+        if (!member.getId().equals(memberId)) {
+            throw new PermissionDeniedException();
+        }
+        return categoryService.getCategoryByMemberId(memberId);
     }
 }

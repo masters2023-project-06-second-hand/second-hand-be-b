@@ -9,4 +9,6 @@ public interface CategoryRepository {
     void saveAll(List<Category> categories);
 
     Optional<Category> findById(Long id);
+
+    List<Category> findCategoryByMemberId(long memberId);
 }

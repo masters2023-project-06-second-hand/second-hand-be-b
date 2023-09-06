@@ -34,4 +34,8 @@ public class Category {
     public boolean isSameId(long categoryId) {
         return id.equals(categoryId);
     }
+
+    public Long getId() {
+        return id;
+    }
 }

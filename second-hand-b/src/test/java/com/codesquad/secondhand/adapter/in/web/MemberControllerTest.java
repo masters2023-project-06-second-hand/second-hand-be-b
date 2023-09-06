@@ -5,7 +5,9 @@ import static com.codesquad.secondhand.adapter.in.web.MemberSteps.관심상품�
 import static com.codesquad.secondhand.adapter.in.web.MemberSteps.관심상품은_담은_응답_검증;
 import static com.codesquad.secondhand.adapter.in.web.MemberSteps.나의_관심상품_목록_조회_검증한다;
 import static com.codesquad.secondhand.adapter.in.web.MemberSteps.나의_광심상품_목록_조회한다;
-import static com.codesquad.secondhand.adapter.in.web.MemberSteps.나의_카테고리별_관심상품_목록_조회_검증한다;
+import static com.codesquad.secondhand.adapter.in.web.MemberSteps.나의_광심상품의_카테고리_목록_조회_결과_검증한다;
+import static com.codesquad.secondhand.adapter.in.web.MemberSteps.나의_광심상품의_카테고리_목록_조회한다;
+import static com.codesquad.secondhand.adapter.in.web.MemberSteps.나의_카테고리별_관심상품_목록_조회_결과_검증한다;
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품을_등록한다;
 
 import com.codesquad.secondhand.utils.AcceptanceTest;
@@ -70,6 +72,22 @@ class MemberControllerTest extends AcceptanceTest {
         var response = 나의_광심상품_목록_조회한다(albertAccessToken, 1);
 
         // then
-        나의_카테고리별_관심상품_목록_조회_검증한다(response);
+        나의_카테고리별_관심상품_목록_조회_결과_검증한다(response);
+    }
+
+    @DisplayName("나의 관심상품의 카테고리 목록을 조회 요청하면 관심상품의 카테고리 목록을 보여준다")
+    @Test
+    void shouldReturnCategoriesOfInterestedProductsWhenRequested() {
+        // given
+        var 상품_아이디_1 = 상품을_등록한다(ayaanAccessToken, 1).jsonPath().getString("id");
+        var 상품_아이디_2 = 상품을_등록한다(ayaanAccessToken, 2).jsonPath().getString("id");
+        관심상품에_담는다(상품_아이디_1, albertAccessToken);
+        관심상품에_담는다(상품_아이디_2, albertAccessToken);
+
+        // when
+        var response = 나의_광심상품의_카테고리_목록_조회한다(albertAccessToken);
+
+        // then
+        나의_광심상품의_카테고리_목록_조회_결과_검증한다(response);
     }
 }
