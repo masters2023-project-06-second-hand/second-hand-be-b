@@ -2,7 +2,7 @@ package com.codesquad.secondhand.application.service.in;
 
 import com.codesquad.secondhand.application.port.in.CategoryUseCase;
 import com.codesquad.secondhand.application.port.in.exception.CategoryNotFoundException;
-import com.codesquad.secondhand.application.port.in.response.CategoryDetailWithImg;
+import com.codesquad.secondhand.application.port.in.response.CategoryDetail;
 import com.codesquad.secondhand.application.port.in.response.CategorySimpleDetail;
 import com.codesquad.secondhand.application.port.out.CategoryRepository;
 import com.codesquad.secondhand.domain.product.Category;
@@ -30,7 +30,7 @@ public class CategoryService implements CategoryUseCase {
     }
 
     @Override
-    public List<CategoryDetailWithImg> getCategoriesWithImgUrl() {
+    public List<CategoryDetail> getCategoriesWithImgUrl() {
         List<Category> categories = categoryRepository.findAll();
         return toCategoryDetailWithImg(categories);
     }
@@ -47,9 +47,9 @@ public class CategoryService implements CategoryUseCase {
                 .collect(Collectors.toList());
     }
 
-    private List<CategoryDetailWithImg> toCategoryDetailWithImg(List<Category> categories) {
+    private List<CategoryDetail> toCategoryDetailWithImg(List<Category> categories) {
         return categories.stream()
-                .map(category -> new CategoryDetailWithImg(category.getId(), category.getName(), category.getImgUrl()))
+                .map(category -> new CategoryDetail(category.getId(), category.getName(), category.getImgUrl()))
                 .collect(Collectors.toList());
     }
 }
