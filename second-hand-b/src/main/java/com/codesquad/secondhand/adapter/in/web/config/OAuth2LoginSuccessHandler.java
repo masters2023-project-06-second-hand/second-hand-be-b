@@ -45,7 +45,8 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
             } catch (NotRegisteredMemberException exception) {
                 String signUpToken = JwtTokenProvider.createSignUpToken(email);
                 PrintWriter out = response.getWriter();
-                out.write(objectMapper.writeValueAsString(Map.of("signUpToken", signUpToken)));
+                String signUpToken1 = objectMapper.writeValueAsString(Map.of("signUpToken", signUpToken));
+                out.write(signUpToken1);
                 out.flush();
                 out.close();
                 return;
