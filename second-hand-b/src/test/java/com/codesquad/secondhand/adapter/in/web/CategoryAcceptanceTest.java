@@ -13,8 +13,11 @@ class CategoryAcceptanceTest extends AcceptanceTest {
     @Test
     @DisplayName("카테고리 목록 조회 요청을 받으면 카테고리 목록을 반환한다.")
     void getCategories() {
+        //given
+        boolean includeImages = false;
+
         //when
-        var response = 카테고리_목록을_조회한다(false, ayaanAccessToken);
+        var response = 카테고리_목록을_조회한다(includeImages, ayaanAccessToken);
 
         //then
         카테고리_목록조회를_검증한다(response);
@@ -23,8 +26,11 @@ class CategoryAcceptanceTest extends AcceptanceTest {
     @Test
     @DisplayName("카테고리 목록 조회 요청을 받으면 includeImages가 true인 경우 imgUrl을 포함하는 카테고리 목록을 반환한다.")
     void getCategoriesWithImgUrl() {
+        //given
+        boolean includeImages = true;
+
         //when
-        var response = 카테고리_목록을_조회한다(true, ayaanAccessToken);
+        var response = 카테고리_목록을_조회한다(includeImages, ayaanAccessToken);
 
         //then
         이미지포함_카테고리_목록조회를_검증한다(response);
