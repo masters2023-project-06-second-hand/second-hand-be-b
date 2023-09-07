@@ -27,6 +27,10 @@ public class RegionService implements RegionUseCase {
     @Override
     public List<RegionInfo> searchRegionsByName(String word, Pageable pageable) {
         Slice<Region> regions = regionRepository.findByRegionsByName(word, pageable);
+        return toRegionInfos(regions);
+    }
+
+    private List<RegionInfo> toRegionInfos(Slice<Region> regions) {
         return regions
                 .map(region -> new RegionInfo(region.getId(), region.getName()))
                 .getContent();

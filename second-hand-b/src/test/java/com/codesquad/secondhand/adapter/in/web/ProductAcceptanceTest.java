@@ -1,5 +1,7 @@
 package com.codesquad.secondhand.adapter.in.web;
 
+import static com.codesquad.secondhand.adapter.in.web.ProductSteps.regionId로_상품목록을_조회한다;
+import static com.codesquad.secondhand.adapter.in.web.ProductSteps.regionId와_categoryId로_지역목록을_조회한다;
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품등록을_검증한다;
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품상세를_조회한다;
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품상세조회를_검증한다;
@@ -8,10 +10,9 @@ import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품상태�
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품수정을_검증한다;
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품을_등록한다;
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품을_수정한다;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 import com.codesquad.secondhand.utils.AcceptanceTest;
-import io.restassured.RestAssured;
 import java.io.IOException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -65,7 +66,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
     }
 
     @Test
-    @DisplayName("지역에 해당하는 상품 목록을 조회하여 반환한다.")
+    @DisplayName("지역id에 해당하는 상품 목록을 조회하여 반환한다.")
     void getProductListByRegion() {
         //given
         상품을_등록한다(ayaanAccessToken, 1);
@@ -73,11 +74,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
         Long regionId = 1L;
 
         //when
-        var response = RestAssured.given().log().all()
-                .queryParam("regionId", regionId)
-                .auth().oauth2(ayaanAccessToken)
-                .when().get("/api/products")
-                .then().log().all().extract();
+        var response = regionId로_상품목록을_조회한다(regionId, ayaanAccessToken);
 
         //then
         Assertions.assertAll(
@@ -87,7 +84,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
     }
 
     @Test
-    @DisplayName("지역과 카테고리에 해당하는 상품 목록을 조회하여 반환한다.")
+    @DisplayName("지역id와 카테고리id에 해당하는 상품 목록을 조회하여 반환한다.")
     void getProductListByRegionAndCategory() {
         //given
         상품을_등록한다(ayaanAccessToken, 1);
@@ -97,12 +94,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
         Long categoryId = 2L;
 
         //when
-        var response = RestAssured.given().log().all()
-                .queryParam("regionId", regionId)
-                .queryParam("categoryId", categoryId)
-                .auth().oauth2(ayaanAccessToken)
-                .when().get("/api/products")
-                .then().log().all().extract();
+        var response = regionId와_categoryId로_지역목록을_조회한다(regionId, categoryId, ayaanAccessToken);
 
         //then
         Assertions.assertAll(

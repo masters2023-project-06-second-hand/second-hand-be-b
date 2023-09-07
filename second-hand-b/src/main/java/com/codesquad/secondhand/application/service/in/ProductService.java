@@ -82,41 +82,6 @@ public class ProductService implements ProductUseCase {
         return toProductInfos(products);
     }
 
-    private static ProductDetail toProductDetail(Product product) {
-        Member member = product.getWriter();
-        Category category = product.getCategory();
-        Region region = product.getRegion();
-        Status status = product.getStatus();
-        List<ImageInfo> imageInfos = product.fetchImageInfos();
-        return new ProductDetail(product.getId(),
-                new ProductWriter(member.getId(), member.getNickname()),
-                product.getName(),
-                category.getName(),
-                region.getName(),
-                status.getName(),
-                product.getContent(),
-                product.getPrice(),
-                imageInfos,
-                product.getCreatedAt());
-    }
-
-    public static ProductInfo toProductInfo(Product product) {
-        Member member = product.getWriter();
-        Region region = product.getRegion();
-        Status status = product.getStatus();
-        Image thumbnail = product.getThumbnailImage();
-        return new ProductInfo(product.getId(),
-                member.getId(),
-                thumbnail.getUrl(),
-                product.getName(),
-                region.getName(),
-                product.getCreatedAt(),
-                status.getName(),
-                product.getPrice(),
-                0,
-                0);
-    }
-
     public Product getById(Long productId) {
         return productRepository.findById(productId)
                 .orElseThrow(ProductNotFoundException::new);
@@ -138,6 +103,18 @@ public class ProductService implements ProductUseCase {
         return toProductDetails(productRepository.findByWriterIdAndStatusNot(memberId, Status.SOLDOUT));
     }
 
+    public List<ProductDetail> toProductDetails(Set<Product> products) {
+        return products.stream()
+                .map(this::toProductDetail)
+                .collect(Collectors.toList());
+    }
+
+    public List<ProductInfo> toProductInfos(Set<Product> products) {
+        return products.stream()
+                .map(this::toProductInfo)
+                .collect(Collectors.toList());
+    }
+
     private Product toProduct(ProductCreateRequest productCreateRequest, Member member) {
         Region region = regionService.getById(productCreateRequest.getRegionId());
         Category category = categoryService.getById(productCreateRequest.getCategoryId());
@@ -157,15 +134,38 @@ public class ProductService implements ProductUseCase {
                 LocalDateTime.now());
     }
 
-    public List<ProductDetail> toProductDetails(Set<Product> products) {
-        return products.stream()
-                .map(ProductService::toProductDetail)
-                .collect(Collectors.toList());
+    private ProductDetail toProductDetail(Product product) {
+        Member member = product.getWriter();
+        Category category = product.getCategory();
+        Region region = product.getRegion();
+        Status status = product.getStatus();
+        List<ImageInfo> imageInfos = product.fetchImageInfos();
+        return new ProductDetail(product.getId(),
+                new ProductWriter(member.getId(), member.getNickname()),
+                product.getName(),
+                category.getName(),
+                region.getName(),
+                status.getName(),
+                product.getContent(),
+                product.getPrice(),
+                imageInfos,
+                product.getCreatedAt());
     }
 
-    public List<ProductInfo> toProductInfos(Set<Product> products) {
-        return products.stream()
-                .map(ProductService::toProductInfo)
-                .collect(Collectors.toList());
+    private ProductInfo toProductInfo(Product product) {
+        Member member = product.getWriter();
+        Region region = product.getRegion();
+        Status status = product.getStatus();
+        Image thumbnail = product.getThumbnailImage();
+        return new ProductInfo(product.getId(),
+                member.getId(),
+                thumbnail.getUrl(),
+                product.getName(),
+                region.getName(),
+                product.getCreatedAt(),
+                status.getName(),
+                product.getPrice(),
+                0,
+                0);
     }
 }

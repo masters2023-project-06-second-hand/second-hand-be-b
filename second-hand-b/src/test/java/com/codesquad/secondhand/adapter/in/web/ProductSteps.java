@@ -135,4 +135,22 @@ public class ProductSteps {
                 .when().delete("/api/images")
                 .then().log().all().extract();
     }
+
+    public static ExtractableResponse<Response> regionId로_상품목록을_조회한다(Long regionId, String accessToken) {
+        return RestAssured.given().log().all()
+                .queryParam("regionId", regionId)
+                .auth().oauth2(accessToken)
+                .when().get("/api/products")
+                .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> regionId와_categoryId로_지역목록을_조회한다(Long regionId, Long categoryId,
+            String accessToken) {
+        return RestAssured.given().log().all()
+                .queryParam("regionId", regionId)
+                .queryParam("categoryId", categoryId)
+                .auth().oauth2(accessToken)
+                .when().get("/api/products")
+                .then().log().all().extract();
+    }
 }
