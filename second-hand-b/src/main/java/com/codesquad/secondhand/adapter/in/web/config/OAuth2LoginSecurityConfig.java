@@ -49,7 +49,7 @@ public class OAuth2LoginSecurityConfig {
                         new JwtSignInAuthenticationFilter(memberRepository),
                         JwtSignUpAuthenticationFilter.class)
                 .oauth2Login(configurer -> configurer.defaultSuccessUrl("/api/members/signin"))
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
                 .and()
                 .cors().configurationSource(corsConfigurationSource())
                 .and()
