@@ -81,7 +81,8 @@ public class OAuth2LoginSecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         var configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://ec2-15-164-155-230.ap-northeast-2.compute.amazonaws.com"));
+        configuration.setAllowedOrigins(List.of("http://ec2-15-164-155-230.ap-northeast-2.compute.amazonaws.com"
+                , "http://15.164.155.230"));
         configuration.setAllowedMethods(List.of("*"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
