@@ -8,7 +8,7 @@ import lombok.Getter;
 public class ProductDetail {
 
     private Long id;
-    private String writer;
+    private ProductWriter writer;
     private String productName;
     private String categoryName;
     private String regionName;
@@ -18,9 +18,8 @@ public class ProductDetail {
     private List<ImageInfo> images;
     private LocalDateTime createdAt;
 
-    public ProductDetail(Long id, String writer, String productName, String categoryName, String regionName,
-            String status,
-            String content, int price, List<ImageInfo> images, LocalDateTime createdAt) {
+    public ProductDetail(Long id, ProductWriter writer, String productName, String categoryName, String regionName,
+            String status, String content, int price, List<ImageInfo> images, LocalDateTime createdAt) {
         this.id = id;
         this.writer = writer;
         this.productName = productName;

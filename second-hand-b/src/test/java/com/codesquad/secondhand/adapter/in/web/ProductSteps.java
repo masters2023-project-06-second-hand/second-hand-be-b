@@ -21,10 +21,10 @@ public class ProductSteps {
         String filePath = "/image/test.jpg";
         try {
             File file = new ClassPathResource(filePath).getFile();
-            이미지를_업로드한다(file, accessToken);
+            상품용_이미지를_업로드한다(file, accessToken);
             filePath = "/image/test2.jpg";
             file = new ClassPathResource(filePath).getFile();
-            이미지를_업로드한다(file, accessToken);
+            상품용_이미지를_업로드한다(file, accessToken);
         } catch (IOException exception) {
             exception.printStackTrace();
         }
@@ -38,7 +38,7 @@ public class ProductSteps {
         body.put("imagesId", List.of(1, 2));
 
         return RestAssured.given().contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", "Bearer " + accessToken)
+                .auth().oauth2(accessToken)
                 .log().all().body(body)
                 .when().post("/api/products")
                 .then().log().all().extract();
@@ -50,7 +50,7 @@ public class ProductSteps {
 
     public static ExtractableResponse<Response> 상품상세를_조회한다(Long id, String accessToken) {
         return RestAssured.given().log().all()
-                .header("Authorization", "Bearer " + accessToken)
+                .auth().oauth2(accessToken)
                 .when().get("/api/products/{productId}", id)
                 .then().log().all().extract();
     }
@@ -78,7 +78,7 @@ public class ProductSteps {
         body.put("imagesId", List.of(1));
 
         return RestAssured.given().log().all()
-                .header("Authorization", "Bearer " + accessToken)
+                .auth().oauth2(accessToken)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(body)
                 .when().put("/api/products/{productId}", id)
@@ -102,7 +102,7 @@ public class ProductSteps {
     public static ExtractableResponse<Response> 상품상태를_수정한다(Long id, String accessToken) {
         Map<String, String> body = Map.of("status", "판매완료");
         return RestAssured.given().log().all()
-                .header("Authorization", "Bearer " + accessToken)
+                .auth().oauth2(accessToken)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(body)
                 .when().put("/api/products/{productId}/status", id)
@@ -117,11 +117,20 @@ public class ProductSteps {
         );
     }
 
-    public static ExtractableResponse<Response> 이미지를_업로드한다(File file, String accessToken) throws IOException {
+    public static ExtractableResponse<Response> 상품용_이미지를_업로드한다(File file, String accessToken) throws IOException {
         return RestAssured.given().log().all()
                 .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                 .multiPart("file", file)
-                .header("Authorization", "Bearer " + accessToken)
+                .auth().oauth2(accessToken)
+                .when().post("/api/images")
+                .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 회원용_이미지를_업로드한다(File file, String accessToken) throws IOException {
+        return RestAssured.given().log().all()
+                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                .multiPart("file", file)
+                .auth().oauth2(accessToken)
                 .when().post("/api/images")
                 .then().log().all().extract();
     }
@@ -130,9 +139,27 @@ public class ProductSteps {
         Map<String, Long> body = Map.of("id", id);
         return RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", "Bearer " + accessToken)
+                .auth().oauth2(accessToken)
                 .body(body)
                 .when().delete("/api/images")
+                .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> regionId로_상품목록을_조회한다(Long regionId, String accessToken) {
+        return RestAssured.given().log().all()
+                .queryParam("regionId", regionId)
+                .auth().oauth2(accessToken)
+                .when().get("/api/products")
+                .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> regionId와_categoryId로_지역목록을_조회한다(Long regionId, Long categoryId,
+            String accessToken) {
+        return RestAssured.given().log().all()
+                .queryParam("regionId", regionId)
+                .queryParam("categoryId", categoryId)
+                .auth().oauth2(accessToken)
+                .when().get("/api/products")
                 .then().log().all().extract();
     }
 }

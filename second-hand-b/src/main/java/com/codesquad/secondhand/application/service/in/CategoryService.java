@@ -1,6 +1,8 @@
 package com.codesquad.secondhand.application.service.in;
 
+import com.codesquad.secondhand.application.port.in.CategoryUseCase;
 import com.codesquad.secondhand.application.port.in.exception.CategoryNotFoundException;
+import com.codesquad.secondhand.application.port.in.response.CategoryDetail;
 import com.codesquad.secondhand.application.port.in.response.CategorySimpleDetail;
 import com.codesquad.secondhand.application.port.out.CategoryRepository;
 import com.codesquad.secondhand.domain.product.Category;
@@ -11,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class CategoryService {
+public class CategoryService implements CategoryUseCase {
 
     private final CategoryRepository categoryRepository;
 
@@ -27,9 +29,27 @@ public class CategoryService {
         return toCategorySimpleDetail(categories);
     }
 
+    @Override
+    public List<CategoryDetail> getCategoriesWithImgUrl() {
+        List<Category> categories = categoryRepository.findAll();
+        return toCategoryDetailWithImg(categories);
+    }
+
+    @Override
+    public List<CategorySimpleDetail> getCategories() {
+        List<Category> categories = categoryRepository.findAll();
+        return toCategorySimpleDetail(categories);
+    }
+
     private List<CategorySimpleDetail> toCategorySimpleDetail(List<Category> categories) {
         return categories.stream()
                 .map(category -> new CategorySimpleDetail(category.getId(), category.getName()))
+                .collect(Collectors.toList());
+    }
+
+    private List<CategoryDetail> toCategoryDetailWithImg(List<Category> categories) {
+        return categories.stream()
+                .map(category -> new CategoryDetail(category.getId(), category.getName(), category.getImgUrl()))
                 .collect(Collectors.toList());
     }
 }

@@ -22,10 +22,15 @@ public class ImageService implements ImageUseCase {
 
     @Transactional
     @Override
-    public ImageInfo upload(MultipartFile file) {
+    public ImageInfo uploadWithServer(MultipartFile file) {
         String imgUrl = cloudStorageService.upload(file);
         Image savedImage = imageRepository.save(new Image(imgUrl));
         return new ImageInfo(savedImage.getId(), savedImage.getUrl());
+    }
+
+    @Override
+    public String uploadOnlyCloud(MultipartFile file) {
+        return cloudStorageService.upload(file);
     }
 
     @Transactional
@@ -33,8 +38,7 @@ public class ImageService implements ImageUseCase {
     public void delete(DeleteImageRequest deleteImageRequest) {
         Long id = deleteImageRequest.getId();
         Image image = getById(id);
-        imageRepository.deleteById(id);
-        cloudStorageService.delete(image.getUrl());
+        imageRepository.deleteById(image.getId());
     }
 
     public Image getById(Long id) {

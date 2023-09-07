@@ -1,5 +1,7 @@
 package com.codesquad.secondhand.adapter.in.web;
 
+import static com.codesquad.secondhand.adapter.in.web.ProductSteps.regionId로_상품목록을_조회한다;
+import static com.codesquad.secondhand.adapter.in.web.ProductSteps.regionId와_categoryId로_지역목록을_조회한다;
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품등록을_검증한다;
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품상세를_조회한다;
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품상세조회를_검증한다;
@@ -8,13 +10,15 @@ import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품상태�
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품수정을_검증한다;
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품을_등록한다;
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품을_수정한다;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 import com.codesquad.secondhand.utils.AcceptanceTest;
 import java.io.IOException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class ProductControllerTest extends AcceptanceTest {
+class ProductAcceptanceTest extends AcceptanceTest {
 
     @Test
     @DisplayName("상품 등록 요청이 오면 상품 아이디를 반환한다.")
@@ -59,5 +63,43 @@ class ProductControllerTest extends AcceptanceTest {
 
         //then
         상품상태수정을_검증한다(id, ayaanAccessToken, response);
+    }
+
+    @Test
+    @DisplayName("지역id에 해당하는 상품 목록을 조회하여 반환한다.")
+    void getProductListByRegion() {
+        //given
+        상품을_등록한다(ayaanAccessToken, 1);
+        상품을_등록한다(ayaanAccessToken, 2);
+        Long regionId = 1L;
+
+        //when
+        var response = regionId로_상품목록을_조회한다(regionId, ayaanAccessToken);
+
+        //then
+        Assertions.assertAll(
+                () -> assertThat(response.jsonPath().getList(".")).hasSize(2),
+                () -> assertThat(response.jsonPath().getList("id")).containsExactly(1, 2)
+        );
+    }
+
+    @Test
+    @DisplayName("지역id와 카테고리id에 해당하는 상품 목록을 조회하여 반환한다.")
+    void getProductListByRegionAndCategory() {
+        //given
+        상품을_등록한다(ayaanAccessToken, 1);
+        상품을_등록한다(ayaanAccessToken, 2);
+        상품을_등록한다(ayaanAccessToken, 2);
+        Long regionId = 1L;
+        Long categoryId = 2L;
+
+        //when
+        var response = regionId와_categoryId로_지역목록을_조회한다(regionId, categoryId, ayaanAccessToken);
+
+        //then
+        Assertions.assertAll(
+                () -> assertThat(response.jsonPath().getList(".")).hasSize(2),
+                () -> assertThat(response.jsonPath().getList("id")).containsExactly(2, 3)
+        );
     }
 }
