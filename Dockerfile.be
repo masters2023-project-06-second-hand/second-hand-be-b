@@ -10,4 +10,4 @@ COPY /second-hand-b/build/libs/*.jar /be/app.jar
 # 컨테이너가 시작될 때 실행할 명령어를 지정
 # 여기서는 JAR 파일을 실행하는 명령어를 설정
 # 추가적으로 스프링의 설정 위치와 프로파일도 함께 지정
-ENTRYPOINT ["java","-Dspring.config.location=classpath:/,file:/be/config/","-jar","/be/app.jar","--spring.profiles.active=dev"]
+ENTRYPOINT ["java","-Dspring.config.location=file:/be/config/","-jar","/be/app.jar","--spring.profiles.active=dev"]
