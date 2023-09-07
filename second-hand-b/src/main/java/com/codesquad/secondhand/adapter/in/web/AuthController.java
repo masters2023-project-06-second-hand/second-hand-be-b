@@ -31,10 +31,11 @@ public class AuthController {
     public RedirectView signIn(@AuthenticationPrincipal OAuth2User oAuth2User, HttpServletResponse response) {
         String email = oAuth2User.getAttribute("email");
         Tokens tokens = authUseCase.signIn(email);
-        response.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + tokens.getAccessToken());
         response.setHeader(HttpHeaders.SET_COOKIE, "refresh_token=" + tokens.getRefreshToken());
 
-        return new RedirectView(frontServerUrl);
+        return new RedirectView(frontServerUrl +
+                "?accessToken=" + tokens.getAccessToken()
+                + "?refreshToken=" + tokens.getRefreshToken());
     }
 
     @PostMapping("/signup")
