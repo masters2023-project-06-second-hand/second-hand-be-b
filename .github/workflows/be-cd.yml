@@ -76,10 +76,10 @@ jobs:
             # 현재 실행 중인 컨테이너에 따라 새 컨테이너를 실행하고, 이전 컨테이너를 중지 및 삭제합니다.
             if echo $CURRENT_CONTAINERS | grep -q 'be1'; then
               sudo docker run -d --name be2 --network=secondhand -v ~/be/yml:/be/config/:ro $TAG
-              sudo docker stop be1 && docker rm be1
+              sudo docker stop be1 && sudo docker rm be1
             elif echo $CURRENT_CONTAINERS | grep -q 'be2'; then
               sudo docker run -d --name be1 --network=secondhand -v ~/be/yml:/be/config/:ro $TAG
-              sudo docker stop be2 && docker rm be2
+              sudo docker stop be2 && sudo docker rm be2
             else
               sudo docker run -d --name be1 --network=secondhand -v ~/be/yml:/be/config/:ro $TAG
             fi
