@@ -38,7 +38,7 @@ class ImageAcceptanceTest extends AcceptanceTest {
 
         //then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-        assertThat(response.jsonPath().getLong("imgUrl")).isNotNull();
+        assertThat(response.jsonPath().getString("imgUrl")).isNotNull();
     }
 
     @Test

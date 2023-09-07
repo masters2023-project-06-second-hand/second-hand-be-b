@@ -122,7 +122,7 @@ public class ProductSteps {
                 .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                 .multiPart("file", file)
                 .auth().oauth2(accessToken)
-                .when().post("/api/images")
+                .when().post("/api/products/images")
                 .then().log().all().extract();
     }
 
@@ -131,7 +131,7 @@ public class ProductSteps {
                 .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                 .multiPart("file", file)
                 .auth().oauth2(accessToken)
-                .when().post("/api/images")
+                .when().post("/api/members/images")
                 .then().log().all().extract();
     }
 
