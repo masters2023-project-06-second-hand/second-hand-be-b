@@ -5,6 +5,7 @@ import com.codesquad.secondhand.adapter.in.web.config.jwt.JwtSignUpAuthenticatio
 import com.codesquad.secondhand.application.port.out.MemberRepository;
 import com.codesquad.secondhand.domain.member.Role;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -25,6 +26,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 @EnableWebSecurity
 public class OAuth2LoginSecurityConfig {
+
+    @Autowired
+    private OAuth2LoginSuccessHandler successHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity,
@@ -48,7 +52,8 @@ public class OAuth2LoginSecurityConfig {
                 .addFilterBefore(
                         new JwtSignInAuthenticationFilter(memberRepository),
                         JwtSignUpAuthenticationFilter.class)
-                .oauth2Login(configurer -> configurer.defaultSuccessUrl("/api/members/signin"))
+                .oauth2Login(configurer -> configurer.defaultSuccessUrl("/api/members/signin")
+                        .successHandler(successHandler))
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
                 .and()
                 .cors().configurationSource(corsConfigurationSource())
