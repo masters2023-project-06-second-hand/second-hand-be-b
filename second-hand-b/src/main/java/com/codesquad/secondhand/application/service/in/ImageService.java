@@ -33,8 +33,7 @@ public class ImageService implements ImageUseCase {
     public void delete(DeleteImageRequest deleteImageRequest) {
         Long id = deleteImageRequest.getId();
         Image image = getById(id);
-        imageRepository.deleteById(id);
-        cloudStorageService.delete(image.getUrl());
+        imageRepository.deleteById(image.getId());
     }
 
     public Image getById(Long id) {
