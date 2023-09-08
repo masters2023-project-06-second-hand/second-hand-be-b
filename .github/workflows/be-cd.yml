@@ -70,14 +70,13 @@ jobs:
           
           # EC2 인스턴스에 SSH로 접속하여 Docker 컨테이너를 관리합니다.
           ssh -o StrictHostKeyChecking=no -i private_key.pem $USER@$HOST "
-            sudo docker pull $TAG &&
-            CURRENT_CONTAINERS=$(sudo docker ps --format '{{.Names}}')
+            sudo docker pull $TAG
           
             # 현재 실행 중인 컨테이너에 따라 새 컨테이너를 실행하고, 이전 컨테이너를 중지 및 삭제합니다.
-            if echo $CURRENT_CONTAINERS | grep -q 'be1'; then
+            if sudo docker ps --format '{{.Names}}' | grep -q 'be1'; then
               sudo docker run -d --name be2 --network=secondhand -v ~/be/yml:/be/config/:ro $TAG
               sudo docker stop be1 && sudo docker rm be1
-            elif echo $CURRENT_CONTAINERS | grep -q 'be2'; then
+            elif sudo docker ps --format '{{.Names}}' | grep -q 'be2'; then
               sudo docker run -d --name be1 --network=secondhand -v ~/be/yml:/be/config/:ro $TAG
               sudo docker stop be2 && sudo docker rm be2
             else
