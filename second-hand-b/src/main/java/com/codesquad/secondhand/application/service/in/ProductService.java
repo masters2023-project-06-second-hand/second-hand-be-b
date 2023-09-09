@@ -2,13 +2,24 @@ package com.codesquad.secondhand.application.service.in;
 
 
 import com.codesquad.secondhand.application.port.in.ProductUseCase;
+import com.codesquad.secondhand.application.port.in.exception.ProductNotFoundException;
 import com.codesquad.secondhand.application.port.in.request.ProductCreateRequest;
 import com.codesquad.secondhand.application.port.in.request.ProductModifyRequest;
+import com.codesquad.secondhand.application.port.in.response.ImageInfo;
 import com.codesquad.secondhand.application.port.in.response.ProductDetail;
+import com.codesquad.secondhand.application.port.in.response.ProductInfo;
+import com.codesquad.secondhand.application.port.in.response.ProductWriter;
 import com.codesquad.secondhand.application.port.out.ProductRepository;
+import com.codesquad.secondhand.domain.image.Image;
+import com.codesquad.secondhand.domain.member.Member;
+import com.codesquad.secondhand.domain.product.Category;
 import com.codesquad.secondhand.domain.product.Product;
 import com.codesquad.secondhand.domain.product.Status;
+import com.codesquad.secondhand.domain.region.Region;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,12 +28,17 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ProductService implements ProductUseCase {
 
+    private static final int IMAGES_FIRST_INDEX = 0;
+
     private final ProductRepository productRepository;
+    private final RegionService regionService;
+    private final CategoryService categoryService;
+    private final ImageService imageService;
 
     @Transactional
     @Override
-    public Long save(ProductCreateRequest productCreateRequest, String email) {
-        Product product = toProduct(productCreateRequest);
+    public Long save(ProductCreateRequest productCreateRequest, Member member) {
+        Product product = toProduct(productCreateRequest, member);
         return productRepository.save(product).getId();
     }
 
@@ -36,7 +52,15 @@ public class ProductService implements ProductUseCase {
     @Override
     public void modify(Long id, ProductModifyRequest request) {
         Product product = productRepository.findById(id).orElseThrow();
-        product.modifyProduct(request.getName(), request.getContent(), request.getPrice(), null, null, null);
+        Category category = categoryService.getById(request.getCategoryId());
+        List<Image> images = imageService.getImageListById(request.getImagesId());
+        Region region = regionService.getById(request.getRegionId());
+        product.modifyProduct(request.getName(),
+                request.getContent(),
+                request.getPrice(),
+                category,
+                images,
+                region);
     }
 
     @Transactional
@@ -46,30 +70,102 @@ public class ProductService implements ProductUseCase {
         product.modifyStatus(status);
     }
 
-    private Product toProduct(ProductCreateRequest productCreateRequest) {
-        // TODO: writer, category, region, images Entity 추가
+    @Override
+    public List<ProductInfo> getProductsByRegion(Long regionId) {
+        Set<Product> products = productRepository.findByRegionId(regionId);
+        return toProductInfos(products);
+    }
+
+    @Override
+    public List<ProductInfo> getProductsByRegionAndCategory(Long regionId, Long categoryId) {
+        Set<Product> products = productRepository.findByRegionIdAndCategoryId(regionId, categoryId);
+        return toProductInfos(products);
+    }
+
+    public Product getById(Long productId) {
+        return productRepository.findById(productId)
+                .orElseThrow(ProductNotFoundException::new);
+    }
+
+    public List<ProductDetail> getProductsByMemberIdAndCategoryId(long memberId, long categoryId) {
+        return toProductDetails(productRepository.findProductsByMemberIdAndCategoryId(memberId, categoryId));
+    }
+
+    public List<ProductDetail> getByWriterId(long memberId) {
+        return toProductDetails(productRepository.findByWriterId(memberId));
+    }
+
+    public List<ProductDetail> getSoldOutByWriterId(long memberId) {
+        return toProductDetails(productRepository.findByWriterIdAndStatus(memberId, Status.SOLDOUT));
+    }
+
+    public List<ProductDetail> getSalesByWriterId(long memberId) {
+        return toProductDetails(productRepository.findByWriterIdAndStatusNot(memberId, Status.SOLDOUT));
+    }
+
+    public List<ProductDetail> toProductDetails(Set<Product> products) {
+        return products.stream()
+                .map(this::toProductDetail)
+                .collect(Collectors.toList());
+    }
+
+    public List<ProductInfo> toProductInfos(Set<Product> products) {
+        return products.stream()
+                .map(this::toProductInfo)
+                .collect(Collectors.toList());
+    }
+
+    private Product toProduct(ProductCreateRequest productCreateRequest, Member member) {
+        Region region = regionService.getById(productCreateRequest.getRegionId());
+        Category category = categoryService.getById(productCreateRequest.getCategoryId());
+        List<Long> imagesId = productCreateRequest.getImagesId();
+        // 이미지 목록의 첫번째는 썸네일 이미지
+        Image thumbnailImage = imageService.getById(imagesId.get(IMAGES_FIRST_INDEX));
+        List<Image> images = imageService.getImageListById(imagesId);
         return new Product(productCreateRequest.getName(),
                 productCreateRequest.getContent(),
                 productCreateRequest.getPrice(),
-                null,
-                null,
-                null,
-                null,
+                member,
+                category,
+                thumbnailImage,
+                images,
+                region,
                 Status.ONSALES,
                 LocalDateTime.now());
     }
 
-    private static ProductDetail toProductDetail(Product product) {
-        // TODO: writer, categoryName, region, images 추가
+    private ProductDetail toProductDetail(Product product) {
+        Member member = product.getWriter();
+        Category category = product.getCategory();
+        Region region = product.getRegion();
+        Status status = product.getStatus();
+        List<ImageInfo> imageInfos = product.fetchImageInfos();
         return new ProductDetail(product.getId(),
-                null,
+                new ProductWriter(member.getId(), member.getNickname()),
                 product.getName(),
-                null,
-                null,
-                product.getStatus().getName(),
+                category.getName(),
+                region.getName(),
+                status.getName(),
                 product.getContent(),
                 product.getPrice(),
-                null,
+                imageInfos,
                 product.getCreatedAt());
+    }
+
+    private ProductInfo toProductInfo(Product product) {
+        Member member = product.getWriter();
+        Region region = product.getRegion();
+        Status status = product.getStatus();
+        Image thumbnail = product.getThumbnailImage();
+        return new ProductInfo(product.getId(),
+                member.getId(),
+                thumbnail.getUrl(),
+                product.getName(),
+                region.getName(),
+                product.getCreatedAt(),
+                status.getName(),
+                product.getPrice(),
+                0,
+                0);
     }
 }

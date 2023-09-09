@@ -5,6 +5,7 @@ import com.codesquad.secondhand.domain.member.Role;
 import com.codesquad.secondhand.domain.units.JwtTokenProvider;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Date;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -16,11 +17,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 public class JwtSignUpAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtTokenProvider jwtTokenProvider;
-
-    public JwtSignUpAuthenticationFilter(JwtTokenProvider jwtTokenProvider) {
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -30,10 +26,11 @@ public class JwtSignUpAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        String token = jwtTokenProvider.resolveToken(request);
-        if (token != null && jwtTokenProvider.validateToken(token.split(" ")[1].trim())
-                && !jwtTokenProvider.isAccessToken(token.split(" ")[1].trim())) {
-            String email = jwtTokenProvider.getEmail(token.split(" ")[1].trim());
+        String token = JwtTokenProvider.resolveToken(request);
+        Date now = new Date();
+        if (token != null && JwtTokenProvider.validateToken(token, now)
+                && !JwtTokenProvider.isAccessToken(token)) {
+            String email = JwtTokenProvider.getEmail(token);
             Authentication authentication = new JwtSignUpToken(email, Collections.singleton(new SimpleGrantedAuthority(
                     Role.USER.getKey())));
             authentication.setAuthenticated(true);

@@ -6,7 +6,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "category")
 public class Category {
@@ -26,5 +29,17 @@ public class Category {
 
     public String getName() {
         return name;
+    }
+
+    public boolean isSameId(long categoryId) {
+        return id.equals(categoryId);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
     }
 }

@@ -13,6 +13,10 @@ public enum Status {
         this.name = name;
     }
 
+    public static boolean isSoldOut(Status status) {
+        return status.equals(SOLDOUT);
+    }
+
     public String getName() {
         return name;
     }

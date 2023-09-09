@@ -1,39 +1,73 @@
 package com.codesquad.secondhand.adapter.in.web;
 
 import com.codesquad.secondhand.application.port.in.MemberUseCase;
-import com.codesquad.secondhand.application.port.in.request.SignUpRequest;
-import java.util.Map;
+import com.codesquad.secondhand.application.port.in.request.ToggleProductLikeStatusRequest;
+import com.codesquad.secondhand.application.port.in.response.CategorySimpleDetail;
+import com.codesquad.secondhand.application.port.in.response.ProductDetail;
+import com.codesquad.secondhand.domain.member.Member;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RequiredArgsConstructor
-@RequestMapping("/api/members")
-@RestController
+@Controller
 public class MemberController {
 
     private final MemberUseCase memberUseCase;
 
-    @GetMapping("/signin")
-    public ResponseEntity<Map<String, String>> signIn(@AuthenticationPrincipal OAuth2User oAuth2User) {
-        String email = oAuth2User.getAttribute("email");
-        String accessToken = memberUseCase.signIn(email);
-        return ResponseEntity.ok(Map.of("AccessToken", accessToken));
-    }
-
-    @PostMapping("/signup")
-    public ResponseEntity<Map<String, String>> signup(
-            @AuthenticationPrincipal String email,
-            @RequestBody SignUpRequest signUpRequest
+    @PutMapping("/api/products/{productId}/likes")
+    public ResponseEntity<Void> toggleProductLikeStatus(
+            @AuthenticationPrincipal Member member,
+            @RequestBody ToggleProductLikeStatusRequest toggleProductLikeStatusRequest,
+            @PathVariable Long productId
     ) {
-        String accessToken = memberUseCase.signUp(email, signUpRequest);
-        return ResponseEntity.ok(Map.of("AccessToken", accessToken));
+        memberUseCase.toggleProductLikeStatus(member, productId, toggleProductLikeStatusRequest.isLiked());
+        return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/api/members/{memberId}/likes")
+    public ResponseEntity<List<ProductDetail>> fetchMemberFavoriteProducts(
+            @AuthenticationPrincipal Member member,
+            @PathVariable long memberId,
+            @RequestParam Optional<Long> categoryId
+    ) {
+        if (categoryId.isPresent()) {
+            List<ProductDetail> productDetails = memberUseCase.fetchMemberFavoriteProducts(member, memberId,
+                    categoryId.get());
+            return ResponseEntity.ok(productDetails);
+        }
+        List<ProductDetail> productDetails = memberUseCase.fetchMemberFavoriteProducts(member, memberId);
+        return ResponseEntity.ok(productDetails);
+    }
+
+    @GetMapping("/api/members/{memberId}/likes/categories")
+    public ResponseEntity<List<CategorySimpleDetail>> fetchMemberInterestCategories(
+            @AuthenticationPrincipal Member member,
+            @PathVariable long memberId
+    ) {
+        List<CategorySimpleDetail> categories = memberUseCase.fetchMemberInterestCategories(member, memberId);
+        return ResponseEntity.ok(categories);
+    }
+
+    @GetMapping("/api/members/{memberId}/sales")
+    public ResponseEntity<List<ProductDetail>> getMySellingProducts(
+            @AuthenticationPrincipal Member member,
+            @RequestParam Optional<String> status,
+            @PathVariable long memberId
+    ) {
+        if (status.isPresent()) {
+            List<ProductDetail> categories = memberUseCase.getMySellingProductsByStatus(member, memberId, status.get());
+            return ResponseEntity.ok(categories);
+        }
+        List<ProductDetail> categories = memberUseCase.getMySellingProducts(member, memberId);
+        return ResponseEntity.ok(categories);
+    }
 }

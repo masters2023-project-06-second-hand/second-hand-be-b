@@ -1,13 +1,15 @@
 package com.codesquad.secondhand.utils;
 
-import com.codesquad.secondhand.adapter.out.persistence.MemberJpaRepository;
-import com.codesquad.secondhand.adapter.out.persistence.RegionJpaRepository;
-import com.codesquad.secondhand.config.SecurityTestConfig;
+import com.codesquad.secondhand.application.port.out.MemberRepository;
+import com.codesquad.secondhand.application.port.out.RegionRepository;
 import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.member.Role;
 import com.codesquad.secondhand.domain.region.Region;
 import com.codesquad.secondhand.domain.units.JwtTokenProvider;
+import io.findify.s3mock.S3Mock;
 import io.restassured.RestAssured;
+import java.util.Date;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,29 +17,53 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
 
-@Import(value = SecurityTestConfig.class)
+@Import(S3MockConfig.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class AcceptanceTest {
 
-    public String accessToken;
+    public static final String AYAAN_EMAIL = "ayaan@email.com";
+    public static final String AYAAN_NICKNAME = "이안";
+    public static final String AYAAN_PROFILE_IMAGE = "url";
+    public static final long AYAAN_DEFAULT_REGION_ID = 3L;
+    public static final String ALBERT_EMAIL = "albert@email.com";
+    public static final String ALBERT_NICKNAME = "앨버트";
+    public static final String ALBERT_PROFILE_IMAGE = "url";
+    public static final long ALBERT_DEFAULT_REGION_ID = 1L;
+    public String ayaanAccessToken;
+    public String albertAccessToken;
     @LocalServerPort
     private int port;
     @Autowired
     private DatabaseCleanup databaseCleanup;
     @Autowired
-    private MemberJpaRepository memberJpaRepository;
+    private MemberRepository memberRepository;
     @Autowired
-    private RegionJpaRepository regionJpaRepository;
+    private RegionRepository regionRepository;
     @Autowired
-    private JwtTokenProvider jwtTokenProvider;
+    private S3Mock s3Mock;
 
     @BeforeEach
     public void setUp() {
         RestAssured.port = port;
         databaseCleanup.execute();
-        Region region = regionJpaRepository.findById(3L).orElseThrow();
-        memberJpaRepository.save(new Member("test@email.com", "이안", "url", region, Role.MEMBER));
-        accessToken = jwtTokenProvider.createAccessToken("test@email.com", 1 + "");
+        initAccessToken();
+    }
+
+    @AfterEach
+    void tearDown() {
+        s3Mock.stop();
+    }
+
+    private void initAccessToken() {
+        Region ayyanRegion = regionRepository.findById(AYAAN_DEFAULT_REGION_ID).orElseThrow();
+        Region albertRegion = regionRepository.findById(ALBERT_DEFAULT_REGION_ID).orElseThrow();
+        Member ayaan = memberRepository.save(
+                new Member(AYAAN_EMAIL, AYAAN_NICKNAME, AYAAN_PROFILE_IMAGE, ayyanRegion, Role.MEMBER));
+        Member albert = memberRepository.save(
+                new Member(ALBERT_EMAIL, ALBERT_NICKNAME, ALBERT_PROFILE_IMAGE, albertRegion, Role.MEMBER));
+        final Date startDate = new Date();
+        ayaanAccessToken = JwtTokenProvider.createAccessToken(AYAAN_EMAIL, ayaan.getIdStringValue(), startDate);
+        albertAccessToken = JwtTokenProvider.createAccessToken(ALBERT_EMAIL, albert.getIdStringValue(), startDate);
     }
 
 }

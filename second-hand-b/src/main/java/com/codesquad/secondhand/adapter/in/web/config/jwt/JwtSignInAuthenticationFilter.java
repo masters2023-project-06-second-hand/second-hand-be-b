@@ -5,6 +5,7 @@ import com.codesquad.secondhand.application.port.out.MemberRepository;
 import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.units.JwtTokenProvider;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Optional;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -16,11 +17,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 public class JwtSignInAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtTokenProvider jwtTokenProvider;
     private final MemberRepository memberRepository;
 
-    public JwtSignInAuthenticationFilter(JwtTokenProvider jwtTokenProvider, MemberRepository memberRepository) {
-        this.jwtTokenProvider = jwtTokenProvider;
+    public JwtSignInAuthenticationFilter(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
     }
 
@@ -32,13 +31,14 @@ public class JwtSignInAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        String token = jwtTokenProvider.resolveToken(request);
+        String token = JwtTokenProvider.resolveToken(request);
         if (token == null) {
             filterChain.doFilter(request, response);
             return;
         }
-        if (jwtTokenProvider.validateToken(token) && jwtTokenProvider.isAccessToken(token)) {
-            String email = jwtTokenProvider.getEmail(token);
+        Date now = new Date();
+        if (JwtTokenProvider.validateToken(token, now) && JwtTokenProvider.isAccessToken(token)) {
+            String email = JwtTokenProvider.getEmail(token);
             Optional<Member> member = memberRepository.findByEmail(email);
             if (member.isPresent()) {
                 Authentication authentication = new JwtAccessToken(member.get(), member.get().getRoleAuthority());
