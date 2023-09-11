@@ -87,6 +87,7 @@ public class ProductService implements ProductUseCase {
         return toProductInfos(products);
     }
 
+    @Transactional
     @Override
     public void delete(Long id) {
         Product product = getById(id);
