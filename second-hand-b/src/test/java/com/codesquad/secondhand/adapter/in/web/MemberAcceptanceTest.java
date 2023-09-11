@@ -64,7 +64,7 @@ class MemberAcceptanceTest extends AcceptanceTest {
         나의_관심상품_목록_조회_검증한다(response);
     }
 
-    @DisplayName("관심상품의 카테고리 목록 조회 요청 시, 카테고리 목록 반환")
+    @DisplayName("관심상품의 카테고리별 목록 조회 요청 시, 카테고리별 목록 반환")
     @Test
     void shouldReturnProductsGroupedByCategoryWhenFetchingFavorites() {
         // given

@@ -62,23 +62,25 @@ public class MemberService implements MemberUseCase {
     @Override
     public List<ProductInfo> fetchMemberFavoriteProducts(Member member, long memberId, long categoryId) {
         validateMemberPermission(member, memberId);
-        Member savedMember = getById(memberId);
-        List<Product> productsByCategoryId = savedMember.getProductsByCategoryId(categoryId);
-        return productService.toProductInfos(productsByCategoryId);
+        return productService.getProductsByMemberIdAndCategoryId(memberId,
+                categoryId);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<CategorySimpleDetail> fetchMemberInterestCategories(Member member, long memberId) {
         validateMemberPermission(member, memberId);
         return categoryService.getCategoryByMemberId(memberId);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<ProductInfo> getMySellingProducts(Member member, long memberId) {
         validateMemberPermission(member, memberId);
         return productService.getByWriterId(memberId);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<ProductInfo> getMySellingProductsByStatus(Member member, long memberId, String statusName) {
         validateMemberPermission(member, memberId);
