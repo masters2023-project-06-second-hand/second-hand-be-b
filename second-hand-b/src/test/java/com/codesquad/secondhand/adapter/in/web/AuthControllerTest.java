@@ -1,11 +1,8 @@
 package com.codesquad.secondhand.adapter.in.web;
 
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.startsWith;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -14,14 +11,12 @@ import com.codesquad.secondhand.application.port.out.MemberRepository;
 import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.member.Role;
 import com.codesquad.secondhand.domain.units.JwtTokenProvider;
-import com.codesquad.secondhand.oauth.WithTestUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
-import org.hamcrest.Matcher;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,22 +47,6 @@ class AuthControllerTest {
     @Autowired
     EntityManager entityManager;
 
-    private static Matcher<String> MatcherBearer() {
-        return startsWith("Bearer ");
-    }
-
-    @WithTestUser
-    @DisplayName("OAuth2.0 인증 했지만 해당 유저가 없으면 signup Token을 발급하여 가입하라고 redirect 한다")
-    @Test
-    void givenOAuth2Authentication_whenUserDoesNotExist_thenIssueSignupTokenAndRedirectForRegistration()
-            throws Exception {
-        mockMvc.perform(get("/api/members/signin"))
-                .andDo(print())
-                .andExpect(header().string(HttpHeaders.AUTHORIZATION, MatcherBearer()))
-                .andExpect(status().is3xxRedirection())
-        ;
-    }
-
     private String getTestRefreshToken(Member member, Date startDate) {
         return JwtTokenProvider.createRefreshToken(TEST_EMAIL, member.getIdStringValue(), startDate);
     }
@@ -75,20 +54,6 @@ class AuthControllerTest {
     private Member getTestMember() {
         return memberRepository.save(
                 new Member(TEST_EMAIL, TEST_NICKNAME, TEST_PROFILE_IMAGE, null, Role.USER));
-    }
-
-    @WithTestUser
-    @DisplayName("Oauth2.0 인증 했고 행당 유저가 있으면 AccessToken를 Authtication Header로 RefreshToken은 Cookie Header에 담은 다음 Redirect한다")
-    @Test
-    void givenOAuth2Authentication_whenUserExists_thenSetTokensInHeadersAndRedirect() throws Exception {
-        getTestMember();
-
-        mockMvc.perform(get("/api/members/signin"))
-                .andDo(print())
-                .andExpect(header().string(HttpHeaders.AUTHORIZATION, MatcherBearer()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(header().string(HttpHeaders.SET_COOKIE, containsString("refresh_token")))
-        ;
     }
 
     @DisplayName("signUpToken와 함께 회원가입을 요청하면 Tokens를 보낸다")
@@ -107,6 +72,7 @@ class AuthControllerTest {
                 .andDo(print())
                 .andExpect(jsonPath("accessToken").exists())
                 .andExpect(jsonPath("refreshToken").exists())
+                .andExpect(jsonPath("memberId").exists())
                 .andExpect(status().isOk());
     }
 

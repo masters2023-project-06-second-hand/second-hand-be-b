@@ -1,6 +1,6 @@
 package com.codesquad.secondhand.application.port.in.exception;
 
-import java.util.List;
+import java.util.Map;
 
 public class NotRegisteredMemberException extends BusinessException {
 
@@ -9,7 +9,7 @@ public class NotRegisteredMemberException extends BusinessException {
     private final String token;
 
     public NotRegisteredMemberException(String token) {
-        super(new ErrorResponse(STATUS, new Errors(List.of(ERROR))));
+        super(new ErrorResponse(STATUS, new Errors(Map.of("error", ERROR))));
         this.token = token;
     }
 
