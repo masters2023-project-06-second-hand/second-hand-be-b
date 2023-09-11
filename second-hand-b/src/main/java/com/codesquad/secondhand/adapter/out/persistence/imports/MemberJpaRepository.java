@@ -2,9 +2,9 @@ package com.codesquad.secondhand.adapter.out.persistence.imports;
 
 import com.codesquad.secondhand.domain.member.Member;
 import java.util.Optional;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 
-public interface MemberJpaRepository extends JpaRepository<Member, Long> {
+public interface MemberJpaRepository extends CrudRepository<Member, Long> {
 
     Optional<Member> findByEmail(String email);
 }
