@@ -21,9 +21,7 @@ public interface ProductJpaRepository extends JpaRepository<Product, Long> {
 
     Set<Product> findByWriterIdAndStatusNot(long memberId, Status status);
 
-    @Query("select product_ from Product product_"
-            + " join fetch product_.thumbnailImage"
-            + " join fetch product_.region")
+    @Query("select product_ from Product product_ join fetch product_.region")
     Set<Product> findByRegionId(long regionId);
 
     Set<Product> findByRegionIdAndCategoryId(long regionId, long categoryId);

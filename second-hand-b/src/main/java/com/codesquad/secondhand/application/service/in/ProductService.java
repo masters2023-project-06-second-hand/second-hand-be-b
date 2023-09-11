@@ -20,9 +20,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -53,12 +53,16 @@ public class ProductService implements ProductUseCase {
     public void modify(Long id, ProductModifyRequest request) {
         Product product = productRepository.findById(id).orElseThrow();
         Category category = categoryService.getById(request.getCategoryId());
+        List<Long> imagesId = request.getImagesId();
+        // 이미지 목록의 첫번째는 썸네일 이미지
+        Image thumbnailImage = imageService.getById(imagesId.get(IMAGES_FIRST_INDEX));
         List<Image> images = imageService.getImageListById(request.getImagesId());
         Region region = regionService.getById(request.getRegionId());
         product.modifyProduct(request.getName(),
                 request.getContent(),
                 request.getPrice(),
                 category,
+                thumbnailImage.getUrl(),
                 images,
                 region);
     }
@@ -70,12 +74,14 @@ public class ProductService implements ProductUseCase {
         product.modifyStatus(status);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<ProductInfo> getProductsByRegion(Long regionId) {
         Set<Product> products = productRepository.findByRegionId(regionId);
         return toProductInfos(products);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<ProductInfo> getProductsByRegionAndCategory(Long regionId, Long categoryId) {
         Set<Product> products = productRepository.findByRegionIdAndCategoryId(regionId, categoryId);
@@ -127,7 +133,7 @@ public class ProductService implements ProductUseCase {
                 productCreateRequest.getPrice(),
                 member,
                 category,
-                thumbnailImage,
+                thumbnailImage.getUrl(),
                 images,
                 region,
                 Status.ONSALES,
@@ -156,10 +162,10 @@ public class ProductService implements ProductUseCase {
         Member member = product.getWriter();
         Region region = product.getRegion();
         Status status = product.getStatus();
-        Image thumbnail = product.getThumbnailImage();
+        String thumbnailUrl = product.getThumbnailUrl();
         return new ProductInfo(product.getId(),
                 member.getId(),
-                thumbnail.getUrl(),
+                thumbnailUrl,
                 product.getName(),
                 region.getName(),
                 product.getCreatedAt(),
