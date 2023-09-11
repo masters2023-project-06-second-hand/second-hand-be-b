@@ -1,10 +1,13 @@
 # 워크플로우의 이름을 정의합니다. 이 이름은 GitHub Actions 탭에서 표시됩니다.
-name: be server merge
+name: fe server
 
 # 워크플로우 실행의 트리거 조건을 정의합니다.
 on:
   # 'fe' 브랜치에 push 이벤트가 발생할 때 워크플로우를 실행합니다.
   push:
+    branches:
+      - fe
+  pull_request:
     branches:
       - fe
   # 워크플로우를 수동으로 실행할 수 있는 옵션을 제공합니다.
@@ -32,11 +35,15 @@ jobs:
 
       # 프로젝트의 의존성을 설치합니다.
       - name: 의존성 설치
-        run: npm install
+        run: |
+          cd fe
+          npm install
 
       # React 애플리케이션을 빌드합니다.
       - name: React 애플리케이션 빌드
-        run: npm run build
+        run: |
+          cd fe
+          npm run build
 
       # QEMU를 설정합니다. 멀티 아키텍처 빌드를 지원하기 위한 것입니다.
       - name: QEMU 설정
@@ -74,19 +81,20 @@ jobs:
           echo "$PRIVATE_KEY" > private_key.pem
           chmod 600 private_key.pem
           ssh -o StrictHostKeyChecking=no -i private_key.pem $USER@$HOST "
-            sudo docker pull $TAG &&
-            CURRENT_CONTAINERS=$(sudo docker ps --format '{{.Names}}')
+            sudo docker pull $TAG
           
             # fe1이 실행 중이면 fe2로 시작하고, fe1을 중지 및 삭제
-            if echo $CURRENT_CONTAINERS | grep -q 'fe1'; then
-            sudo docker run -d --name fe2 --network=secondhand $TAG
-            sudo docker stop fe1 && docker rm fe1
+            if sudo docker ps --format '{{.Names}}' | grep -q 'fe1'; then
+              sudo docker run -d --name fe2 --network=secondhand $TAG
+              sudo docker stop fe1
+              sudo docker rm fe1
             # fe2가 실행 중이면 fe1로 시작하고, fe2를 중지 및 삭제
-            elif echo $CURRENT_CONTAINERS | grep -q 'fe2'; then
-            sudo docker run -d --name fe1 --network=secondhand $TAG
-            sudo docker stop fe2 && docker rm fe2
+            elif sudo docker ps --format '{{.Names}}' | grep -q 'fe2'; then
+              sudo docker run -d --name fe1 --network=secondhand $TAG
+              sudo docker stop fe2
+              sudo docker rm fe2
             else
-            # 위의 두 경우가 아니면 기본 동작을 실행할 수 있습니다.
-            sudo docker run -d --name fe1 --network=secondhand $TAG
+            # 위의 두 경우가 아니면 기본 동작을 실행할 수 있습니다
+              sudo docker run -d --name fe1 --network=secondhand $TAG
             fi
           "
