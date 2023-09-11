@@ -25,10 +25,13 @@ public interface ProductJpaRepository extends JpaRepository<Product, Long> {
     )
     List<Product> findProductsByMemberIdAndCategoryId(long memberId, long categoryId);
 
+    @EntityGraph(attributePaths = {"region"})
     List<Product> findByWriterId(long writerId);
 
+    @EntityGraph(attributePaths = {"region"})
     List<Product> findByWriterIdAndStatus(long memberId, Status status);
 
+    @EntityGraph(attributePaths = {"region"})
     List<Product> findByWriterIdAndStatusNot(long memberId, Status status);
 
     @EntityGraph(attributePaths = {"region"})
