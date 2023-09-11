@@ -21,7 +21,7 @@ jobs:
     # 작업에서 실행될 순차적인 단계를 정의합니다.
     steps:
       - name: 코드 체크아웃
-        uses: actions/checkout@v4  # 'actions/checkout' 액션의 버전 4를 사용합니다.
+        uses: actions/checkout@v4
 
       - name: Java 설정
         uses: actions/setup-java@v3
@@ -31,9 +31,9 @@ jobs:
 
       - name: 비밀 키 적용
         run: |
-          echo "${{ secrets.CLOUD }}" > second-hand-b/src/main/resources/application-cloud.yml
-          echo "${{ secrets.TESTDB }}" > second-hand-b/src/main/resources/application-localdb.yml
-          echo "${{ secrets.OAUTH2 }}" > second-hand-b/src/main/resources/application-oauth2.yml
+          echo "${{ secrets.CLOUD }}" | base64 --decode > second-hand-b/src/main/resources/application-cloud.yml
+          echo "${{ secrets.TESTDB }}" | base64 --decode > second-hand-b/src/main/resources/application-localdb.yml
+          echo "${{ secrets.OAUTH2 }}" | base64 --decode > second-hand-b/src/main/resources/application-oauth2.yml
 
       - name: 프로젝트 빌드
         run: |
