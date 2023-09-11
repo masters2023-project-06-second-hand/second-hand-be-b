@@ -6,7 +6,7 @@ on:
   push:
     branches:
       - main
-      - be-server-cicd
+      - be
   workflow_dispatch:  # 워크플로우 수동 실행 옵션
 
 jobs:
