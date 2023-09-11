@@ -1,6 +1,6 @@
 package com.codesquad.secondhand.application.port.in.exception;
 
-import java.util.List;
+import java.util.Map;
 
 public class TokenExpiredException extends BusinessException {
 
@@ -8,6 +8,6 @@ public class TokenExpiredException extends BusinessException {
     private static final String ERROR = "토큰이 유효하지 않습니다. 다시 로그인해주세요.";
 
     public TokenExpiredException() {
-        super(new ErrorResponse(STATUS, new Errors(List.of(ERROR))));
+        super(new ErrorResponse(STATUS, new Errors(Map.of("error", ERROR))));
     }
 }

@@ -59,7 +59,7 @@ public class AuthService implements AuthUseCase {
         Date startDate = new Date();
         var accessToken = getAccessToken(email, member.getIdStringValue(), startDate);
         var refreshToken = getRefreshToken(email, member, startDate);
-        return new Tokens(accessToken, refreshToken);
+        return new Tokens(accessToken, refreshToken, member.getId());
     }
 
     private String getAccessToken(String email, String id, Date startDate) {

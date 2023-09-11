@@ -1,6 +1,6 @@
 package com.codesquad.secondhand.application.port.in.exception;
 
-import java.util.List;
+import java.util.Map;
 
 public class ProductNotFoundException extends BusinessException {
 
@@ -8,6 +8,6 @@ public class ProductNotFoundException extends BusinessException {
     private static final String ERROR = "상품을 찾을 수 없습니다.";
 
     public ProductNotFoundException() {
-        super(new ErrorResponse(STATUS, new Errors(List.of(ERROR))));
+        super(new ErrorResponse(STATUS, new Errors(Map.of("error", ERROR))));
     }
 }
