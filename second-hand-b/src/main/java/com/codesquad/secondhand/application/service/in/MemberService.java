@@ -53,9 +53,7 @@ public class MemberService implements MemberUseCase {
     @Override
     public List<ProductInfo> fetchMemberFavoriteProducts(Member member, long memberId) {
         validateMemberPermission(member, memberId);
-        Member savedMember = getById(memberId);
-        List<Product> products = savedMember.getProducts();
-        return productService.toProductInfos(products);
+        return productService.getProductsByMemberId(memberId);
     }
 
     @Transactional(readOnly = true)

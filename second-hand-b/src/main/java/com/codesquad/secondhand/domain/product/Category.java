@@ -31,10 +31,6 @@ public class Category {
         return name;
     }
 
-    public boolean isSameId(long categoryId) {
-        return id.equals(categoryId);
-    }
-
     public Long getId() {
         return id;
     }

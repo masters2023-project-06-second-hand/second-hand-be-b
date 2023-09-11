@@ -12,6 +12,15 @@ public interface ProductJpaRepository extends JpaRepository<Product, Long> {
     @Query(
             " select member_product from Member member_ "
                     + " join member_.likes.products member_product"
+                    + " join fetch member_product.region"
+                    + " where member_.id = :memberId"
+    )
+    List<Product> findProductsByMemberId(long memberId);
+
+    @Query(
+            " select member_product from Member member_ "
+                    + " join member_.likes.products member_product"
+                    + " join fetch member_product.region"
                     + " where member_.id = :memberId and member_product.category.id = :categoryId"
     )
     List<Product> findProductsByMemberIdAndCategoryId(long memberId, long categoryId);

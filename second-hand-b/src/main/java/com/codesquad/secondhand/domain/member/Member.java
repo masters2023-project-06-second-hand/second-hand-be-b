@@ -112,14 +112,6 @@ public class Member implements Serializable {
         return likes.remove(product);
     }
 
-    public List<Product> getProducts() {
-        return likes.getProducts();
-    }
-
-    public List<Product> getProductsByCategoryId(long categoryId) {
-        return likes.getProductsByCategoryId(categoryId);
-    }
-
     public boolean isSameId(long memberId) {
         return id.equals(memberId);
     }

@@ -92,6 +92,10 @@ public class ProductService implements ProductUseCase {
                 .orElseThrow(ProductNotFoundException::new);
     }
 
+    public List<ProductInfo> getProductsByMemberId(long memberId) {
+        return toProductInfos(productRepository.findProductsByMemberId(memberId));
+    }
+
     public List<ProductInfo> getProductsByMemberIdAndCategoryId(long memberId, long categoryId) {
         return toProductInfos(productRepository.findProductsByMemberIdAndCategoryId(memberId, categoryId));
     }

@@ -11,6 +11,8 @@ public interface ProductRepository {
 
     Optional<Product> findById(Long id);
 
+    List<Product> findProductsByMemberId(long memberId);
+
     List<Product> findProductsByMemberIdAndCategoryId(long memberId, long categoryId);
 
     List<Product> findByWriterId(long writerId);
