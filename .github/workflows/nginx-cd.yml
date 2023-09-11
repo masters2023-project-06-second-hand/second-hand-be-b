@@ -55,6 +55,11 @@ jobs:
           chmod 600 private_key.pem
           ssh -o StrictHostKeyChecking=no -i private_key.pem $USER@$HOST "
             sudo docker pull $TAG &&
-            sudo docker stop $CONTAINER_NAME && sudo docker rm $CONTAINER_NAME &&
+          
+            if sudo docker ps -a | grep -q $CONTAINER_NAME; then
+              sudo docker stop $CONTAINER_NAME &&
+              sudo docker rm $CONTAINER_NAME;
+            fi &&
+          
             sudo docker run -d --name $CONTAINER_NAME --network=secondhand -p 80:80 $TAG
           "
