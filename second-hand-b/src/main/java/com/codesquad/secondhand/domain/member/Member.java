@@ -7,7 +7,6 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -113,11 +112,11 @@ public class Member implements Serializable {
         return likes.remove(product);
     }
 
-    public Set<Product> getProducts() {
+    public List<Product> getProducts() {
         return likes.getProducts();
     }
 
-    public Set<Product> getProductsByCategoryId(long categoryId) {
+    public List<Product> getProductsByCategoryId(long categoryId) {
         return likes.getProductsByCategoryId(categoryId);
     }
 

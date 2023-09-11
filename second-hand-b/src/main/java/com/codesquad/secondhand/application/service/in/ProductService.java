@@ -18,7 +18,6 @@ import com.codesquad.secondhand.domain.product.Status;
 import com.codesquad.secondhand.domain.region.Region;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -77,14 +76,14 @@ public class ProductService implements ProductUseCase {
     @Transactional(readOnly = true)
     @Override
     public List<ProductInfo> getProductsByRegion(Long regionId) {
-        Set<Product> products = productRepository.findByRegionId(regionId);
+        List<Product> products = productRepository.findByRegionId(regionId);
         return toProductInfos(products);
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<ProductInfo> getProductsByRegionAndCategory(Long regionId, Long categoryId) {
-        Set<Product> products = productRepository.findByRegionIdAndCategoryId(regionId, categoryId);
+        List<Product> products = productRepository.findByRegionIdAndCategoryId(regionId, categoryId);
         return toProductInfos(products);
     }
 
@@ -109,13 +108,13 @@ public class ProductService implements ProductUseCase {
         return toProductDetails(productRepository.findByWriterIdAndStatusNot(memberId, Status.SOLDOUT));
     }
 
-    public List<ProductDetail> toProductDetails(Set<Product> products) {
+    public List<ProductDetail> toProductDetails(List<Product> products) {
         return products.stream()
                 .map(this::toProductDetail)
                 .collect(Collectors.toList());
     }
 
-    public List<ProductInfo> toProductInfos(Set<Product> products) {
+    public List<ProductInfo> toProductInfos(List<Product> products) {
         return products.stream()
                 .map(this::toProductInfo)
                 .collect(Collectors.toList());

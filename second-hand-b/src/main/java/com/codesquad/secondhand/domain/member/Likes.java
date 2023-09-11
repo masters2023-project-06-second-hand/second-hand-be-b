@@ -1,7 +1,7 @@
 package com.codesquad.secondhand.domain.member;
 
 import com.codesquad.secondhand.domain.product.Product;
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.Embeddable;
 import javax.persistence.ManyToMany;
@@ -10,7 +10,7 @@ import javax.persistence.ManyToMany;
 public class Likes {
 
     @ManyToMany
-    private Set<Product> products;
+    private List<Product> products;
 
     public boolean add(Product product) {
         return products.add(product);
@@ -21,13 +21,13 @@ public class Likes {
     }
 
 
-    public Set<Product> getProducts() {
+    public List<Product> getProducts() {
         return products;
     }
 
-    public Set<Product> getProductsByCategoryId(long categoryId) {
+    public List<Product> getProductsByCategoryId(long categoryId) {
         return products.stream()
                 .filter(product -> product.getCategory().isSameId(categoryId))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 }

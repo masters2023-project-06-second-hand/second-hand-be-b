@@ -4,8 +4,8 @@ import com.codesquad.secondhand.adapter.out.persistence.imports.ProductJpaReposi
 import com.codesquad.secondhand.application.port.out.ProductRepository;
 import com.codesquad.secondhand.domain.product.Product;
 import com.codesquad.secondhand.domain.product.Status;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -26,32 +26,32 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public Set<Product> findProductsByMemberIdAndCategoryId(long memberId, long categoryId) {
+    public List<Product> findProductsByMemberIdAndCategoryId(long memberId, long categoryId) {
         return productJpaRepository.findProductsByMemberIdAndCategoryId(memberId, categoryId);
     }
 
     @Override
-    public Set<Product> findByWriterId(long writerId) {
+    public List<Product> findByWriterId(long writerId) {
         return productJpaRepository.findByWriterId(writerId);
     }
 
     @Override
-    public Set<Product> findByWriterIdAndStatus(long memberId, Status status) {
+    public List<Product> findByWriterIdAndStatus(long memberId, Status status) {
         return productJpaRepository.findByWriterIdAndStatus(memberId, status);
     }
 
     @Override
-    public Set<Product> findByWriterIdAndStatusNot(long memberId, Status status) {
+    public List<Product> findByWriterIdAndStatusNot(long memberId, Status status) {
         return productJpaRepository.findByWriterIdAndStatusNot(memberId, status);
     }
 
     @Override
-    public Set<Product> findByRegionId(long regionId) {
+    public List<Product> findByRegionId(long regionId) {
         return productJpaRepository.findByRegionId(regionId);
     }
 
     @Override
-    public Set<Product> findByRegionIdAndCategoryId(long regionId, long categoryId) {
+    public List<Product> findByRegionIdAndCategoryId(long regionId, long categoryId) {
         return productJpaRepository.findByRegionIdAndCategoryId(regionId, categoryId);
     }
 }

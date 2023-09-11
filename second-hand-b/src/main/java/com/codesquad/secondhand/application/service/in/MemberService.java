@@ -10,7 +10,6 @@ import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.product.Product;
 import com.codesquad.secondhand.domain.product.Status;
 import java.util.List;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,7 +54,7 @@ public class MemberService implements MemberUseCase {
     public List<ProductDetail> fetchMemberFavoriteProducts(Member member, long memberId) {
         validateMemberPermission(member, memberId);
         Member savedMember = getById(memberId);
-        Set<Product> products = savedMember.getProducts();
+        List<Product> products = savedMember.getProducts();
         return productService.toProductDetails(products);
     }
 

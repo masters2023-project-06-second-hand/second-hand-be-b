@@ -2,8 +2,8 @@ package com.codesquad.secondhand.application.port.out;
 
 import com.codesquad.secondhand.domain.product.Product;
 import com.codesquad.secondhand.domain.product.Status;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 public interface ProductRepository {
 
@@ -11,15 +11,15 @@ public interface ProductRepository {
 
     Optional<Product> findById(Long id);
 
-    Set<Product> findProductsByMemberIdAndCategoryId(long memberId, long categoryId);
+    List<Product> findProductsByMemberIdAndCategoryId(long memberId, long categoryId);
 
-    Set<Product> findByWriterId(long writerId);
+    List<Product> findByWriterId(long writerId);
 
-    Set<Product> findByWriterIdAndStatus(long memberId, Status status);
+    List<Product> findByWriterIdAndStatus(long memberId, Status status);
 
-    Set<Product> findByWriterIdAndStatusNot(long memberId, Status status);
+    List<Product> findByWriterIdAndStatusNot(long memberId, Status status);
 
-    Set<Product> findByRegionId(long regionId);
+    List<Product> findByRegionId(long regionId);
 
-    Set<Product> findByRegionIdAndCategoryId(long regionId, long categoryId);
+    List<Product> findByRegionIdAndCategoryId(long regionId, long categoryId);
 }
