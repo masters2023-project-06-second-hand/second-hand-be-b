@@ -48,7 +48,7 @@ public class MemberSteps {
                 .containsExactlyInAnyOrder("1");
     }
 
-    public static void 나의_광심상품의_카테고리_목록_조회_결과_검증한다(ExtractableResponse<Response> response) {
+    public static void 나의_관심상품의_카테고리_목록_조회_결과_검증한다(ExtractableResponse<Response> response) {
         assertThat(response.jsonPath().getList("id", String.class))
                 .containsExactlyInAnyOrder("1", "2");
     }
@@ -63,7 +63,7 @@ public class MemberSteps {
                 .containsExactlyInAnyOrder("1");
     }
 
-    public static ExtractableResponse<Response> 나의_광심상품_목록_조회한다(String accessToken) {
+    public static ExtractableResponse<Response> 나의_관심상품_목록_조회한다(String accessToken) {
         return RestAssured.given().log().all()
                 .auth().oauth2(accessToken)
                 .when().get("/api/members/{memberId}/likes", 2)
@@ -71,7 +71,7 @@ public class MemberSteps {
                 .extract();
     }
 
-    public static ExtractableResponse<Response> 나의_광심상품_목록_조회한다(String accessToken, int categoryId) {
+    public static ExtractableResponse<Response> 나의_관심상품_목록_조회한다(String accessToken, int categoryId) {
         return RestAssured.given().log().all()
                 .auth().oauth2(accessToken).param("categoryId", categoryId)
                 .when().get("/api/members/{memberId}/likes", 2)
@@ -79,7 +79,7 @@ public class MemberSteps {
                 .extract();
     }
 
-    public static ExtractableResponse<Response> 나의_광심상품의_카테고리_목록_조회한다(String accessToken) {
+    public static ExtractableResponse<Response> 나의_관심상품의_카테고리_목록_조회한다(String accessToken) {
         return RestAssured.given().log().all()
                 .auth().oauth2(accessToken)
                 .when().get("/api/members/{memberId}/likes/categories", 2)

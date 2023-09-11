@@ -92,26 +92,20 @@ public class ProductService implements ProductUseCase {
                 .orElseThrow(ProductNotFoundException::new);
     }
 
-    public List<ProductDetail> getProductsByMemberIdAndCategoryId(long memberId, long categoryId) {
-        return toProductDetails(productRepository.findProductsByMemberIdAndCategoryId(memberId, categoryId));
+    public List<ProductInfo> getProductsByMemberIdAndCategoryId(long memberId, long categoryId) {
+        return toProductInfos(productRepository.findProductsByMemberIdAndCategoryId(memberId, categoryId));
     }
 
-    public List<ProductDetail> getByWriterId(long memberId) {
-        return toProductDetails(productRepository.findByWriterId(memberId));
+    public List<ProductInfo> getByWriterId(long memberId) {
+        return toProductInfos(productRepository.findByWriterId(memberId));
     }
 
-    public List<ProductDetail> getSoldOutByWriterId(long memberId) {
-        return toProductDetails(productRepository.findByWriterIdAndStatus(memberId, Status.SOLDOUT));
+    public List<ProductInfo> getSoldOutByWriterId(long memberId) {
+        return toProductInfos(productRepository.findByWriterIdAndStatus(memberId, Status.SOLDOUT));
     }
 
-    public List<ProductDetail> getSalesByWriterId(long memberId) {
-        return toProductDetails(productRepository.findByWriterIdAndStatusNot(memberId, Status.SOLDOUT));
-    }
-
-    public List<ProductDetail> toProductDetails(List<Product> products) {
-        return products.stream()
-                .map(this::toProductDetail)
-                .collect(Collectors.toList());
+    public List<ProductInfo> getSalesByWriterId(long memberId) {
+        return toProductInfos(productRepository.findByWriterIdAndStatusNot(memberId, Status.SOLDOUT));
     }
 
     public List<ProductInfo> toProductInfos(List<Product> products) {
