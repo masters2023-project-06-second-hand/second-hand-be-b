@@ -87,6 +87,12 @@ public class ProductService implements ProductUseCase {
         return toProductInfos(products);
     }
 
+    @Override
+    public void delete(Long id) {
+        Product product = getById(id);
+        productRepository.deleteById(product.getId());
+    }
+
     public Product getById(Long productId) {
         return productRepository.findById(productId)
                 .orElseThrow(ProductNotFoundException::new);

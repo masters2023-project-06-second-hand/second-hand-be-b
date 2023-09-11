@@ -59,4 +59,9 @@ public class ProductRepositoryImpl implements ProductRepository {
     public List<Product> findByRegionIdAndCategoryId(long regionId, long categoryId) {
         return productJpaRepository.findByRegionIdAndCategoryId(regionId, categoryId);
     }
+
+    @Override
+    public void deleteById(long productId) {
+        productJpaRepository.deleteById(productId);
+    }
 }

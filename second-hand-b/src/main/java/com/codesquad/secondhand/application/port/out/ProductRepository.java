@@ -24,4 +24,6 @@ public interface ProductRepository {
     List<Product> findByRegionId(long regionId);
 
     List<Product> findByRegionIdAndCategoryId(long regionId, long categoryId);
+
+    void deleteById(long productId);
 }
