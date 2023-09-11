@@ -20,17 +20,15 @@ public class ImageService implements ImageUseCase {
     private final CloudStorageService cloudStorageService;
     private final ImageRepository imageRepository;
 
-    @Transactional
     @Override
-    public ImageInfo uploadWithServer(MultipartFile file) {
-        String imgUrl = cloudStorageService.upload(file);
-        Image savedImage = imageRepository.save(new Image(imgUrl));
-        return new ImageInfo(savedImage.getId(), savedImage.getUrl());
+    public String uploadCloud(MultipartFile file) {
+        return cloudStorageService.upload(file);
     }
 
     @Override
-    public String uploadOnlyCloud(MultipartFile file) {
-        return cloudStorageService.upload(file);
+    public ImageInfo save(String imgUrl) {
+        Image savedImage = imageRepository.save(new Image(imgUrl));
+        return new ImageInfo(savedImage.getId(), savedImage.getUrl());
     }
 
     @Transactional

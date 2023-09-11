@@ -21,14 +21,15 @@ public class ImageController {
 
     @PostMapping("/api/products/images")
     public ResponseEntity<ImageInfo> uploadForProduct(@RequestParam MultipartFile file) {
-        ImageInfo imageInfo = imageUseCase.uploadWithServer(file);
+        String imgUrl = imageUseCase.uploadCloud(file);
+        ImageInfo imageInfo = imageUseCase.save(imgUrl);
         return ResponseEntity.ok()
                 .body(imageInfo);
     }
 
     @PostMapping("/api/members/images")
     public ResponseEntity<Map<String, String>> uploadForMember(@RequestParam MultipartFile file) {
-        String imgUrl = imageUseCase.uploadOnlyCloud(file);
+        String imgUrl = imageUseCase.uploadCloud(file);
         return ResponseEntity.ok()
                 .body(Map.of("imgUrl", imgUrl));
     }
