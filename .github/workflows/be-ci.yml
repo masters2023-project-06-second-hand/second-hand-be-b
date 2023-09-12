@@ -5,7 +5,8 @@ name: be server pull request
 on:
   # 'main' 브랜치 또는 'be-server-cicd' 브랜치에 pull request 이벤트가 발생할 때 워크플로우를 실행합니다.
   pull_request:
-    branches: [ main, be-server-cicd ]
+    branches:
+      - main, be-server-cicd
 
   # 워크플로우를 수동으로 실행할 수 있는 옵션을 제공합니다.
   # GitHub 웹 인터페이스에서 "Run workflow" 버튼을 통해 실행할 수 있습니다.
