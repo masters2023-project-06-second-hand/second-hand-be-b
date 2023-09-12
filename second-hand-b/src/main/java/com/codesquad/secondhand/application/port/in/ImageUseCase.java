@@ -2,17 +2,8 @@ package com.codesquad.secondhand.application.port.in;
 
 import com.codesquad.secondhand.application.port.in.request.DeleteImageRequest;
 import com.codesquad.secondhand.application.port.in.response.ImageInfo;
-import org.springframework.web.multipart.MultipartFile;
 
 public interface ImageUseCase {
-
-    /**
-     * 이미지를 클라우드에 업로드한다.
-     *
-     * @param file 업로드 할 이미지 파일
-     * @return 업로드한 이미지 URL
-     */
-    String uploadCloud(MultipartFile file);
 
     /**
      * 이미지를 DB에 저장한다.
