@@ -4,10 +4,12 @@ public class Tokens {
 
     private final String accessToken;
     private final String refreshToken;
+    private final long memberId;
 
-    public Tokens(String accessToken, String refreshToken) {
+    public Tokens(String accessToken, String refreshToken, Long memberId) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
+        this.memberId = memberId;
     }
 
     public String getAccessToken() {
@@ -16,5 +18,9 @@ public class Tokens {
 
     public String getRefreshToken() {
         return refreshToken;
+    }
+
+    public long getMemberId() {
+        return memberId;
     }
 }

@@ -1,17 +1,19 @@
 package com.codesquad.secondhand.application.port.in.exception;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Map;
 
 public class Errors implements Serializable {
 
-    private final List<String> messages;
+    private final Map<String, String> messages;
 
-    public Errors(List<String> messages) {
+    public Errors(Map<String, String> messages) {
         this.messages = messages;
     }
 
-    public List<String> getMessages() {
+    @JsonValue
+    public Map<String, String> getMessages() {
         return messages;
     }
 }

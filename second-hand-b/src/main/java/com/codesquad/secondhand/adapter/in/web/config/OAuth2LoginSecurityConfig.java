@@ -5,13 +5,13 @@ import com.codesquad.secondhand.adapter.in.web.config.jwt.JwtSignUpAuthenticatio
 import com.codesquad.secondhand.application.port.out.MemberRepository;
 import com.codesquad.secondhand.domain.member.Role;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProviderBuilder;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizedClientManager;
@@ -26,17 +26,28 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 public class OAuth2LoginSecurityConfig {
 
+    @Value("${cors.allowed.origins}")
+    public List<String> allowedOrigins;
+    @Value("${cors.allowed.methods}")
+    public List<String> allowedMethods;
+    @Value("${cors.allowed.headers}")
+    public List<String> allowedHeaders;
+    @Value("${cors.mapping.pattern}")
+    public String corsMappingPattern;
+    @Value("${anonymous.allowed.urls}")
+    private String[] anonymousAllowedUrls;
+    @Value("${oauth2user.allowed.urls}")
+    private String[] userAllowedUrls;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity,
-            MemberRepository memberRepository) throws Exception {
+            MemberRepository memberRepository, OAuth2LoginSuccessHandler successHandler) throws Exception {
         return httpSecurity
                 .authorizeHttpRequests(
                         requestMatcherRegistry -> requestMatcherRegistry
-                                .mvcMatchers(HttpMethod.GET, "/api/members/accesstoken")
+                                .mvcMatchers(HttpMethod.GET, anonymousAllowedUrls)
                                 .permitAll()
-                                .mvcMatchers(HttpMethod.GET, "/api/members/signin")
-                                .authenticated()
-                                .mvcMatchers(HttpMethod.POST, "/api/members/signup")
+                                .mvcMatchers(HttpMethod.POST, userAllowedUrls)
                                 .hasAuthority(Role.USER.getKey())
                                 .anyRequest()
                                 .hasAnyAuthority(Role.MANAGER.getKey(), Role.MEMBER.getKey())
@@ -48,9 +59,7 @@ public class OAuth2LoginSecurityConfig {
                 .addFilterBefore(
                         new JwtSignInAuthenticationFilter(memberRepository),
                         JwtSignUpAuthenticationFilter.class)
-                .oauth2Login(configurer -> configurer.defaultSuccessUrl("/api/members/signin"))
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+                .oauth2Login(configurer -> configurer.successHandler(successHandler))
                 .cors().configurationSource(corsConfigurationSource())
                 .and()
                 .build();
@@ -79,11 +88,12 @@ public class OAuth2LoginSecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         var configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("*"));
-        configuration.setAllowedMethods(List.of("*"));
-        configuration.setAllowedHeaders(List.of("*"));
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
+        configuration.setAllowedOrigins(allowedOrigins);
+        configuration.setAllowedMethods(allowedMethods);
+        configuration.setAllowedHeaders(allowedHeaders);
+        configuration.setAllowCredentials(true);
+        var urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+        urlBasedCorsConfigurationSource.registerCorsConfiguration(corsMappingPattern, configuration);
+        return urlBasedCorsConfigurationSource;
     }
 }
