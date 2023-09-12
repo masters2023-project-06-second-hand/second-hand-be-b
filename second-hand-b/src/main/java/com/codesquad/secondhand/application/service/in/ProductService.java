@@ -100,11 +100,11 @@ public class ProductService implements ProductUseCase {
     }
 
     public List<ProductInfo> getSoldOutByWriterId(long memberId) {
-        return toProductInfos(productRepository.findByWriterIdAndStatus(memberId, Status.SOLDOUT));
+        return toProductInfos(productRepository.findByWriterIdAndStatus(memberId, Status.SOLD_OUT));
     }
 
     public List<ProductInfo> getSalesByWriterId(long memberId) {
-        return toProductInfos(productRepository.findByWriterIdAndStatusNot(memberId, Status.SOLDOUT));
+        return toProductInfos(productRepository.findByWriterIdAndStatusNot(memberId, Status.SOLD_OUT));
     }
 
     public List<ProductInfo> toProductInfos(List<Product> products) {
@@ -127,7 +127,7 @@ public class ProductService implements ProductUseCase {
                 thumbnailUrl,
                 images,
                 region,
-                Status.ONSALES,
+                Status.ON_SALES,
                 LocalDateTime.now());
     }
 

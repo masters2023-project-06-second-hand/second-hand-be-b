@@ -115,7 +115,7 @@ class ProductTest {
                 TEST_THUMBNAIL_IMG_URL,
                 images,
                 region,
-                Status.ONSALES,
+                Status.ON_SALES,
                 YESTERDAY
         );
     }

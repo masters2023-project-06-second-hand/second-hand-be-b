@@ -3,9 +3,9 @@ package com.codesquad.secondhand.domain.product;
 import java.util.Arrays;
 
 public enum Status {
-    ONSALES("판매중"),
+    ON_SALES("판매중"),
     RESERVED("예약중"),
-    SOLDOUT("판매완료");
+    SOLD_OUT("판매완료");
 
     private final String name;
 
@@ -14,7 +14,7 @@ public enum Status {
     }
 
     public static boolean isSoldOut(Status status) {
-        return status.equals(SOLDOUT);
+        return status.equals(SOLD_OUT);
     }
 
     public String getName() {
@@ -25,6 +25,6 @@ public enum Status {
         return Arrays.stream(values())
                 .filter(status -> status.name.equals(name))
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(BadRequestException::new);
     }
 }
