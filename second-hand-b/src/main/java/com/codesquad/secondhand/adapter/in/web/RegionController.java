@@ -22,7 +22,7 @@ public class RegionController {
     @GetMapping
     public ResponseEntity<RegionInfos> searchRegionsByName(
             @PageableDefault(sort = "id", direction = Direction.ASC) Pageable pageable,
-            @RequestParam String word) {
+            @RequestParam(defaultValue = "") String word) {
         RegionInfos regionInfos = regionUseCase.searchRegionsByName(word, pageable);
         return ResponseEntity.ok()
                 .body(regionInfos);
