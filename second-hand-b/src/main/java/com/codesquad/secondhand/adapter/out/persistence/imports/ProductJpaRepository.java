@@ -3,7 +3,6 @@ package com.codesquad.secondhand.adapter.out.persistence.imports;
 import com.codesquad.secondhand.domain.product.Product;
 import com.codesquad.secondhand.domain.product.Status;
 import java.util.List;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -25,18 +24,38 @@ public interface ProductJpaRepository extends CrudRepository<Product, Long> {
     )
     List<Product> findProductsByMemberIdAndCategoryId(long memberId, long categoryId);
 
-    @EntityGraph(attributePaths = {"region"})
+    @Query(
+            "select product_ from Product product_"
+                    + " join fetch product_.region"
+                    + " where product_.writer.id = :writerId"
+    )
     List<Product> findByWriterId(long writerId);
 
-    @EntityGraph(attributePaths = {"region"})
-    List<Product> findByWriterIdAndStatus(long memberId, Status status);
+    @Query(
+            "select product_ from Product product_"
+                    + " join fetch product_.region"
+                    + " where product_.writer.id = :writerId and product_.status = :status"
+    )
+    List<Product> findByWriterIdAndStatus(long writerId, Status status);
 
-    @EntityGraph(attributePaths = {"region"})
-    List<Product> findByWriterIdAndStatusNot(long memberId, Status status);
+    @Query(
+            "select product_ from Product product_"
+                    + " join fetch product_.region"
+                    + " where product_.writer.id = :writerId and product_.status != :status"
+    )
+    List<Product> findByWriterIdAndStatusNot(long writerId, Status status);
 
-    @EntityGraph(attributePaths = {"region"})
+    @Query(
+            "select product_ from Product product_"
+                    + " join fetch product_.region region_"
+                    + " where region_.id = :regionId"
+    )
     List<Product> findByRegionId(long regionId);
 
-    @EntityGraph(attributePaths = {"region"})
+    @Query(
+            "select product_ from Product product_"
+                    + " join fetch product_.region region_"
+                    + " where region_.id = :regionId and product_.category.id = :categoryId"
+    )
     List<Product> findByRegionIdAndCategoryId(long regionId, long categoryId);
 }

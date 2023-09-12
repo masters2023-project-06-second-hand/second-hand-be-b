@@ -41,13 +41,13 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public List<Product> findByWriterIdAndStatus(long memberId, Status status) {
-        return productJpaRepository.findByWriterIdAndStatus(memberId, status);
+    public List<Product> findByWriterIdAndStatus(long writerId, Status status) {
+        return productJpaRepository.findByWriterIdAndStatus(writerId, status);
     }
 
     @Override
-    public List<Product> findByWriterIdAndStatusNot(long memberId, Status status) {
-        return productJpaRepository.findByWriterIdAndStatusNot(memberId, status);
+    public List<Product> findByWriterIdAndStatusNot(long writerId, Status status) {
+        return productJpaRepository.findByWriterIdAndStatusNot(writerId, status);
     }
 
     @Override

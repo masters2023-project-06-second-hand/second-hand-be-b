@@ -17,9 +17,9 @@ public interface ProductRepository {
 
     List<Product> findByWriterId(long writerId);
 
-    List<Product> findByWriterIdAndStatus(long memberId, Status status);
+    List<Product> findByWriterIdAndStatus(long writerId, Status status);
 
-    List<Product> findByWriterIdAndStatusNot(long memberId, Status status);
+    List<Product> findByWriterIdAndStatusNot(long writerId, Status status);
 
     List<Product> findByRegionId(long regionId);
 
