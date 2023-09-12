@@ -28,12 +28,13 @@ public class RegionService implements RegionUseCase {
     @Override
     public RegionInfos searchRegionsByName(String word, Pageable pageable) {
         Slice<Region> regions = regionRepository.findByRegionsByName(word, pageable);
-        return new RegionInfos(regions.hasNext(), regions.getNumber(), toRegionInfos(regions));
+        return toRegionInfos(regions);
     }
 
-    private List<RegionInfo> toRegionInfos(Slice<Region> regions) {
-        return regions
+    private RegionInfos toRegionInfos(Slice<Region> regions) {
+        List<RegionInfo> regionInfos = regions
                 .map(region -> new RegionInfo(region.getId(), region.getName()))
                 .getContent();
+        return new RegionInfos(regions.hasNext(), regions.getNumber(), regionInfos);
     }
 }
