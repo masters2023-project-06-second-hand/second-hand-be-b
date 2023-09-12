@@ -1,5 +1,6 @@
 package com.codesquad.secondhand.domain.product;
 
+import com.codesquad.secondhand.application.port.in.exception.BadRequestException;
 import java.util.Arrays;
 
 public enum Status {
