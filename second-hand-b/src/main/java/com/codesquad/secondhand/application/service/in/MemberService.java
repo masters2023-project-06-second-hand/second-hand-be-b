@@ -6,6 +6,7 @@ import com.codesquad.secondhand.application.port.in.exception.PermissionDeniedEx
 import com.codesquad.secondhand.application.port.in.response.CategorySimpleDetail;
 import com.codesquad.secondhand.application.port.in.response.ProductInfo;
 import com.codesquad.secondhand.application.port.out.MemberRepository;
+import com.codesquad.secondhand.application.service.in.prodcut.ProductService;
 import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.product.Product;
 import com.codesquad.secondhand.domain.product.Status;
