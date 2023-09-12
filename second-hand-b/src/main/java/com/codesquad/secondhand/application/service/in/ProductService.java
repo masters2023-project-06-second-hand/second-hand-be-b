@@ -49,21 +49,9 @@ public class ProductService implements ProductUseCase {
 
     @Transactional
     @Override
-    public void modify(Long id, ProductModifyRequest request) {
+    public void modify(Long id, ProductModifyRequest productModifyRequest) {
         Product product = productRepository.findById(id).orElseThrow();
-        Category category = categoryService.getById(request.getCategoryId());
-        List<Long> imagesId = request.getImagesId();
-        // 이미지 목록의 첫번째는 썸네일 이미지
-        Image thumbnailImage = imageService.getById(imagesId.get(IMAGES_FIRST_INDEX));
-        List<Image> images = imageService.getImageListById(request.getImagesId());
-        Region region = regionService.getById(request.getRegionId());
-        product.modifyProduct(request.getName(),
-                request.getContent(),
-                request.getPrice(),
-                category,
-                thumbnailImage.getUrl(),
-                images,
-                region);
+        modifyProduct(productModifyRequest, product);
     }
 
     @Transactional
@@ -129,15 +117,14 @@ public class ProductService implements ProductUseCase {
         Region region = regionService.getById(productCreateRequest.getRegionId());
         Category category = categoryService.getById(productCreateRequest.getCategoryId());
         List<Long> imagesId = productCreateRequest.getImagesId();
-        // 이미지 목록의 첫번째는 썸네일 이미지
-        Image thumbnailImage = imageService.getById(imagesId.get(IMAGES_FIRST_INDEX));
+        String thumbnailUrl = getThumbnailUrl(imagesId);
         List<Image> images = imageService.getImageListById(imagesId);
         return new Product(productCreateRequest.getName(),
                 productCreateRequest.getContent(),
                 productCreateRequest.getPrice(),
                 member,
                 category,
-                thumbnailImage.getUrl(),
+                thumbnailUrl,
                 images,
                 region,
                 Status.ONSALES,
@@ -177,5 +164,26 @@ public class ProductService implements ProductUseCase {
                 product.getPrice(),
                 0,
                 0);
+    }
+
+    private void modifyProduct(ProductModifyRequest productModifyRequest, Product product) {
+        Category category = categoryService.getById(productModifyRequest.getCategoryId());
+        List<Long> imagesId = productModifyRequest.getImagesId();
+        String thumbnailUrl = getThumbnailUrl(imagesId);
+        List<Image> images = imageService.getImageListById(imagesId);
+        Region region = regionService.getById(productModifyRequest.getRegionId());
+        product.modifyProduct(
+                productModifyRequest.getName(),
+                productModifyRequest.getContent(),
+                productModifyRequest.getPrice(),
+                category,
+                thumbnailUrl,
+                images,
+                region);
+    }
+
+    private String getThumbnailUrl(List<Long> imagesId) {
+        Image thumbnailImage = imageService.getById(imagesId.get(IMAGES_FIRST_INDEX));
+        return thumbnailImage.getUrl();
     }
 }
