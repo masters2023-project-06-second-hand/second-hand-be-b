@@ -34,6 +34,9 @@ class ProductTest {
     public static final String MODIFIED_PRODUCT_CONTENT = "modifiedProductContent";
     public static final int MODIFIED_PRODUCT_PRICE = 2000;
     public static final String MODIFIED_THUMBNAIL_URL = "modifiedThumbnailUrl";
+    public static final String TEST_EMAIL = "test@email.com";
+    public static final String TEST_NICK_NAME = "testNickName";
+    public static final String TEST_PROFILE_IMAGE = "testProfileImage";
 
     @DisplayName("제품을 만들고 정보 수정 시 제품이 수정된다")
     @Test
@@ -100,9 +103,9 @@ class ProductTest {
         Region region = new Region(TEST_REGION_NAME);
         LocalDateTime YESTERDAY = LocalDateTime.now().minusDays(1);
         Member testWriter = new Member(
-                "test@email.com",
-                "testNickName",
-                "testProfileImage",
+                TEST_EMAIL,
+                TEST_NICK_NAME,
+                TEST_PROFILE_IMAGE,
                 region,
                 Role.MEMBER);
         Category testCategory = new Category(TEST_CATEGORY, TEST_CATEGORY_URL);
