@@ -22,11 +22,15 @@ public class Images {
             inverseJoinColumns = @JoinColumn(name = "image_id"))
     private List<Image> imageList = new ArrayList<>();
 
-    public List<Image> getImageList() {
-        return imageList;
+    public Images(List<Image> images) {
+        this.imageList = images;
     }
 
     public void modify(List<Image> images) {
         imageList = images;
+    }
+
+    public List<Image> getImageList() {
+        return imageList;
     }
 }

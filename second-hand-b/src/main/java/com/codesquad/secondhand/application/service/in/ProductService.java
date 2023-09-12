@@ -136,7 +136,10 @@ public class ProductService implements ProductUseCase {
         Category category = product.getCategory();
         Region region = product.getRegion();
         Status status = product.getStatus();
-        List<ImageInfo> imageInfos = product.fetchImageInfos();
+        List<Image> images = product.fetchImages();
+        List<ImageInfo> imageInfos = images.stream()
+                .map(ProductService::toImageInfo)
+                .collect(Collectors.toUnmodifiableList());
         return new ProductDetail(product.getId(),
                 new ProductWriter(member.getId(), member.getNickname()),
                 product.getName(),
@@ -147,6 +150,10 @@ public class ProductService implements ProductUseCase {
                 product.getPrice(),
                 imageInfos,
                 product.getCreatedAt());
+    }
+
+    private static ImageInfo toImageInfo(Image image) {
+        return new ImageInfo(image.getId(), image.getUrl());
     }
 
     private ProductInfo toProductInfo(Product product) {
