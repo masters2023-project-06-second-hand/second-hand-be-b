@@ -14,12 +14,20 @@ import static com.codesquad.secondhand.adapter.in.web.MemberSteps.나의_판매�
 import static com.codesquad.secondhand.adapter.in.web.MemberSteps.나의_판매상품의_목록_조회_결과_검증한다;
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품상태를_수정한다;
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품을_등록한다;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 import com.codesquad.secondhand.utils.AcceptanceTest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class MemberAcceptanceTest extends AcceptanceTest {
+
+    @BeforeEach
+    public void setS3StorageService() {
+        when(s3StorageService.upload(any())).thenReturn("testUrl");
+    }
 
     @DisplayName("특정 상품을 내 관심상품에 추가")
     @Test
