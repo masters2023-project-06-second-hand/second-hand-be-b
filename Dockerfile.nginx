@@ -1,2 +1,37 @@
-FROM nginx:latest
-COPY nginx.conf /etc/nginx/nginx.conf
+# 베이스 이미지 설정
+FROM ubuntu:20.04 AS builder
+
+# 환경 변수 설정 (프론트엔드 사용을 위해 필요)
+ENV DEBIAN_FRONTEND=noninteractive
+
+# 필요한 패키지 설치
+RUN apt-get update \
+    && apt-get install -y \
+        curl \
+        gcc \
+        libc6-dev \
+        make \
+        libpcre3-dev \
+        zlib1g-dev \
+        libssl-dev \
+        git
+
+# Nginx 소스 및 nginx_upstream_check_module 다운로드
+RUN curl -O http://nginx.org/download/nginx-1.21.1.tar.gz \
+    && tar xvf nginx-1.21.1.tar.gz \
+    && rm nginx-1.21.1.tar.gz \
+    && git clone https://github.com/yaoweibin/nginx_upstream_check_module.git
+
+# Nginx 컴파일
+RUN cd nginx-1.21.1 \
+    && ./configure --add-module=../nginx_upstream_check_module \
+    && make \
+    && make install
+
+# 런타임 이미지 생성
+FROM ubuntu:20.04
+
+COPY --from=builder /usr/local/nginx /usr/local/nginx
+COPY nginx.conf /usr/local/nginx/conf/nginx.conf
+
+CMD ["/usr/local/nginx/sbin/nginx", "-g", "daemon off;"]
