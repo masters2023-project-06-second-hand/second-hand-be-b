@@ -8,6 +8,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import io.findify.s3mock.S3Mock;
 import io.findify.s3mock.S3Mock.Builder;
+import javax.annotation.PreDestroy;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -33,6 +34,11 @@ public class S3MockConfig {
                 .build();
         s3Mock.start();
         return s3Mock;
+    }
+
+    @PreDestroy
+    public void destroy() {
+        s3Mock().stop();
     }
 
     @Primary
