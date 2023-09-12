@@ -4,16 +4,24 @@ import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품용_이
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.이미지를_삭제한다;
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.회원용_이미지를_업로드한다;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 import com.codesquad.secondhand.utils.AcceptanceTest;
 import java.io.File;
 import java.io.IOException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 
 class ImageAcceptanceTest extends AcceptanceTest {
+
+    @BeforeEach
+    public void setS3StorageService() {
+        when(s3StorageService.upload(any())).thenReturn("testUrl");
+    }
 
     @Test
     @DisplayName("이미지 업로드 요청을 받으면 이미지 아이디와 S3에 업로드한 이미지 URL을 반환한다.")

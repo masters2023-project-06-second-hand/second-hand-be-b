@@ -1,23 +1,21 @@
 package com.codesquad.secondhand.utils;
 
+import com.codesquad.secondhand.adapter.out.s3.S3StorageService;
 import com.codesquad.secondhand.application.port.out.MemberRepository;
 import com.codesquad.secondhand.application.port.out.RegionRepository;
 import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.member.Role;
 import com.codesquad.secondhand.domain.region.Region;
 import com.codesquad.secondhand.domain.units.JwtTokenProvider;
-import io.findify.s3mock.S3Mock;
 import io.restassured.RestAssured;
 import java.util.Date;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.context.annotation.Import;
 
-@Import(S3MockConfig.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class AcceptanceTest {
 
@@ -31,6 +29,8 @@ public class AcceptanceTest {
     public static final long ALBERT_DEFAULT_REGION_ID = 1L;
     public String ayaanAccessToken;
     public String albertAccessToken;
+    @MockBean
+    public S3StorageService s3StorageService;
     @LocalServerPort
     private int port;
     @Autowired
@@ -39,19 +39,12 @@ public class AcceptanceTest {
     private MemberRepository memberRepository;
     @Autowired
     private RegionRepository regionRepository;
-    @Autowired
-    private S3Mock s3Mock;
 
     @BeforeEach
     public void setUp() {
         RestAssured.port = port;
         databaseCleanup.execute();
         initAccessToken();
-    }
-
-    @AfterEach
-    void tearDown() {
-        s3Mock.stop();
     }
 
     private void initAccessToken() {

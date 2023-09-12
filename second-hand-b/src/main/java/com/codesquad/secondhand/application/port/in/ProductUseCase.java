@@ -20,4 +20,6 @@ public interface ProductUseCase {
     List<ProductInfo> getProductsByRegion(Long regionId);
 
     List<ProductInfo> getProductsByRegionAndCategory(Long regionId, Long categoryId);
+
+    void delete(Long id);
 }

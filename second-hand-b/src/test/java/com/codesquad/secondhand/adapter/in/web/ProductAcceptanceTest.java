@@ -9,20 +9,29 @@ import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품상태�
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품상태수정을_검증한다;
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품수정을_검증한다;
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품을_등록한다;
+import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품을_삭제한다;
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품을_수정한다;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 import com.codesquad.secondhand.utils.AcceptanceTest;
-import java.io.IOException;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 
 class ProductAcceptanceTest extends AcceptanceTest {
 
+    @BeforeEach
+    public void setS3StorageService() {
+        when(s3StorageService.upload(any())).thenReturn("testUrl");
+    }
+
     @Test
     @DisplayName("상품 등록 요청이 오면 상품 아이디를 반환한다.")
-    void create() throws IOException {
+    void create() {
         var response = 상품을_등록한다(ayaanAccessToken, 1);
 
         상품등록을_검증한다(response);
@@ -30,7 +39,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
     @Test
     @DisplayName("상품 상세 조회 요청이 오면 상품 상세 정보를 반환한다.")
-    void getDetails() throws IOException {
+    void getDetails() {
         // given
         Long id = 상품을_등록한다(ayaanAccessToken, 1).jsonPath().getLong("id");
         // when
@@ -41,7 +50,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
     @Test
     @DisplayName("상품 수정 요청이 오면 상품 정보를 수정한다.")
-    void modify() throws IOException {
+    void modify() {
         //given
         Long id = 상품을_등록한다(ayaanAccessToken, 1).jsonPath().getLong("id");
 
@@ -54,7 +63,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
     @Test
     @DisplayName("상품 상태 수정 요청이 오면 상품 상태를 수정한다.")
-    void modifyStatus() throws IOException {
+    void modifyStatus() {
         //given
         Long id = 상품을_등록한다(ayaanAccessToken, 1).jsonPath().getLong("id");
 
@@ -101,5 +110,18 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 () -> assertThat(response.jsonPath().getList(".")).hasSize(2),
                 () -> assertThat(response.jsonPath().getList("id")).containsExactly(2, 3)
         );
+    }
+
+    @Test
+    @DisplayName("상품 삭제 요청을 받으면 요청을 수행하고 204 상태코드로 응답한다.")
+    void deleteProduct() {
+        //given
+        long productId = 상품을_등록한다(ayaanAccessToken, 1).jsonPath().getLong("id");
+
+        //when
+        var response = 상품을_삭제한다(productId, ayaanAccessToken);
+
+        //then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
     }
 }

@@ -3,7 +3,7 @@ package com.codesquad.secondhand.adapter.in.web;
 import com.codesquad.secondhand.application.port.in.MemberUseCase;
 import com.codesquad.secondhand.application.port.in.request.ToggleProductLikeStatusRequest;
 import com.codesquad.secondhand.application.port.in.response.CategorySimpleDetail;
-import com.codesquad.secondhand.application.port.in.response.ProductDetail;
+import com.codesquad.secondhand.application.port.in.response.ProductInfo;
 import com.codesquad.secondhand.domain.member.Member;
 import java.util.List;
 import java.util.Optional;
@@ -34,17 +34,17 @@ public class MemberController {
     }
 
     @GetMapping("/api/members/{memberId}/likes")
-    public ResponseEntity<List<ProductDetail>> fetchMemberFavoriteProducts(
+    public ResponseEntity<List<ProductInfo>> fetchMemberFavoriteProducts(
             @AuthenticationPrincipal Member member,
             @PathVariable long memberId,
             @RequestParam Optional<Long> categoryId
     ) {
         if (categoryId.isPresent()) {
-            List<ProductDetail> productDetails = memberUseCase.fetchMemberFavoriteProducts(member, memberId,
+            List<ProductInfo> productInfos = memberUseCase.fetchMemberFavoriteProducts(member, memberId,
                     categoryId.get());
-            return ResponseEntity.ok(productDetails);
+            return ResponseEntity.ok(productInfos);
         }
-        List<ProductDetail> productDetails = memberUseCase.fetchMemberFavoriteProducts(member, memberId);
+        List<ProductInfo> productDetails = memberUseCase.fetchMemberFavoriteProducts(member, memberId);
         return ResponseEntity.ok(productDetails);
     }
 
@@ -58,16 +58,16 @@ public class MemberController {
     }
 
     @GetMapping("/api/members/{memberId}/sales")
-    public ResponseEntity<List<ProductDetail>> getMySellingProducts(
+    public ResponseEntity<List<ProductInfo>> getMySellingProducts(
             @AuthenticationPrincipal Member member,
             @RequestParam Optional<String> status,
             @PathVariable long memberId
     ) {
         if (status.isPresent()) {
-            List<ProductDetail> categories = memberUseCase.getMySellingProductsByStatus(member, memberId, status.get());
-            return ResponseEntity.ok(categories);
+            List<ProductInfo> productInfos = memberUseCase.getMySellingProductsByStatus(member, memberId, status.get());
+            return ResponseEntity.ok(productInfos);
         }
-        List<ProductDetail> categories = memberUseCase.getMySellingProducts(member, memberId);
-        return ResponseEntity.ok(categories);
+        List<ProductInfo> productInfos = memberUseCase.getMySellingProducts(member, memberId);
+        return ResponseEntity.ok(productInfos);
     }
 }

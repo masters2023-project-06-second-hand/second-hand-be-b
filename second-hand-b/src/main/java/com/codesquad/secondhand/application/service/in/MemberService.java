@@ -4,13 +4,12 @@ import com.codesquad.secondhand.application.port.in.MemberUseCase;
 import com.codesquad.secondhand.application.port.in.exception.MemberNotFoundException;
 import com.codesquad.secondhand.application.port.in.exception.PermissionDeniedException;
 import com.codesquad.secondhand.application.port.in.response.CategorySimpleDetail;
-import com.codesquad.secondhand.application.port.in.response.ProductDetail;
+import com.codesquad.secondhand.application.port.in.response.ProductInfo;
 import com.codesquad.secondhand.application.port.out.MemberRepository;
 import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.product.Product;
 import com.codesquad.secondhand.domain.product.Status;
 import java.util.List;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,35 +51,36 @@ public class MemberService implements MemberUseCase {
 
     @Transactional(readOnly = true)
     @Override
-    public List<ProductDetail> fetchMemberFavoriteProducts(Member member, long memberId) {
+    public List<ProductInfo> fetchMemberFavoriteProducts(Member member, long memberId) {
         validateMemberPermission(member, memberId);
-        Member savedMember = getById(memberId);
-        Set<Product> products = savedMember.getProducts();
-        return productService.toProductDetails(products);
+        return productService.getProductsByMemberId(memberId);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public List<ProductDetail> fetchMemberFavoriteProducts(Member member, long memberId, long categoryId) {
+    public List<ProductInfo> fetchMemberFavoriteProducts(Member member, long memberId, long categoryId) {
         validateMemberPermission(member, memberId);
         return productService.getProductsByMemberIdAndCategoryId(memberId,
                 categoryId);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<CategorySimpleDetail> fetchMemberInterestCategories(Member member, long memberId) {
         validateMemberPermission(member, memberId);
         return categoryService.getCategoryByMemberId(memberId);
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public List<ProductDetail> getMySellingProducts(Member member, long memberId) {
+    public List<ProductInfo> getMySellingProducts(Member member, long memberId) {
         validateMemberPermission(member, memberId);
         return productService.getByWriterId(memberId);
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public List<ProductDetail> getMySellingProductsByStatus(Member member, long memberId, String statusName) {
+    public List<ProductInfo> getMySellingProductsByStatus(Member member, long memberId, String statusName) {
         validateMemberPermission(member, memberId);
         Status status = Status.findByName(statusName);
         if (Status.isSoldOut(status)) {

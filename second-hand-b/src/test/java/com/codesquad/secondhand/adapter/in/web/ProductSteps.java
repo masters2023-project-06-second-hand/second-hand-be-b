@@ -162,4 +162,12 @@ public class ProductSteps {
                 .when().get("/api/products")
                 .then().log().all().extract();
     }
+
+    public static ExtractableResponse<Response> 상품을_삭제한다(long productId, String accessToken) {
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
+                .auth().oauth2(accessToken)
+                .when().delete("/api/products/{productId}", productId)
+                .then().log().all().extract();
+        return response;
+    }
 }

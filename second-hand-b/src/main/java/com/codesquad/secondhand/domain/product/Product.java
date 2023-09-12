@@ -12,6 +12,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -37,18 +38,17 @@ public class Product {
     private String content;
     @Column(nullable = false)
     private int price;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "writer_id")
     private Member writer;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
     @Embedded
     private Images images = new Images();
-    @ManyToOne
-    @JoinColumn(name = "thumbnail_id")
-    private Image thumbnailImage;
-    @ManyToOne
+    @JoinColumn(name = "thumbnail_id", nullable = false)
+    private String thumbnailUrl;
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "region_id")
     private Region region;
     @Enumerated(EnumType.STRING)
@@ -56,26 +56,27 @@ public class Product {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    public Product(String name, String content, int price, Member writer, Category category, Image thumbnailImage,
+    public Product(String name, String content, int price, Member writer, Category category, String thumbnailUrl,
             List<Image> images, Region region, Status status, LocalDateTime createdAt) {
         this.name = name;
         this.content = content;
         this.price = price;
         this.writer = writer;
         this.category = category;
-        this.thumbnailImage = thumbnailImage;
+        this.thumbnailUrl = thumbnailUrl;
         modifyImages(images);
         this.region = region;
         this.status = status;
         this.createdAt = createdAt;
     }
 
-    public void modifyProduct(String name, String content, int price, Category category, List<Image> images,
-            Region region) {
+    public void modifyProduct(String name, String content, int price, Category category, String thumbnailUrl,
+            List<Image> images, Region region) {
         this.name = name;
         this.content = content;
         this.price = price;
         this.category = category;
+        this.thumbnailUrl = thumbnailUrl;
         modifyImages(images);
         this.region = region;
     }

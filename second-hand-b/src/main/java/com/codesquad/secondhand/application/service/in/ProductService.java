@@ -18,11 +18,10 @@ import com.codesquad.secondhand.domain.product.Status;
 import com.codesquad.secondhand.domain.region.Region;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
-import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -50,17 +49,9 @@ public class ProductService implements ProductUseCase {
 
     @Transactional
     @Override
-    public void modify(Long id, ProductModifyRequest request) {
+    public void modify(Long id, ProductModifyRequest productModifyRequest) {
         Product product = productRepository.findById(id).orElseThrow();
-        Category category = categoryService.getById(request.getCategoryId());
-        List<Image> images = imageService.getImageListById(request.getImagesId());
-        Region region = regionService.getById(request.getRegionId());
-        product.modifyProduct(request.getName(),
-                request.getContent(),
-                request.getPrice(),
-                category,
-                images,
-                region);
+        modifyProduct(productModifyRequest, product);
     }
 
     @Transactional
@@ -70,16 +61,25 @@ public class ProductService implements ProductUseCase {
         product.modifyStatus(status);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<ProductInfo> getProductsByRegion(Long regionId) {
-        Set<Product> products = productRepository.findByRegionId(regionId);
+        List<Product> products = productRepository.findByRegionId(regionId);
         return toProductInfos(products);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<ProductInfo> getProductsByRegionAndCategory(Long regionId, Long categoryId) {
-        Set<Product> products = productRepository.findByRegionIdAndCategoryId(regionId, categoryId);
+        List<Product> products = productRepository.findByRegionIdAndCategoryId(regionId, categoryId);
         return toProductInfos(products);
+    }
+
+    @Transactional
+    @Override
+    public void delete(Long id) {
+        Product product = getById(id);
+        productRepository.deleteById(product.getId());
     }
 
     public Product getById(Long productId) {
@@ -87,29 +87,27 @@ public class ProductService implements ProductUseCase {
                 .orElseThrow(ProductNotFoundException::new);
     }
 
-    public List<ProductDetail> getProductsByMemberIdAndCategoryId(long memberId, long categoryId) {
-        return toProductDetails(productRepository.findProductsByMemberIdAndCategoryId(memberId, categoryId));
+    public List<ProductInfo> getProductsByMemberId(long memberId) {
+        return toProductInfos(productRepository.findProductsByMemberId(memberId));
     }
 
-    public List<ProductDetail> getByWriterId(long memberId) {
-        return toProductDetails(productRepository.findByWriterId(memberId));
+    public List<ProductInfo> getProductsByMemberIdAndCategoryId(long memberId, long categoryId) {
+        return toProductInfos(productRepository.findProductsByMemberIdAndCategoryId(memberId, categoryId));
     }
 
-    public List<ProductDetail> getSoldOutByWriterId(long memberId) {
-        return toProductDetails(productRepository.findByWriterIdAndStatus(memberId, Status.SOLDOUT));
+    public List<ProductInfo> getByWriterId(long memberId) {
+        return toProductInfos(productRepository.findByWriterId(memberId));
     }
 
-    public List<ProductDetail> getSalesByWriterId(long memberId) {
-        return toProductDetails(productRepository.findByWriterIdAndStatusNot(memberId, Status.SOLDOUT));
+    public List<ProductInfo> getSoldOutByWriterId(long memberId) {
+        return toProductInfos(productRepository.findByWriterIdAndStatus(memberId, Status.SOLDOUT));
     }
 
-    public List<ProductDetail> toProductDetails(Set<Product> products) {
-        return products.stream()
-                .map(this::toProductDetail)
-                .collect(Collectors.toList());
+    public List<ProductInfo> getSalesByWriterId(long memberId) {
+        return toProductInfos(productRepository.findByWriterIdAndStatusNot(memberId, Status.SOLDOUT));
     }
 
-    public List<ProductInfo> toProductInfos(Set<Product> products) {
+    public List<ProductInfo> toProductInfos(List<Product> products) {
         return products.stream()
                 .map(this::toProductInfo)
                 .collect(Collectors.toList());
@@ -119,15 +117,14 @@ public class ProductService implements ProductUseCase {
         Region region = regionService.getById(productCreateRequest.getRegionId());
         Category category = categoryService.getById(productCreateRequest.getCategoryId());
         List<Long> imagesId = productCreateRequest.getImagesId();
-        // 이미지 목록의 첫번째는 썸네일 이미지
-        Image thumbnailImage = imageService.getById(imagesId.get(IMAGES_FIRST_INDEX));
+        String thumbnailUrl = getThumbnailUrl(imagesId);
         List<Image> images = imageService.getImageListById(imagesId);
         return new Product(productCreateRequest.getName(),
                 productCreateRequest.getContent(),
                 productCreateRequest.getPrice(),
                 member,
                 category,
-                thumbnailImage,
+                thumbnailUrl,
                 images,
                 region,
                 Status.ONSALES,
@@ -156,10 +153,10 @@ public class ProductService implements ProductUseCase {
         Member member = product.getWriter();
         Region region = product.getRegion();
         Status status = product.getStatus();
-        Image thumbnail = product.getThumbnailImage();
+        String thumbnailUrl = product.getThumbnailUrl();
         return new ProductInfo(product.getId(),
                 member.getId(),
-                thumbnail.getUrl(),
+                thumbnailUrl,
                 product.getName(),
                 region.getName(),
                 product.getCreatedAt(),
@@ -167,5 +164,26 @@ public class ProductService implements ProductUseCase {
                 product.getPrice(),
                 0,
                 0);
+    }
+
+    private void modifyProduct(ProductModifyRequest productModifyRequest, Product product) {
+        Category category = categoryService.getById(productModifyRequest.getCategoryId());
+        List<Long> imagesId = productModifyRequest.getImagesId();
+        String thumbnailUrl = getThumbnailUrl(imagesId);
+        List<Image> images = imageService.getImageListById(imagesId);
+        Region region = regionService.getById(productModifyRequest.getRegionId());
+        product.modifyProduct(
+                productModifyRequest.getName(),
+                productModifyRequest.getContent(),
+                productModifyRequest.getPrice(),
+                category,
+                thumbnailUrl,
+                images,
+                region);
+    }
+
+    private String getThumbnailUrl(List<Long> imagesId) {
+        Image thumbnailImage = imageService.getById(imagesId.get(IMAGES_FIRST_INDEX));
+        return thumbnailImage.getUrl();
     }
 }

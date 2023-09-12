@@ -7,13 +7,13 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -40,7 +40,7 @@ public class Member implements Serializable {
     private String profileImage;
     @Embedded
     private MemberRegions myRegions = new MemberRegions();
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "selected_region_id")
     private Region selectedRegion;
     @Enumerated(EnumType.STRING)
@@ -110,14 +110,6 @@ public class Member implements Serializable {
 
     public boolean removeLikes(Product product) {
         return likes.remove(product);
-    }
-
-    public Set<Product> getProducts() {
-        return likes.getProducts();
-    }
-
-    public Set<Product> getProductsByCategoryId(long categoryId) {
-        return likes.getProductsByCategoryId(categoryId);
     }
 
     public boolean isSameId(long memberId) {

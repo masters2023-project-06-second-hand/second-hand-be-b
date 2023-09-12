@@ -3,6 +3,7 @@ package com.codesquad.secondhand.application.service.in;
 import com.codesquad.secondhand.application.port.in.RegionUseCase;
 import com.codesquad.secondhand.application.port.in.exception.RegionNotFoundException;
 import com.codesquad.secondhand.application.port.in.response.RegionInfo;
+import com.codesquad.secondhand.application.port.in.response.RegionInfos;
 import com.codesquad.secondhand.application.port.out.RegionRepository;
 import com.codesquad.secondhand.domain.region.Region;
 import java.util.List;
@@ -25,14 +26,15 @@ public class RegionService implements RegionUseCase {
     }
 
     @Override
-    public List<RegionInfo> searchRegionsByName(String word, Pageable pageable) {
+    public RegionInfos searchRegionsByName(String word, Pageable pageable) {
         Slice<Region> regions = regionRepository.findByRegionsByName(word, pageable);
         return toRegionInfos(regions);
     }
 
-    private List<RegionInfo> toRegionInfos(Slice<Region> regions) {
-        return regions
+    private RegionInfos toRegionInfos(Slice<Region> regions) {
+        List<RegionInfo> regionInfos = regions
                 .map(region -> new RegionInfo(region.getId(), region.getName()))
                 .getContent();
+        return new RegionInfos(regions.hasNext(), regions.getNumber(), regionInfos);
     }
 }
