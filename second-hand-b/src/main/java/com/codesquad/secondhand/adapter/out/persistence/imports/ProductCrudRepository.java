@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-public interface ProductJpaRepository extends CrudRepository<Product, Long> {
+public interface ProductCrudRepository extends CrudRepository<Product, Long> {
 
     @Query(
             " select member_product from Member member_ "

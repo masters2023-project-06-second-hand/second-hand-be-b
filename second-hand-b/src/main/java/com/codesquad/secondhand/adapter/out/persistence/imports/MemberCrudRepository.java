@@ -4,7 +4,7 @@ import com.codesquad.secondhand.domain.member.Member;
 import java.util.Optional;
 import org.springframework.data.repository.CrudRepository;
 
-public interface MemberJpaRepository extends CrudRepository<Member, Long> {
+public interface MemberCrudRepository extends CrudRepository<Member, Long> {
 
     Optional<Member> findByEmail(String email);
 }
