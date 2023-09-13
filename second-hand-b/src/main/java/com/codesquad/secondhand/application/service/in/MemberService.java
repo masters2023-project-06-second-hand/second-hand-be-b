@@ -1,10 +1,10 @@
 package com.codesquad.secondhand.application.service.in;
 
 import com.codesquad.secondhand.application.port.in.MemberUseCase;
-import com.codesquad.secondhand.application.port.in.exception.MemberNotFoundException;
-import com.codesquad.secondhand.application.port.in.exception.PermissionDeniedException;
-import com.codesquad.secondhand.application.port.in.response.CategorySimpleDetail;
-import com.codesquad.secondhand.application.port.in.response.ProductInfo;
+import com.codesquad.secondhand.application.service.in.exception.MemberNotFoundException;
+import com.codesquad.secondhand.application.service.in.exception.PermissionDeniedException;
+import com.codesquad.secondhand.adapter.in.web.response.CategorySimpleDetail;
+import com.codesquad.secondhand.adapter.in.web.response.ProductInfo;
 import com.codesquad.secondhand.application.port.out.MemberRepository;
 import com.codesquad.secondhand.application.service.in.prodcut.ProductService;
 import com.codesquad.secondhand.domain.member.Member;

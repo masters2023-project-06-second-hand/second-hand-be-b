@@ -2,7 +2,7 @@ package com.codesquad.secondhand.application.service.in;
 
 
 import com.codesquad.secondhand.application.port.in.MemberRegionUseCase;
-import com.codesquad.secondhand.application.port.in.response.MemberRegionInfos;
+import com.codesquad.secondhand.adapter.in.web.response.MemberRegionInfos;
 import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.region.Region;
 import javax.transaction.Transactional;

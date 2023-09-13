@@ -1,10 +1,10 @@
 package com.codesquad.secondhand.application.service.in;
 
 import com.codesquad.secondhand.application.port.in.AuthUseCase;
-import com.codesquad.secondhand.application.port.in.exception.MemberNotFoundException;
-import com.codesquad.secondhand.application.port.in.exception.NotRegisteredMemberException;
-import com.codesquad.secondhand.application.port.in.request.SignUpRequest;
-import com.codesquad.secondhand.application.port.in.response.Tokens;
+import com.codesquad.secondhand.application.service.in.exception.MemberNotFoundException;
+import com.codesquad.secondhand.application.service.in.exception.NotRegisteredMemberException;
+import com.codesquad.secondhand.adapter.in.web.request.SignUpRequest;
+import com.codesquad.secondhand.adapter.in.web.response.Tokens;
 import com.codesquad.secondhand.application.port.out.RefreshTokenRepository;
 import com.codesquad.secondhand.domain.auth.RefreshToken;
 import com.codesquad.secondhand.domain.member.Member;

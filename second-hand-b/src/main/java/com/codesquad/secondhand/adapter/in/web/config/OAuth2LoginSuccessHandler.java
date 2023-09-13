@@ -1,6 +1,6 @@
 package com.codesquad.secondhand.adapter.in.web.config;
 
-import com.codesquad.secondhand.application.port.in.exception.NotRegisteredMemberException;
+import com.codesquad.secondhand.application.service.in.exception.NotRegisteredMemberException;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

@@ -4,9 +4,9 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
-import com.codesquad.secondhand.application.port.in.exception.InvalidEntityStateException;
-import com.codesquad.secondhand.application.port.in.exception.ProductNotFoundException;
-import com.codesquad.secondhand.application.port.in.request.ProductCreateRequest;
+import com.codesquad.secondhand.application.service.in.exception.InvalidEntityStateException;
+import com.codesquad.secondhand.application.service.in.exception.ProductNotFoundException;
+import com.codesquad.secondhand.adapter.in.web.request.ProductCreateRequest;
 import com.codesquad.secondhand.application.port.out.ProductRepository;
 import com.codesquad.secondhand.application.service.in.prodcut.ProductService;
 import com.codesquad.secondhand.domain.product.Product;

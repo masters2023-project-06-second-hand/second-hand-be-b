@@ -1,6 +1,6 @@
 package com.codesquad.secondhand.domain.member;
 
-import com.codesquad.secondhand.application.port.in.response.RegionInfo;
+import com.codesquad.secondhand.adapter.in.web.response.RegionInfo;
 import com.codesquad.secondhand.domain.product.Product;
 import com.codesquad.secondhand.domain.region.Region;
 import java.io.Serializable;

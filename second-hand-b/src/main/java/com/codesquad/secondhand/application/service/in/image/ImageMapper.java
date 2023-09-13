@@ -1,6 +1,6 @@
 package com.codesquad.secondhand.application.service.in.image;
 
-import com.codesquad.secondhand.application.port.in.response.ImageInfo;
+import com.codesquad.secondhand.adapter.in.web.response.ImageInfo;
 import com.codesquad.secondhand.domain.image.Image;
 import java.util.List;
 import java.util.stream.Collectors;

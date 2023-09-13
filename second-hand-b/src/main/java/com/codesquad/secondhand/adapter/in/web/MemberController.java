@@ -1,9 +1,9 @@
 package com.codesquad.secondhand.adapter.in.web;
 
 import com.codesquad.secondhand.application.port.in.MemberUseCase;
-import com.codesquad.secondhand.application.port.in.request.ToggleProductLikeStatusRequest;
-import com.codesquad.secondhand.application.port.in.response.CategorySimpleDetail;
-import com.codesquad.secondhand.application.port.in.response.ProductInfo;
+import com.codesquad.secondhand.adapter.in.web.request.ToggleProductLikeStatusRequest;
+import com.codesquad.secondhand.adapter.in.web.response.CategorySimpleDetail;
+import com.codesquad.secondhand.adapter.in.web.response.ProductInfo;
 import com.codesquad.secondhand.domain.member.Member;
 import java.util.List;
 import java.util.Optional;

@@ -1,6 +1,6 @@
 package com.codesquad.secondhand.domain.units;
 
-import com.codesquad.secondhand.application.port.in.exception.TokenExpiredException;
+import com.codesquad.secondhand.application.service.in.exception.TokenExpiredException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;

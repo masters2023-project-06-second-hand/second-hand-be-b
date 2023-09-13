@@ -2,10 +2,10 @@ package com.codesquad.secondhand.application.service.in.prodcut;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.codesquad.secondhand.application.port.in.response.ImageInfo;
-import com.codesquad.secondhand.application.port.in.response.ProductDetail;
-import com.codesquad.secondhand.application.port.in.response.ProductInfo;
-import com.codesquad.secondhand.application.port.in.response.ProductWriter;
+import com.codesquad.secondhand.adapter.in.web.response.ImageInfo;
+import com.codesquad.secondhand.adapter.in.web.response.ProductDetail;
+import com.codesquad.secondhand.adapter.in.web.response.ProductInfo;
+import com.codesquad.secondhand.adapter.in.web.response.ProductWriter;
 import com.codesquad.secondhand.application.service.in.image.ImageMapper;
 import com.codesquad.secondhand.domain.image.Image;
 import com.codesquad.secondhand.domain.member.Member;

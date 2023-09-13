@@ -1,8 +1,8 @@
 package com.codesquad.secondhand.adapter.in.web;
 
 import com.codesquad.secondhand.application.port.in.AuthUseCase;
-import com.codesquad.secondhand.application.port.in.request.SignUpRequest;
-import com.codesquad.secondhand.application.port.in.response.Tokens;
+import com.codesquad.secondhand.adapter.in.web.request.SignUpRequest;
+import com.codesquad.secondhand.adapter.in.web.response.Tokens;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;

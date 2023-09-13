@@ -1,8 +1,8 @@
 package com.codesquad.secondhand.adapter.in.web.exception;
 
-import com.codesquad.secondhand.application.port.in.exception.ErrorResponse;
-import com.codesquad.secondhand.application.port.in.exception.NotRegisteredMemberException;
-import com.codesquad.secondhand.application.port.in.exception.TokenExpiredException;
+import com.codesquad.secondhand.application.service.in.exception.ErrorResponse;
+import com.codesquad.secondhand.application.service.in.exception.NotRegisteredMemberException;
+import com.codesquad.secondhand.application.service.in.exception.TokenExpiredException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
