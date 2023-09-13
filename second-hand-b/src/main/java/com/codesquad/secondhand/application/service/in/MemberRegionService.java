@@ -1,11 +1,11 @@
 package com.codesquad.secondhand.application.service.in;
 
 
+import com.codesquad.secondhand.adapter.in.web.response.MemberRegionInfos;
+import com.codesquad.secondhand.adapter.in.web.response.RegionInfo;
 import com.codesquad.secondhand.application.port.in.MemberRegionUseCase;
 import com.codesquad.secondhand.application.port.in.exception.ExistsMemberRegionException;
 import com.codesquad.secondhand.application.port.in.exception.NotExistsMemberRegionException;
-import com.codesquad.secondhand.application.port.in.response.MemberRegionInfos;
-import com.codesquad.secondhand.application.port.in.response.RegionInfo;
 import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.region.Region;
 import java.util.List;

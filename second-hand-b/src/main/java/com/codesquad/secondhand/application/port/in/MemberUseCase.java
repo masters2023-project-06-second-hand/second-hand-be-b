@@ -1,8 +1,8 @@
 package com.codesquad.secondhand.application.port.in;
 
-import com.codesquad.secondhand.application.port.in.response.CategorySimpleDetail;
-import com.codesquad.secondhand.application.port.in.response.MemberInfo;
-import com.codesquad.secondhand.application.port.in.response.ProductInfo;
+import com.codesquad.secondhand.adapter.in.web.response.CategorySimpleDetail;
+import com.codesquad.secondhand.adapter.in.web.response.MemberInfo;
+import com.codesquad.secondhand.adapter.in.web.response.ProductInfo;
 import com.codesquad.secondhand.domain.member.Member;
 import java.util.List;
 

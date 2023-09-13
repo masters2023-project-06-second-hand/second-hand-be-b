@@ -1,6 +1,6 @@
 package com.codesquad.secondhand.application.port.in;
 
-import com.codesquad.secondhand.application.port.in.response.MemberRegionInfos;
+import com.codesquad.secondhand.adapter.in.web.response.MemberRegionInfos;
 
 public interface MemberRegionUseCase {
 

@@ -1,7 +1,7 @@
 package com.codesquad.secondhand.application.port.in;
 
-import com.codesquad.secondhand.application.port.in.request.SignUpRequest;
-import com.codesquad.secondhand.application.port.in.response.Tokens;
+import com.codesquad.secondhand.adapter.in.web.request.SignUpRequest;
+import com.codesquad.secondhand.adapter.in.web.response.Tokens;
 
 public interface AuthUseCase {
 

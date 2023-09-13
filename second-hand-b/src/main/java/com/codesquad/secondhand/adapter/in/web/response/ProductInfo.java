@@ -1,4 +1,4 @@
-package com.codesquad.secondhand.application.port.in.response;
+package com.codesquad.secondhand.adapter.in.web.response;
 
 import java.time.LocalDateTime;
 import lombok.Getter;

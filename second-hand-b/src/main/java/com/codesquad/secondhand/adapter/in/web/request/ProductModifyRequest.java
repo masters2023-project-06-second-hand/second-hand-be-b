@@ -1,11 +1,12 @@
-package com.codesquad.secondhand.application.port.in.request;
+package com.codesquad.secondhand.adapter.in.web.request;
 
 import java.util.List;
 import lombok.Getter;
 
 @Getter
-public class ProductCreateRequest {
+public class ProductModifyRequest {
 
+    private Long id;
     private String name;
     private String content;
     private int price;
