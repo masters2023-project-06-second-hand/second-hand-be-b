@@ -3,8 +3,8 @@ package com.codesquad.secondhand.application.service.in;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 
-import com.codesquad.secondhand.application.port.in.exception.ImageNotFoundException;
 import com.codesquad.secondhand.application.port.out.ImageRepository;
+import com.codesquad.secondhand.application.service.in.exception.ImageNotFoundException;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

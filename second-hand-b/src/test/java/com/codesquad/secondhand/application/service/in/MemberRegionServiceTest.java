@@ -2,8 +2,8 @@ package com.codesquad.secondhand.application.service.in;
 
 import static org.mockito.BDDMockito.given;
 
-import com.codesquad.secondhand.application.port.in.exception.ExistsMemberRegionException;
-import com.codesquad.secondhand.application.port.in.exception.NotExistsMemberRegionException;
+import com.codesquad.secondhand.application.service.in.exception.ExistsMemberRegionException;
+import com.codesquad.secondhand.application.service.in.exception.NotExistsMemberRegionException;
 import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.region.Region;
 import org.assertj.core.api.Assertions;

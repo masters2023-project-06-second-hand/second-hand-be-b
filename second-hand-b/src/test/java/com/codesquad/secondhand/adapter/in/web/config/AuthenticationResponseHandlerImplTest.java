@@ -6,8 +6,8 @@ import static org.mockito.Mockito.when;
 
 import com.codesquad.secondhand.adapter.in.web.response.Tokens;
 import com.codesquad.secondhand.application.port.in.AuthUseCase;
-import com.codesquad.secondhand.application.port.in.exception.ErrorResponse;
-import com.codesquad.secondhand.application.port.in.exception.Errors;
+import com.codesquad.secondhand.application.service.in.exception.ErrorResponse;
+import com.codesquad.secondhand.application.service.in.exception.Errors;
 import com.codesquad.secondhand.domain.units.JwtTokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;

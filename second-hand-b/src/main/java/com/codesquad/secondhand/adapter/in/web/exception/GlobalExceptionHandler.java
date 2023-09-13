@@ -1,11 +1,11 @@
 package com.codesquad.secondhand.adapter.in.web.exception;
 
-import com.codesquad.secondhand.application.port.in.exception.BusinessException;
-import com.codesquad.secondhand.application.port.in.exception.ErrorCode;
-import com.codesquad.secondhand.application.port.in.exception.ErrorResponse;
-import com.codesquad.secondhand.application.port.in.exception.Errors;
-import com.codesquad.secondhand.application.port.in.exception.NotRegisteredMemberException;
-import com.codesquad.secondhand.application.port.in.exception.TokenExpiredException;
+import com.codesquad.secondhand.application.service.in.exception.BusinessException;
+import com.codesquad.secondhand.application.service.in.exception.ErrorCode;
+import com.codesquad.secondhand.application.service.in.exception.ErrorResponse;
+import com.codesquad.secondhand.application.service.in.exception.Errors;
+import com.codesquad.secondhand.application.service.in.exception.NotRegisteredMemberException;
+import com.codesquad.secondhand.application.service.in.exception.TokenExpiredException;
 import java.util.Map;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

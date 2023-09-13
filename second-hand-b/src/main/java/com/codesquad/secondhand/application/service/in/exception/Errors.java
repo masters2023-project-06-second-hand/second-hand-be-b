@@ -1,4 +1,4 @@
-package com.codesquad.secondhand.application.port.in.exception;
+package com.codesquad.secondhand.application.service.in.exception;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.io.Serializable;

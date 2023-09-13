@@ -3,8 +3,8 @@ package com.codesquad.secondhand.application.service.in;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 
-import com.codesquad.secondhand.application.port.in.exception.ProductNotFoundException;
 import com.codesquad.secondhand.application.port.out.ProductRepository;
+import com.codesquad.secondhand.application.service.in.exception.ProductNotFoundException;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
