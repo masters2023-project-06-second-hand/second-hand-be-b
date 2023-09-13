@@ -82,7 +82,7 @@ public class AuthService implements AuthUseCase {
         try {
             return memberService.getByEmail(email);
         } catch (MemberNotFoundException e) {
-            throw new NotRegisteredMemberException(JwtTokenProvider.createSignUpToken(email));
+            throw new NotRegisteredMemberException();
         }
     }
 

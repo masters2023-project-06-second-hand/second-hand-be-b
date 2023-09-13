@@ -2,14 +2,13 @@ package com.codesquad.secondhand.application.port.in.exception;
 
 public abstract class BusinessException extends RuntimeException {
 
-    private final ErrorResponse errorResponse;
+    private final ErrorCode errorCode;
 
-    protected BusinessException(ErrorResponse errorResponse) {
-        super(errorResponse.getStatus());
-        this.errorResponse = errorResponse;
+    protected BusinessException(ErrorCode errorCode) {
+        this.errorCode = errorCode;
     }
 
-    public ErrorResponse getErrorResponse() {
-        return errorResponse;
+    public ErrorCode getErrorCode() {
+        return errorCode;
     }
 }
