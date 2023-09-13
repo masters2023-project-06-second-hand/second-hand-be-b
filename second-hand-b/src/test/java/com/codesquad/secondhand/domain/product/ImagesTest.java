@@ -20,11 +20,8 @@ class ImagesTest {
         // given
         Images testImages = createTestImages();
 
-        Image modifiedUrl1 = new Image(MODIFIED_URL_1);
-        Image modifiedUrl2 = new Image(MODIFIED_URL_2);
-        List<Image> modifiedImages = List.of(modifiedUrl1, modifiedUrl2);
-
         // when
+        List<Image> modifiedImages = getModifiedImages();
         testImages.modify(modifiedImages);
 
         // then
@@ -44,10 +41,15 @@ class ImagesTest {
         assertThat(imageList).isUnmodifiable();
     }
 
-
     private static Images createTestImages() {
         Image image1 = new Image(TEST_URL_1);
         Image image2 = new Image(TEST_URL_2);
         return new Images(List.of(image1, image2));
+    }
+
+    private static List<Image> getModifiedImages() {
+        Image modifiedUrl1 = new Image(MODIFIED_URL_1);
+        Image modifiedUrl2 = new Image(MODIFIED_URL_2);
+        return List.of(modifiedUrl1, modifiedUrl2);
     }
 }

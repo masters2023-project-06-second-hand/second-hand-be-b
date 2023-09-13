@@ -1,10 +1,11 @@
 package com.codesquad.secondhand.application.service.in.prodcut;
 
+import static com.codesquad.secondhand.application.service.in.image.ImageMapper.toImageInfos;
+
 import com.codesquad.secondhand.application.port.in.response.ImageInfo;
 import com.codesquad.secondhand.application.port.in.response.ProductDetail;
 import com.codesquad.secondhand.application.port.in.response.ProductInfo;
 import com.codesquad.secondhand.application.port.in.response.ProductWriter;
-import com.codesquad.secondhand.application.service.in.image.ImageToImageInfoMapper;
 import com.codesquad.secondhand.domain.image.Image;
 import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.product.Category;
@@ -49,9 +50,7 @@ public class ProductMapper {
         Region region = product.getRegion();
         Status status = product.getStatus();
         List<Image> images = product.fetchImages();
-        List<ImageInfo> imageInfos = images.stream()
-                .map(ImageToImageInfoMapper::map)
-                .collect(Collectors.toUnmodifiableList());
+        List<ImageInfo> imageInfos = toImageInfos(images);
         return new ProductDetail(product.getId(),
                 new ProductWriter(member.getId(), member.getNickname()),
                 product.getName(),
