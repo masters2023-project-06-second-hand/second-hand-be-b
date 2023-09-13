@@ -38,6 +38,7 @@ public class AuthenticationResponseHandlerImpl implements AuthenticationResponse
         String signUpToken = JwtTokenProvider.createSignUpToken(email);
         ErrorResponse errorResponse = new ErrorResponse(HttpStatus.UNAUTHORIZED.toString(),
                 new Errors(Map.of(SIGN_UP_TOKEN, signUpToken)));
+        response.setStatus(HttpStatus.NO_CONTENT.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         PrintWriter out = response.getWriter();
         String signUpToken1 = objectMapper.writeValueAsString(errorResponse);
