@@ -3,6 +3,7 @@ package com.codesquad.secondhand.adapter.in.web;
 import com.codesquad.secondhand.application.port.in.MemberUseCase;
 import com.codesquad.secondhand.application.port.in.request.ToggleProductLikeStatusRequest;
 import com.codesquad.secondhand.application.port.in.response.CategorySimpleDetail;
+import com.codesquad.secondhand.application.port.in.response.MemberInfo;
 import com.codesquad.secondhand.application.port.in.response.ProductInfo;
 import com.codesquad.secondhand.domain.member.Member;
 import java.util.List;
@@ -22,6 +23,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class MemberController {
 
     private final MemberUseCase memberUseCase;
+
+    @GetMapping("/api/members/{memberId}")
+    public ResponseEntity<MemberInfo> getProfile(
+            @AuthenticationPrincipal Member member,
+            @PathVariable Long memberId) {
+        MemberInfo memberInfo = memberUseCase.getProfile(member, memberId);
+        return ResponseEntity.ok().body(memberInfo);
+    }
 
     @PutMapping("/api/products/{productId}/likes")
     public ResponseEntity<Void> toggleProductLikeStatus(

@@ -12,6 +12,8 @@ import static com.codesquad.secondhand.adapter.in.web.MemberSteps.나의_카테�
 import static com.codesquad.secondhand.adapter.in.web.MemberSteps.나의_판매상품_목록_조회한다;
 import static com.codesquad.secondhand.adapter.in.web.MemberSteps.나의_판매상품_목록을_상태별_조회한다;
 import static com.codesquad.secondhand.adapter.in.web.MemberSteps.나의_판매상품의_목록_조회_결과_검증한다;
+import static com.codesquad.secondhand.adapter.in.web.MemberSteps.멤버의_정보를_요청한다;
+import static com.codesquad.secondhand.adapter.in.web.MemberSteps.멤버정보_요청을_검증한다;
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품상태를_수정한다;
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품을_등록한다;
 import static org.mockito.ArgumentMatchers.any;
@@ -104,7 +106,7 @@ class MemberAcceptanceTest extends AcceptanceTest {
         나의_관심상품의_카테고리_목록_조회_결과_검증한다(response);
     }
 
-    @DisplayName("판매상품 목록 조회 요청 시, 내 판매 상품 반환")
+    @DisplayName("판매상품 목록 조회 요청 시, 내 상품 목록 반환")
     @Test
     void shouldReturnMySellingProductsWhenRequested() {
         // given
@@ -131,5 +133,18 @@ class MemberAcceptanceTest extends AcceptanceTest {
 
         // then
         나의_상태별_판매상품의_목록_조회_결과_검증한다(response);
+    }
+
+    @Test
+    @DisplayName("멤버의 정보 요청 시, 멤버의 정보 반환")
+    void getProfile() {
+        // given
+        Long memberId = 1L;
+
+        // when
+        var response = 멤버의_정보를_요청한다(memberId, ayaanAccessToken);
+
+        // then
+        멤버정보_요청을_검증한다(response);
     }
 }

@@ -4,6 +4,7 @@ import com.codesquad.secondhand.application.port.in.MemberUseCase;
 import com.codesquad.secondhand.application.port.in.exception.MemberNotFoundException;
 import com.codesquad.secondhand.application.port.in.exception.PermissionDeniedException;
 import com.codesquad.secondhand.application.port.in.response.CategorySimpleDetail;
+import com.codesquad.secondhand.application.port.in.response.MemberInfo;
 import com.codesquad.secondhand.application.port.in.response.ProductInfo;
 import com.codesquad.secondhand.application.port.out.MemberRepository;
 import com.codesquad.secondhand.domain.member.Member;
@@ -30,6 +31,12 @@ public class MemberService implements MemberUseCase {
         if (!member.isSameId(memberId)) {
             throw new PermissionDeniedException();
         }
+    }
+
+    @Override
+    public MemberInfo getProfile(Member member, Long memberId) {
+        validateMemberPermission(member, memberId);
+        return new MemberInfo(member.getId(), member.getNickname(), member.getProfileImage());
     }
 
     public Member getById(Long memberId) {

@@ -67,6 +67,10 @@ public class Member implements Serializable {
         return nickname;
     }
 
+    public String getProfileImage() {
+        return profileImage;
+    }
+
     public Region getSelectedRegion() {
         return selectedRegion;
     }
