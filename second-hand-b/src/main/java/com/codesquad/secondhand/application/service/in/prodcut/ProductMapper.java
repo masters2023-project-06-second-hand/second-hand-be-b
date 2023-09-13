@@ -51,7 +51,8 @@ public class ProductMapper {
         Status status = product.getStatus();
         List<Image> images = product.fetchImages();
         List<ImageInfo> imageInfos = toImageInfos(images);
-        return new ProductDetail(product.getId(),
+        return new ProductDetail(
+                product.getId(),
                 new ProductWriter(member.getId(), member.getNickname()),
                 product.getName(),
                 category.getName(),

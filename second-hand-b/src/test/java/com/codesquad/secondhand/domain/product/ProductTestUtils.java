@@ -35,7 +35,7 @@ public class ProductTestUtils {
         List<Image> images = getDefaultTestImages();
         Region region = getDefaultTestRegion();
         LocalDateTime testCreatedTime = getDefaultTestCreatedTime();
-        Member testWriter = getDefaultTestWriter(region);
+        Member testWriter = getDefaultTestWriter();
         Category testCategory = getDefaultTestCategory();
         return new Product(
                 TEST_NAME,
@@ -63,12 +63,12 @@ public class ProductTestUtils {
         return LocalDateTime.of(2023,9,13,12,10);
     }
 
-    public static Member getDefaultTestWriter(Region region) {
+    public static Member getDefaultTestWriter() {
         return new Member(
                 TEST_EMAIL,
                 TEST_NICK_NAME,
                 TEST_PROFILE_IMAGE,
-                region,
+                getDefaultTestRegion(),
                 Role.MEMBER);
     }
 

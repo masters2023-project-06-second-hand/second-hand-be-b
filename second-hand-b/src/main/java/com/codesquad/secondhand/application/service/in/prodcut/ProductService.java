@@ -4,6 +4,7 @@ import static com.codesquad.secondhand.application.service.in.prodcut.ProductMap
 import static com.codesquad.secondhand.application.service.in.prodcut.ProductMapper.toProductsInfo;
 
 import com.codesquad.secondhand.application.port.in.ProductUseCase;
+import com.codesquad.secondhand.application.port.in.exception.InvalidEntityStateException;
 import com.codesquad.secondhand.application.port.in.exception.ProductNotFoundException;
 import com.codesquad.secondhand.application.port.in.request.ProductCreateRequest;
 import com.codesquad.secondhand.application.port.in.request.ProductModifyRequest;
@@ -36,49 +37,52 @@ public class ProductService implements ProductUseCase {
 
     @Transactional
     @Override
-    public Long save(ProductCreateRequest productCreateRequest, Member member) {
+    public long save(ProductCreateRequest productCreateRequest, Member member) {
         Product product = toProduct(productCreateRequest, member);
-        return productRepository.save(product)
-                .getId();
+        Long id = productRepository.save(product).getId();
+        if (id == null) {
+            throw new InvalidEntityStateException();
+        }
+        return id;
     }
 
     @Override
-    public ProductDetail getDetails(Long id) {
+    public ProductDetail getDetails(long id) {
         Product product = getById(id);
         return toProductDetail(product);
     }
 
     @Transactional
     @Override
-    public void modify(Long id, ProductModifyRequest productModifyRequest) {
+    public void modify(long id, ProductModifyRequest productModifyRequest) {
         Product product = getById(id);
         modifyProduct(productModifyRequest, product);
     }
 
     @Transactional
     @Override
-    public void modifyStatus(Long id, String status) {
+    public void modifyStatus(long id, String status) {
         Product product = getById(id);
         product.modifyStatus(status);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public List<ProductInfo> getProductsByRegion(Long regionId) {
+    public List<ProductInfo> getProductsByRegion(long regionId) {
         List<Product> products = productRepository.findByRegionId(regionId);
         return toProductsInfo(products);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public List<ProductInfo> getProductsByRegionAndCategory(Long regionId, Long categoryId) {
+    public List<ProductInfo> getProductsByRegionAndCategory(long regionId, long categoryId) {
         List<Product> products = productRepository.findByRegionIdAndCategoryId(regionId, categoryId);
         return toProductsInfo(products);
     }
 
     @Transactional
     @Override
-    public void delete(Long id) {
+    public void delete(long id) {
         productRepository.deleteById(id);
     }
 

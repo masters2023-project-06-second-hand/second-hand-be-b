@@ -9,17 +9,17 @@ import java.util.List;
 
 public interface ProductUseCase {
 
-    Long save(ProductCreateRequest productCreateRequest, Member email);
+    long save(ProductCreateRequest productCreateRequest, Member email);
 
-    ProductDetail getDetails(Long id);
+    ProductDetail getDetails(long id);
 
-    void modify(Long id, ProductModifyRequest productModifyRequest);
+    void modify(long id, ProductModifyRequest productModifyRequest);
 
-    void modifyStatus(Long id, String status);
+    void modifyStatus(long id, String status);
 
-    List<ProductInfo> getProductsByRegion(Long regionId);
+    List<ProductInfo> getProductsByRegion(long regionId);
 
-    List<ProductInfo> getProductsByRegionAndCategory(Long regionId, Long categoryId);
+    List<ProductInfo> getProductsByRegionAndCategory(long regionId, long categoryId);
 
-    void delete(Long id);
+    void delete(long id);
 }
