@@ -23,7 +23,7 @@ public class AuthSteps {
         Map<String, Object> body = Map.of(
                 "nickname", "이안",
                 "profileImg", "url",
-                "regions", List.of(1)
+                "regionsId", List.of(1)
         );
         return RestAssured.given().log().all()
                 .body(body).contentType(MediaType.APPLICATION_JSON_VALUE)
