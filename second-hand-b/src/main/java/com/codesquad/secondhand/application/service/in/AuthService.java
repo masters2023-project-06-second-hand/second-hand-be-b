@@ -39,14 +39,15 @@ public class AuthService implements AuthUseCase {
         return getTokens(email, savedMember);
     }
 
+    // TODO front end에서 local에서도 편하게 테스트 할 수 있게 refreshToken을 임시로 갱신 하지 않음
     @Override
-    public Tokens getAccessToken(String authentication) {
-        String token = JwtTokenProvider.parseTokenFromAuthorization(authentication);
+    public Tokens getToken(String authentication) {
         Date now = new Date();
-        JwtTokenProvider.validate(token, now);
-        String email = JwtTokenProvider.getEmail(token);
+        JwtTokenProvider.validate(authentication, now);
+        String email = JwtTokenProvider.getEmail(authentication);
         Member member = memberService.getByEmail(email);
-        return getTokens(email, member);
+        var accessToken = getAccessToken(email, member.getIdStringValue(), new Date());
+        return new Tokens(accessToken, authentication, member.getId());
     }
 
     @Scheduled(fixedDelay = CLEANUP_ROUND_TIME)

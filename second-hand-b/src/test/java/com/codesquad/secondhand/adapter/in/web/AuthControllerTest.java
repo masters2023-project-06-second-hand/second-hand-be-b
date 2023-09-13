@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.codesquad.secondhand.adapter.in.web.request.RefreshTokenRequest;
 import com.codesquad.secondhand.adapter.in.web.request.SignUpRequest;
 import com.codesquad.secondhand.application.port.out.MemberRepository;
 import com.codesquad.secondhand.domain.member.Member;
@@ -15,7 +16,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -83,10 +86,12 @@ class AuthControllerTest {
         Member member = getTestMember();
         Date startDate = new Date();
         String refreshToken = getTestRefreshToken(member, startDate);
+        Map<String, String> content = Map.of("refreshToken", refreshToken);
 
         // when,then
-        mockMvc.perform(get("/api/members/accesstoken")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + refreshToken)
+        mockMvc.perform(post("/api/oauth2/token")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(content))
                 )
                 .andDo(print())
                 .andExpect(jsonPath("accessToken").exists())
@@ -102,10 +107,12 @@ class AuthControllerTest {
         LocalDate localDate = LocalDate.of(2023, 1, 1);
         Date startDate = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         String refreshToken = getTestRefreshToken(member, startDate);
+        Map<String, String> content = Map.of("refreshToken", refreshToken);
 
         // when,then
-        mockMvc.perform(get("/api/members/accesstoken")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + refreshToken)
+        mockMvc.perform(post("/api/oauth2/token")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(content))
                 )
                 .andDo(print())
                 .andExpect(status().isUnauthorized())

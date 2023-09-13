@@ -34,8 +34,10 @@ public class OAuth2LoginSecurityConfig {
     public List<String> allowedHeaders;
     @Value("${cors.mapping.pattern}")
     public String corsMappingPattern;
-    @Value("${anonymous.allowed.urls}")
-    private String[] anonymousAllowedUrls;
+    @Value("${anonymous.allowed.get.urls}")
+    private String[] anonymousGetAllowedUrls;
+    @Value("${anonymous.allowed.post.urls}")
+    private String[] anonymousPostAllowedUrls;
     @Value("${oauth2user.allowed.urls}")
     private String[] userAllowedUrls;
 
@@ -45,7 +47,9 @@ public class OAuth2LoginSecurityConfig {
         return httpSecurity
                 .authorizeHttpRequests(
                         requestMatcherRegistry -> requestMatcherRegistry
-                                .mvcMatchers(HttpMethod.GET, anonymousAllowedUrls)
+                                .mvcMatchers(HttpMethod.GET, anonymousGetAllowedUrls)
+                                .permitAll()
+                                .mvcMatchers(HttpMethod.POST, anonymousPostAllowedUrls)
                                 .permitAll()
                                 .mvcMatchers(HttpMethod.POST, userAllowedUrls)
                                 .hasAuthority(Role.USER.getKey())

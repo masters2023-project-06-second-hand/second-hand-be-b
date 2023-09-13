@@ -2,9 +2,12 @@ package com.codesquad.secondhand.adapter.in.web;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import groovyjarjarpicocli.CommandLine.Spec;
 import io.restassured.RestAssured;
+import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -18,6 +21,10 @@ import org.springframework.http.MediaType;
 public class ProductSteps {
 
     public static ExtractableResponse<Response> 상품을_등록한다(String accessToken, int categoryId) {
+        return 상품을_등록한다(accessToken, categoryId, new RequestSpecBuilder().build());
+    }
+
+    public static ExtractableResponse<Response> 상품을_등록한다(String accessToken, int categoryId, RequestSpecification specification) {
         String filePath = "/image/test.jpg";
         try {
             File file = new ClassPathResource(filePath).getFile();
@@ -38,13 +45,16 @@ public class ProductSteps {
         body.put("imagesId", List.of(1, 2));
 
         return RestAssured.given().contentType(MediaType.APPLICATION_JSON_VALUE)
+                .spec(specification)
                 .auth().oauth2(accessToken)
                 .log().all().body(body)
                 .when().post("/api/products")
                 .then().log().all().extract();
     }
-
     public static ExtractableResponse<Response> 잘못된_상품_등록요청(String accessToken) {
+        return 잘못된_상품_등록요청(accessToken, new RequestSpecBuilder().build());
+    }
+    public static ExtractableResponse<Response> 잘못된_상품_등록요청(String accessToken,RequestSpecification specification) {
         Map<String, Object> body = new HashMap<>();
         body.put("name", "상품");
         body.put("categoryId", -1);
@@ -54,6 +64,7 @@ public class ProductSteps {
         body.put("imagesId", List.of(-1, -2));
 
         return RestAssured.given().contentType(MediaType.APPLICATION_JSON_VALUE)
+                .spec(specification)
                 .auth().oauth2(accessToken)
                 .log().all().body(body)
                 .when().post("/api/products")
@@ -77,7 +88,12 @@ public class ProductSteps {
     }
 
     public static ExtractableResponse<Response> 상품상세를_조회한다(Long id, String accessToken) {
+        return 상품상세를_조회한다(id, accessToken, new RequestSpecBuilder().build());
+    }
+
+    public static ExtractableResponse<Response> 상품상세를_조회한다(Long id, String accessToken,RequestSpecification specification) {
         return RestAssured.given().log().all()
+                .spec(specification)
                 .auth().oauth2(accessToken)
                 .when().get("/api/products/{productId}", id)
                 .then().log().all().extract();
@@ -97,6 +113,9 @@ public class ProductSteps {
     }
 
     public static ExtractableResponse<Response> 상품을_수정한다(Long id, String accessToken) {
+        return 상품을_수정한다(id, accessToken, new RequestSpecBuilder().build());
+    }
+    public static ExtractableResponse<Response> 상품을_수정한다(Long id, String accessToken,RequestSpecification specification) {
         Map<String, Object> body = new HashMap<>();
         body.put("name", "상품명 수정");
         body.put("categoryId", 2);
@@ -106,6 +125,7 @@ public class ProductSteps {
         body.put("imagesId", List.of(1));
 
         return RestAssured.given().log().all()
+                .spec(specification)
                 .auth().oauth2(accessToken)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(body)
@@ -114,6 +134,9 @@ public class ProductSteps {
     }
 
     public static ExtractableResponse<Response> 잘못된_요청으로_상품을_수정한다(String accessToken) {
+        return 잘못된_요청으로_상품을_수정한다(accessToken, new RequestSpecBuilder().build());
+    }
+    public static ExtractableResponse<Response> 잘못된_요청으로_상품을_수정한다(String accessToken,RequestSpecification specification) {
         Map<String, Object> body = new HashMap<>();
         body.put("name", "상품");
         body.put("categoryId", -1);
@@ -123,6 +146,7 @@ public class ProductSteps {
         body.put("imagesId", List.of(-1, -1));
 
         return RestAssured.given().log().all()
+                .spec(specification)
                 .auth().oauth2(accessToken)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(body)
@@ -158,8 +182,12 @@ public class ProductSteps {
     }
 
     public static ExtractableResponse<Response> 상품상태를_수정한다(Long id, String accessToken) {
+        return 상품상태를_수정한다(id, accessToken, new RequestSpecBuilder().build());
+    }
+    public static ExtractableResponse<Response> 상품상태를_수정한다(Long id, String accessToken,RequestSpecification specification) {
         Map<String, String> body = Map.of("status", "판매완료");
         return RestAssured.given().log().all()
+                .spec(specification)
                 .auth().oauth2(accessToken)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(body)
@@ -204,7 +232,11 @@ public class ProductSteps {
     }
 
     public static ExtractableResponse<Response> regionId로_상품목록을_조회한다(Long regionId, String accessToken) {
+        return regionId로_상품목록을_조회한다(regionId, accessToken, new RequestSpecBuilder().build());
+    }
+    public static ExtractableResponse<Response> regionId로_상품목록을_조회한다(Long regionId, String accessToken,RequestSpecification specification) {
         return RestAssured.given().log().all()
+                .spec(specification)
                 .queryParam("regionId", regionId)
                 .auth().oauth2(accessToken)
                 .when().get("/api/products")
@@ -213,7 +245,12 @@ public class ProductSteps {
 
     public static ExtractableResponse<Response> regionId와_categoryId로_지역목록을_조회한다(Long regionId, Long categoryId,
             String accessToken) {
+        return regionId와_categoryId로_지역목록을_조회한다(regionId, categoryId, accessToken, new RequestSpecBuilder().build());
+    }
+    public static ExtractableResponse<Response> regionId와_categoryId로_지역목록을_조회한다(Long regionId, Long categoryId,
+            String accessToken,RequestSpecification specification) {
         return RestAssured.given().log().all()
+                .spec(specification)
                 .queryParam("regionId", regionId)
                 .queryParam("categoryId", categoryId)
                 .auth().oauth2(accessToken)
@@ -222,10 +259,13 @@ public class ProductSteps {
     }
 
     public static ExtractableResponse<Response> 상품을_삭제한다(long productId, String accessToken) {
-        ExtractableResponse<Response> response = RestAssured.given().log().all()
+        return 상품을_삭제한다(productId, accessToken, new RequestSpecBuilder().build());
+    }
+    public static ExtractableResponse<Response> 상품을_삭제한다(long productId, String accessToken,RequestSpecification specification) {
+        return RestAssured.given().log().all()
+                .spec(specification)
                 .auth().oauth2(accessToken)
                 .when().delete("/api/products/{productId}", productId)
                 .then().log().all().extract();
-        return response;
     }
 }

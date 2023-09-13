@@ -9,5 +9,5 @@ public interface AuthUseCase {
 
     Tokens signUp(String email, SignUpRequest signUpRequest);
 
-    Tokens getAccessToken(String authentication);
+    Tokens getToken(String authentication);
 }

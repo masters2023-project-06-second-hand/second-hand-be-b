@@ -9,11 +9,11 @@ public class ImagesIdValidator implements ConstraintValidator<ImagesId, List<Lon
     private static final int ZERO = 0;
 
     @Override
-    public boolean isValid(List<Long> values, ConstraintValidatorContext context) {
-        if (values == null) {
+    public boolean isValid(List<Long> ids, ConstraintValidatorContext context) {
+        if (ids == null) {
             return true;
         }
-        return values.stream().allMatch(id -> id > ZERO);
+        return ids.stream().allMatch(id -> id > ZERO);
     }
 }
 
