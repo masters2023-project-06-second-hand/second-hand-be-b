@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class AuthenticationResponseHandlerImpl implements AuthenticationResponseHandler {
 
-    public static final String SIGN_UP_TOKEN = "signUpToken";
+    public static final String SIGN_UP_TOKEN = "signupToken";
     private final AuthUseCase authUseCase;
     private final ObjectMapper objectMapper;
 
