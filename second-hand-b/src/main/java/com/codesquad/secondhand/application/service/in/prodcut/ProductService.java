@@ -1,5 +1,8 @@
 package com.codesquad.secondhand.application.service.in.prodcut;
 
+import static com.codesquad.secondhand.application.service.in.prodcut.ProductMapper.toProductDetail;
+import static com.codesquad.secondhand.application.service.in.prodcut.ProductMapper.toProductsInfo;
+
 import com.codesquad.secondhand.application.port.in.ProductUseCase;
 import com.codesquad.secondhand.application.port.in.exception.ProductNotFoundException;
 import com.codesquad.secondhand.application.port.in.request.ProductCreateRequest;
@@ -42,7 +45,7 @@ public class ProductService implements ProductUseCase {
     @Override
     public ProductDetail getDetails(Long id) {
         Product product = getById(id);
-        return ProductToProductDetailMapper.map(product);
+        return toProductDetail(product);
     }
 
     @Transactional
@@ -63,14 +66,14 @@ public class ProductService implements ProductUseCase {
     @Override
     public List<ProductInfo> getProductsByRegion(Long regionId) {
         List<Product> products = productRepository.findByRegionId(regionId);
-        return ProductToProductInfoMapper.map(products);
+        return toProductsInfo(products);
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<ProductInfo> getProductsByRegionAndCategory(Long regionId, Long categoryId) {
         List<Product> products = productRepository.findByRegionIdAndCategoryId(regionId, categoryId);
-        return ProductToProductInfoMapper.map(products);
+        return toProductsInfo(products);
     }
 
     @Transactional
@@ -86,7 +89,7 @@ public class ProductService implements ProductUseCase {
 
     public List<ProductInfo> getProductsByMemberId(long memberId) {
         List<Product> products = productRepository.findProductsByMemberId(memberId);
-        return ProductToProductInfoMapper.map(products);
+        return toProductsInfo(products);
     }
 
     public List<ProductInfo> getProductsByMemberIdAndCategoryId(long memberId, long categoryId) {
@@ -94,22 +97,22 @@ public class ProductService implements ProductUseCase {
                 memberId,
                 categoryId
         );
-        return ProductToProductInfoMapper.map(products);
+        return toProductsInfo(products);
     }
 
     public List<ProductInfo> getByWriterId(long memberId) {
         List<Product> products = productRepository.findByWriterId(memberId);
-        return ProductToProductInfoMapper.map(products);
+        return toProductsInfo(products);
     }
 
     public List<ProductInfo> getSoldOutByWriterId(long memberId) {
         List<Product> products = productRepository.findByWriterIdAndStatus(memberId, Status.SOLD_OUT);
-        return ProductToProductInfoMapper.map(products);
+        return toProductsInfo(products);
     }
 
     public List<ProductInfo> getSalesByWriterId(long memberId) {
         List<Product> products = productRepository.findByWriterIdAndStatusNot(memberId, Status.SOLD_OUT);
-        return ProductToProductInfoMapper.map(products);
+        return toProductsInfo(products);
     }
 
 
