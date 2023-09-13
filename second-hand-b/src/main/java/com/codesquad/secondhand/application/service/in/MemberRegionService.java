@@ -3,8 +3,11 @@ package com.codesquad.secondhand.application.service.in;
 
 import com.codesquad.secondhand.application.port.in.MemberRegionUseCase;
 import com.codesquad.secondhand.application.port.in.response.MemberRegionInfos;
+import com.codesquad.secondhand.application.port.in.response.RegionInfo;
 import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.region.Region;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -35,8 +38,13 @@ public class MemberRegionService implements MemberRegionUseCase {
     @Override
     public MemberRegionInfos getRegionsOfMember(Long memberId) {
         Member member = memberService.getById(memberId);
-        return new MemberRegionInfos(member.getSelectedRegion().getId(),
-                member.fetchRegionInfos());
+        List<RegionInfo> regionInfos = member.fetchRegions().stream()
+                .map(region -> new RegionInfo(region.getId(), region.getName()))
+                .collect(Collectors.toList());
+        return new MemberRegionInfos(
+                member.getSelectedRegion().getId(),
+                regionInfos
+        );
     }
 
     @Transactional

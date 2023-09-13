@@ -1,13 +1,11 @@
 package com.codesquad.secondhand.domain.member;
 
-import com.codesquad.secondhand.application.port.in.response.RegionInfo;
 import com.codesquad.secondhand.domain.product.Product;
 import com.codesquad.secondhand.domain.region.Region;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -85,16 +83,13 @@ public class Member implements Serializable {
         myRegions.removeRegion(region);
     }
 
-    public List<RegionInfo> fetchRegionInfos() {
-        return myRegions.getRegions().stream()
-                .map(region -> new RegionInfo(region.getId(), region.getName()))
-                .collect(Collectors.toUnmodifiableList());
+    public List<Region> fetchRegions() {
+        return myRegions.getRegions();
     }
 
     public void selectRegion(Region region) {
         this.selectedRegion = region;
     }
-
 
     public Collection<GrantedAuthority> getRoleAuthority() {
         return Collections.singleton(new SimpleGrantedAuthority(role.getKey()));

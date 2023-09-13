@@ -3,6 +3,7 @@ package com.codesquad.secondhand.domain.member;
 import com.codesquad.secondhand.domain.region.Region;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
@@ -22,7 +23,7 @@ public class MemberRegions implements Serializable {
     private List<Region> regions = new ArrayList<>();
 
     public List<Region> getRegions() {
-        return regions;
+        return Collections.unmodifiableList(regions);
     }
 
     public void addRegion(Region region) {
