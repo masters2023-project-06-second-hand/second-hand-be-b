@@ -44,8 +44,36 @@ public class ProductSteps {
                 .then().log().all().extract();
     }
 
+    public static ExtractableResponse<Response> 잘못된_상품_등록요청(String accessToken) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("name", "상품");
+        body.put("categoryId", -1);
+        body.put("price", -1);
+        body.put("content", "2개");
+        body.put("regionId", -1);
+        body.put("imagesId", List.of(-1, -2));
+
+        return RestAssured.given().contentType(MediaType.APPLICATION_JSON_VALUE)
+                .auth().oauth2(accessToken)
+                .log().all().body(body)
+                .when().post("/api/products")
+                .then().log().all().extract();
+    }
+
     public static void 상품등록을_검증한다(ExtractableResponse<Response> response) {
         assertThat(response.jsonPath().getString("id")).isEqualTo("1");
+    }
+
+    public static void 잘못된_상품등록_응답_검증한다(ExtractableResponse<Response> response) {
+        Assertions.assertAll(
+                () -> assertThat(response.jsonPath().getString("status")).isNotNull(),
+                () -> assertThat(response.jsonPath().getString("message.imagesId")).isNotNull(),
+                () -> assertThat(response.jsonPath().getString("message.regionId")).isNotNull(),
+                () -> assertThat(response.jsonPath().getString("message.price")).isNotNull(),
+                () -> assertThat(response.jsonPath().getString("message.name")).isNotNull(),
+                () -> assertThat(response.jsonPath().getString("message.content")).isNotNull(),
+                () -> assertThat(response.jsonPath().getString("message.categoryId")).isNotNull()
+        );
     }
 
     public static ExtractableResponse<Response> 상품상세를_조회한다(Long id, String accessToken) {
@@ -85,6 +113,24 @@ public class ProductSteps {
                 .then().log().all().extract();
     }
 
+    public static ExtractableResponse<Response> 잘못된_요청으로_상품을_수정한다(String accessToken) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("name", "상품");
+        body.put("categoryId", -1);
+        body.put("price", -1);
+        body.put("content", "상품");
+        body.put("regionId", -1);
+        body.put("imagesId", List.of(-1, -1));
+
+        return RestAssured.given().log().all()
+                .auth().oauth2(accessToken)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(body)
+                .when().put("/api/products/{productId}", -1)
+                .then().log().all().extract();
+    }
+
+
     public static void 상품수정을_검증한다(Long id, String accessToken, ExtractableResponse<Response> response) {
         var modifiedProduct = 상품상세를_조회한다(id, accessToken);
         Assertions.assertAll(
@@ -96,6 +142,18 @@ public class ProductSteps {
                 () -> assertThat(modifiedProduct.jsonPath().getString("categoryName")).isEqualTo("부동산"),
                 () -> assertThat(modifiedProduct.jsonPath().getString("regionName")).isEqualTo("서울 강남구 역삼동"),
                 () -> assertThat(modifiedProduct.jsonPath().getList("images.id")).containsExactly(1)
+        );
+    }
+
+    public static void 잘못된_상품수정_요청을_검증한다(ExtractableResponse<Response> response) {
+        Assertions.assertAll(
+                () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value()),
+                () -> assertThat(response.jsonPath().getString("message.imagesId")).isNotNull(),
+                () -> assertThat(response.jsonPath().getString("message.regionId")).isNotNull(),
+                () -> assertThat(response.jsonPath().getString("message.price")).isNotNull(),
+                () -> assertThat(response.jsonPath().getString("message.name")).isNotNull(),
+                () -> assertThat(response.jsonPath().getString("message.content")).isNotNull(),
+                () -> assertThat(response.jsonPath().getString("message.categoryId")).isNotNull()
         );
     }
 

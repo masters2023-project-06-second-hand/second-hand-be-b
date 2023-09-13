@@ -11,6 +11,10 @@ import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품수정�
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품을_등록한다;
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품을_삭제한다;
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품을_수정한다;
+import static com.codesquad.secondhand.adapter.in.web.ProductSteps.잘못된_상품_등록요청;
+import static com.codesquad.secondhand.adapter.in.web.ProductSteps.잘못된_상품등록_응답_검증한다;
+import static com.codesquad.secondhand.adapter.in.web.ProductSteps.잘못된_상품수정_요청을_검증한다;
+import static com.codesquad.secondhand.adapter.in.web.ProductSteps.잘못된_요청으로_상품을_수정한다;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -29,16 +33,24 @@ class ProductAcceptanceTest extends AcceptanceTest {
         when(s3StorageService.upload(any())).thenReturn("testUrl");
     }
 
-    @Test
     @DisplayName("상품 등록 요청이 오면 상품 아이디를 반환한다.")
+    @Test
     void create() {
         var response = 상품을_등록한다(ayaanAccessToken, 1);
 
         상품등록을_검증한다(response);
     }
 
+    @DisplayName("잘못된 상품 등록 요청이 에러 메시지를 반환한다.")
     @Test
+    void createWithErrorRequest() {
+        var response = 잘못된_상품_등록요청(ayaanAccessToken);
+
+        잘못된_상품등록_응답_검증한다(response);
+    }
+
     @DisplayName("상품 상세 조회 요청이 오면 상품 상세 정보를 반환한다.")
+    @Test
     void getDetails() {
         // given
         Long id = 상품을_등록한다(ayaanAccessToken, 1).jsonPath().getLong("id");
@@ -48,8 +60,8 @@ class ProductAcceptanceTest extends AcceptanceTest {
         상품상세조회를_검증한다(response);
     }
 
-    @Test
     @DisplayName("상품 수정 요청이 오면 상품 정보를 수정한다.")
+    @Test
     void modify() {
         //given
         Long id = 상품을_등록한다(ayaanAccessToken, 1).jsonPath().getLong("id");
@@ -61,8 +73,18 @@ class ProductAcceptanceTest extends AcceptanceTest {
         상품수정을_검증한다(id, ayaanAccessToken, response);
     }
 
+    @DisplayName("상품 수정 요청이 오면 상품 정보를 수정한다.")
     @Test
+    void modifyWithWrongRequest() {
+        // when
+        var response = 잘못된_요청으로_상품을_수정한다(ayaanAccessToken);
+
+        //then
+        잘못된_상품수정_요청을_검증한다(response);
+    }
+
     @DisplayName("상품 상태 수정 요청이 오면 상품 상태를 수정한다.")
+    @Test
     void modifyStatus() {
         //given
         Long id = 상품을_등록한다(ayaanAccessToken, 1).jsonPath().getLong("id");
@@ -74,8 +96,8 @@ class ProductAcceptanceTest extends AcceptanceTest {
         상품상태수정을_검증한다(id, ayaanAccessToken, response);
     }
 
-    @Test
     @DisplayName("지역id에 해당하는 상품 목록을 조회하여 반환한다.")
+    @Test
     void getProductListByRegion() {
         //given
         상품을_등록한다(ayaanAccessToken, 1);
@@ -92,8 +114,8 @@ class ProductAcceptanceTest extends AcceptanceTest {
         );
     }
 
-    @Test
     @DisplayName("지역id와 카테고리id에 해당하는 상품 목록을 조회하여 반환한다.")
+    @Test
     void getProductListByRegionAndCategory() {
         //given
         상품을_등록한다(ayaanAccessToken, 1);
@@ -112,8 +134,8 @@ class ProductAcceptanceTest extends AcceptanceTest {
         );
     }
 
-    @Test
     @DisplayName("상품 삭제 요청을 받으면 요청을 수행하고 204 상태코드로 응답한다.")
+    @Test
     void deleteProduct() {
         //given
         long productId = 상품을_등록한다(ayaanAccessToken, 1).jsonPath().getLong("id");

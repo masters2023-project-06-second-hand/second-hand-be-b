@@ -1,29 +1,27 @@
 package com.codesquad.secondhand.adapter.in.web.request;
 
+import com.codesquad.secondhand.adapter.in.web.request.annotation.CategoryId;
+import com.codesquad.secondhand.adapter.in.web.request.annotation.ImagesId;
+import com.codesquad.secondhand.adapter.in.web.request.annotation.ProductContent;
+import com.codesquad.secondhand.adapter.in.web.request.annotation.ProductName;
+import com.codesquad.secondhand.adapter.in.web.request.annotation.ProductPrice;
+import com.codesquad.secondhand.adapter.in.web.request.annotation.RegionId;
 import java.util.List;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import lombok.Getter;
 
 @Getter
 public class ProductModifyRequest {
-    @Min(value = 0)
-    private long id;
-    @NotBlank
-    @Size(min = 3, max = 50)
+
+    @ProductName
     private String name;
-    @NotBlank
-    @Size(min = 3, max = 1000)
+    @ProductContent
     private String content;
-    @Min(value = 0)
+    @ProductPrice
     private int price;
-    @Min(value = 0)
+    @CategoryId
     private long categoryId;
-    @Min(value = 0)
+    @RegionId
     private long regionId;
-    @NotNull
-    @Size(min = 1)
+    @ImagesId
     private List<Long> imagesId;
 }
