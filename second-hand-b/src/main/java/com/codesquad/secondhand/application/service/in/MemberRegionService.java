@@ -8,9 +8,9 @@ import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.region.Region;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -35,6 +35,7 @@ public class MemberRegionService implements MemberRegionUseCase {
         member.removeRegion(region);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public MemberRegionInfos getRegionsOfMember(Long memberId) {
         Member member = memberService.getById(memberId);

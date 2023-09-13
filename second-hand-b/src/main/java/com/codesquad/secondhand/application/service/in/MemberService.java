@@ -39,11 +39,6 @@ public class MemberService implements MemberUseCase {
         return new MemberInfo(member.getId(), member.getNickname(), member.getProfileImage());
     }
 
-    public Member getById(Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(MemberNotFoundException::new);
-    }
-
     @Transactional
     @Override
     public void toggleProductLikeStatus(Member member, long productId, boolean isLiked) {
@@ -94,6 +89,11 @@ public class MemberService implements MemberUseCase {
             return productService.getSoldOutByWriterId(memberId);
         }
         return productService.getSalesByWriterId(memberId);
+    }
+
+    public Member getById(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(MemberNotFoundException::new);
     }
 
     public Member getByEmail(String email) {

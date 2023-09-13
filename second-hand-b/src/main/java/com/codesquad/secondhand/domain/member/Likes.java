@@ -4,6 +4,7 @@ import com.codesquad.secondhand.domain.product.Product;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Embeddable;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Embeddable
 public class Likes {
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "member_likes_product",
             joinColumns = @JoinColumn(name = "member_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id"))
