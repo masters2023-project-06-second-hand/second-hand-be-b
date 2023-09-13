@@ -114,4 +114,8 @@ public class Member implements Serializable {
     public boolean isSameId(long memberId) {
         return id.equals(memberId);
     }
+
+    public boolean containsRegion(Region region) {
+        return myRegions.contains(region);
+    }
 }

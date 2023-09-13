@@ -2,6 +2,8 @@ package com.codesquad.secondhand.application.service.in;
 
 
 import com.codesquad.secondhand.application.port.in.MemberRegionUseCase;
+import com.codesquad.secondhand.application.port.in.exception.ExistsMemberRegionException;
+import com.codesquad.secondhand.application.port.in.exception.NotExistsMemberRegionException;
 import com.codesquad.secondhand.application.port.in.response.MemberRegionInfos;
 import com.codesquad.secondhand.application.port.in.response.RegionInfo;
 import com.codesquad.secondhand.domain.member.Member;
@@ -24,6 +26,9 @@ public class MemberRegionService implements MemberRegionUseCase {
     public void addRegionToMember(Long memberId, Long regionId) {
         Member member = memberService.getById(memberId);
         Region region = regionService.getById(regionId);
+        if (member.containsRegion(region)) {
+            throw new ExistsMemberRegionException();
+        }
         member.addRegion(region);
     }
 
@@ -32,6 +37,9 @@ public class MemberRegionService implements MemberRegionUseCase {
     public void removeRegionFromMember(Long memberId, Long regionId) {
         Member member = memberService.getById(memberId);
         Region region = regionService.getById(regionId);
+        if (!member.containsRegion(region)) {
+            throw new NotExistsMemberRegionException();
+        }
         member.removeRegion(region);
     }
 
@@ -53,6 +61,9 @@ public class MemberRegionService implements MemberRegionUseCase {
     public void selectRegionForMember(Long memberId, Long regionId) {
         Member member = memberService.getById(memberId);
         Region region = regionService.getById(regionId);
+        if (!member.containsRegion(region)) {
+            throw new NotExistsMemberRegionException();
+        }
         member.selectRegion(region);
     }
 }

@@ -34,4 +34,8 @@ public class MemberRegions implements Serializable {
     public void removeRegion(Region region) {
         regions.remove(region);
     }
+
+    public boolean contains(Region region) {
+        return regions.contains(region);
+    }
 }
