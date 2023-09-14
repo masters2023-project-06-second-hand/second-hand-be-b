@@ -128,11 +128,11 @@ operation::category_getCategoriesWithImg[snippets='http-request,http-response']
 
 === 회원용 이미지 업로드
 
-operation::image_uploadImageForMember[snippets='http-request,http-response']
+operation::image_uploadImageForMember[snippets='curl-request,http-response']
 
 === 상품용 이미지 업로드
 
-operation::image_uploadImageForProduct[snippets='http-request,http-response']
+operation::image_uploadImageForProduct[snippets='curl-request,http-response']
 
 === 이미지 삭제
 
