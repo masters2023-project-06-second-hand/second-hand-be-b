@@ -8,6 +8,7 @@ import com.codesquad.secondhand.adapter.in.web.request.ProductCreateRequest;
 import com.codesquad.secondhand.application.port.out.ProductRepository;
 import com.codesquad.secondhand.application.service.in.exception.InvalidEntityStateException;
 import com.codesquad.secondhand.application.service.in.exception.ProductNotFoundException;
+import com.codesquad.secondhand.application.service.in.image.ImageService;
 import com.codesquad.secondhand.application.service.in.prodcut.ProductService;
 import com.codesquad.secondhand.application.service.in.region.RegionService;
 import com.codesquad.secondhand.domain.product.Product;

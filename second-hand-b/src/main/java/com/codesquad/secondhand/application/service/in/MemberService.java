@@ -127,9 +127,13 @@ public class MemberService implements MemberUseCase {
         member.addRegion(firstRegion);
         member.selectRegion(firstRegion);
 
-        if (regionsId.size() == SIZE_2) {
+        if (hasSecondRegion(regionsId)) {
             Region secondRegion = regionService.getById(regionsId.get(REGIONS_SECOND_INDEX));
             member.addRegion(secondRegion);
         }
+    }
+
+    private static boolean hasSecondRegion(List<Long> regionsId) {
+        return regionsId.size() == SIZE_2;
     }
 }
