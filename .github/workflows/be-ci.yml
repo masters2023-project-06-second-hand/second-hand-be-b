@@ -12,12 +12,27 @@ on:
   # GitHub 웹 인터페이스에서 "Run workflow" 버튼을 통해 실행할 수 있습니다.
   workflow_dispatch:
 
+permissions:
+  checks: write
+  pull-requests: write
+
 # 워크플로우에서 실행될 작업들을 정의합니다.
 jobs:
   # 'build'라는 이름의 작업을 정의합니다.
   build:
     # 이 작업은 GitHub-hosted runner의 'ubuntu-latest' 환경에서 실행됩니다.
     runs-on: ubuntu-latest
+
+    services:
+      mysql_db:
+        image: mysql:8.0
+        ports:
+          - 3306:3306 # HOST:CONTAINER
+        env:
+          MYSQL_ROOT_PASSWORD: admin
+          MYSQL_DATABASE: secondhand
+          MYSQL_USER: test
+          MYSQL_PASSWORD: test
 
     # 작업에서 실행될 순차적인 단계를 정의합니다.
     steps:
@@ -35,8 +50,8 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            ~/second-hand-b/.gradle/caches
-            ~/second-hand-b/.gradle/wrapper
+            ~/.gradle/caches
+            ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
@@ -44,7 +59,6 @@ jobs:
       - name: 비밀 키 적용
         run: |
           echo "${{ secrets.CLOUD }}" | base64 --decode > second-hand-b/src/main/resources/application-cloud.yml
-          echo "${{ secrets.TESTDB }}" | base64 --decode > second-hand-b/src/main/resources/application-localdb.yml
           echo "${{ secrets.OAUTH2 }}" | base64 --decode > second-hand-b/src/main/resources/application-oauth2.yml
 
       - name: 프로젝트 빌드
@@ -52,3 +66,10 @@ jobs:
           cd second-hand-b
           chmod +x gradlew
           ./gradlew build
+
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: |
+            second-hand-b/build/test-results/**/*.xml

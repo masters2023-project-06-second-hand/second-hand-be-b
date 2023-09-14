@@ -12,6 +12,17 @@ jobs:
   build:
     runs-on: ubuntu-latest  # 'ubuntu-latest' 환경에서 실행
 
+    services:
+      mysql_db:
+        image: mysql:8.0
+        ports:
+          - 3306:3306 # HOST:CONTAINER
+        env:
+          MYSQL_ROOT_PASSWORD: admin
+          MYSQL_DATABASE: secondhand
+          MYSQL_USER: test
+          MYSQL_PASSWORD: test
+
     steps:
       # 저장소 코드를 체크아웃합니다.
       - name: 코드 체크아웃
@@ -29,8 +40,8 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            ~/second-hand-b/.gradle/caches
-            ~/second-hand-b/.gradle/wrapper
+            ~/.gradle/caches
+            ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
@@ -38,7 +49,6 @@ jobs:
       - name: 비밀 키 적용
         run: |
           echo "${{ secrets.CLOUD }}" | base64 --decode > second-hand-b/src/main/resources/application-cloud.yml
-          echo "${{ secrets.TESTDB }}" | base64 --decode > second-hand-b/src/main/resources/application-localdb.yml
           echo "${{ secrets.OAUTH2 }}" | base64 --decode > second-hand-b/src/main/resources/application-oauth2.yml
 
       - name: 프로젝트 빌드
