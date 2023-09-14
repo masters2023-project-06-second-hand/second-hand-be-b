@@ -5,9 +5,10 @@ import com.codesquad.secondhand.application.service.in.exception.ErrorCode;
 import com.codesquad.secondhand.application.service.in.exception.ErrorResponse;
 import com.codesquad.secondhand.application.service.in.exception.Errors;
 import com.codesquad.secondhand.application.service.in.exception.NotRegisteredMemberException;
-import com.codesquad.secondhand.application.service.in.exception.TokenExpiredException;
+import java.util.HashMap;
 import java.util.Map;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -27,9 +28,15 @@ public class GlobalExceptionHandler {
         return handleBusinessException(notRegisteredMemberException);
     }
 
-    @ExceptionHandler(value = TokenExpiredException.class)
-    public ResponseEntity<ErrorResponse> tokenExpiredExceptionHandler(TokenExpiredException tokenExpiredException) {
-        return handleBusinessException(tokenExpiredException);
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException exception) {
+        Map<String, String> errors = new HashMap<>();
+
+        exception.getBindingResult().getFieldErrors().forEach(error ->
+                errors.put(error.getField(), error.getDefaultMessage())
+        );
+        ErrorResponse errorResponse = new ErrorResponse(ErrorCode.BAD_REQUEST.getStatus(), new Errors(errors));
+        return ResponseEntity.badRequest().body(errorResponse);
     }
 
     private ResponseEntity<ErrorResponse> handleBusinessException(BusinessException exception) {

@@ -2,6 +2,7 @@ package com.codesquad.secondhand.domain.product;
 
 import com.codesquad.secondhand.domain.image.Image;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
@@ -22,11 +23,16 @@ public class Images {
             inverseJoinColumns = @JoinColumn(name = "image_id"))
     private List<Image> imageList = new ArrayList<>();
 
-    public List<Image> getImageList() {
-        return imageList;
+    public Images(List<Image> images) {
+        this.imageList.addAll(images);
     }
 
     public void modify(List<Image> images) {
-        imageList = images;
+        imageList.clear();
+        imageList.addAll(images);
+    }
+
+    public List<Image> getImageList() {
+        return Collections.unmodifiableList(imageList);
     }
 }

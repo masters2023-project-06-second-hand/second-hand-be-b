@@ -1,0 +1,46 @@
+= SecondHand Application API Document
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+[[product]]
+== 상품
+
+=== 상품 등록
+
+operation::product_create[snippets='http-request,http-response']
+
+=== 상품 등록 실패
+
+operation::product_createWithErrorRequest[snippets='http-request,http-response']
+
+=== 상품 삭제
+
+operation::product_deleteProduct[snippets='http-request,http-response']
+
+=== 상품 상세
+
+operation::product_getDetails[snippets='http-request,http-response']
+
+=== 리전으로 상품 목록 조회
+
+operation::product_getProductListByRegion[snippets='http-request,http-response']
+
+=== 리전과 카테고리로 상품 목록 조회
+
+operation::product_getProductListByRegionAndCategory[snippets='http-request,http-response']
+
+=== 상품 수정
+
+operation::product_modify[snippets='http-request,http-response']
+
+=== 상품 수정 예외
+
+operation::product_modifyWithWrongRequest[snippets='http-request,http-response']
+
+=== 상품 상태 수정
+
+operation::product_modifyStatus[snippets='http-request,http-response']

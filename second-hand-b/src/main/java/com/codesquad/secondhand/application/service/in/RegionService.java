@@ -1,10 +1,10 @@
 package com.codesquad.secondhand.application.service.in;
 
+import com.codesquad.secondhand.application.port.in.RegionUseCase;
+import com.codesquad.secondhand.application.service.in.exception.RegionNotFoundException;
 import com.codesquad.secondhand.adapter.in.web.response.RegionInfo;
 import com.codesquad.secondhand.adapter.in.web.response.RegionInfos;
-import com.codesquad.secondhand.application.port.in.RegionUseCase;
 import com.codesquad.secondhand.application.port.out.RegionRepository;
-import com.codesquad.secondhand.application.service.in.exception.RegionNotFoundException;
 import com.codesquad.secondhand.domain.region.Region;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

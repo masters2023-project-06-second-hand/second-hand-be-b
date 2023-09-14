@@ -1,9 +1,9 @@
 package com.codesquad.secondhand.adapter.in.web.config;
 
-import com.codesquad.secondhand.adapter.in.web.response.Tokens;
 import com.codesquad.secondhand.application.port.in.AuthUseCase;
 import com.codesquad.secondhand.application.service.in.exception.ErrorResponse;
 import com.codesquad.secondhand.application.service.in.exception.Errors;
+import com.codesquad.secondhand.adapter.in.web.response.Tokens;
 import com.codesquad.secondhand.domain.units.JwtTokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
@@ -38,7 +38,7 @@ public class AuthenticationResponseHandlerImpl implements AuthenticationResponse
         String signUpToken = JwtTokenProvider.createSignUpToken(email);
         ErrorResponse errorResponse = new ErrorResponse(HttpStatus.UNAUTHORIZED.toString(),
                 new Errors(Map.of(SIGN_UP_TOKEN, signUpToken)));
-        response.setStatus(HttpStatus.NO_CONTENT.value());
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         PrintWriter out = response.getWriter();
         String signUpToken1 = objectMapper.writeValueAsString(errorResponse);

@@ -1,12 +1,10 @@
 package com.codesquad.secondhand.domain.product;
 
-import com.codesquad.secondhand.adapter.in.web.response.ImageInfo;
 import com.codesquad.secondhand.domain.image.Image;
 import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.region.Region;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -20,13 +18,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "product")
-@Getter
 public class Product {
 
     @Id
@@ -64,7 +60,7 @@ public class Product {
         this.writer = writer;
         this.category = category;
         this.thumbnailUrl = thumbnailUrl;
-        modifyImages(images);
+        this.images = new Images(images);
         this.region = region;
         this.status = status;
         this.createdAt = createdAt;
@@ -77,7 +73,7 @@ public class Product {
         this.price = price;
         this.category = category;
         this.thumbnailUrl = thumbnailUrl;
-        modifyImages(images);
+        this.images.modify(images);
         this.region = region;
     }
 
@@ -85,13 +81,47 @@ public class Product {
         this.status = Status.findByName(status);
     }
 
-    public void modifyImages(List<Image> images) {
-        this.images.modify(images);
+    public List<Image> fetchImages() {
+        return images.getImageList();
     }
 
-    public List<ImageInfo> fetchImageInfos() {
-        return images.getImageList().stream()
-                .map(image -> new ImageInfo(image.getId(), image.getUrl()))
-                .collect(Collectors.toUnmodifiableList());
+    public Long getId() {
+        return id;
+    }
+
+    public Member getWriter() {
+        return writer;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public Region getRegion() {
+        return region;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public String getThumbnailUrl() {
+        return thumbnailUrl;
     }
 }

@@ -1,7 +1,7 @@
 package com.codesquad.secondhand.adapter.in.web;
 
-import com.codesquad.secondhand.adapter.in.web.response.MemberRegionInfos;
 import com.codesquad.secondhand.application.port.in.MemberRegionUseCase;
+import com.codesquad.secondhand.adapter.in.web.response.MemberRegionInfos;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
