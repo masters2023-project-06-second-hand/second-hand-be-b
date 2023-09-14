@@ -35,8 +35,8 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            ~/second-hand-b/gradle/caches
-            ~/second-hand-b/gradle/wrapper
+            ~/.gradle/caches
+            ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
@@ -52,3 +52,10 @@ jobs:
           cd second-hand-b
           chmod +x gradlew
           ./gradlew build
+
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: |
+            test-results/**/*.xml
