@@ -12,6 +12,21 @@ jobs:
   build:
     runs-on: ubuntu-latest  # 'ubuntu-latest' 환경에서 실행
 
+    services:
+      mysql_db:
+        image: mysql:8.0
+        container_name: second-hand
+        ports:
+          - 3306:3306 # HOST:CONTAINER
+        environment:
+          MYSQL_ROOT_PASSWORD: admin
+          MYSQL_DATABASE: secondhand
+          MYSQL_USER: test
+          MYSQL_PASSWORD: test
+        command:
+          - --character-set-server=utf8mb4
+          - --collation-server=utf8mb4_unicode_ci
+
     steps:
       # 저장소 코드를 체크아웃합니다.
       - name: 코드 체크아웃
@@ -38,7 +53,6 @@ jobs:
       - name: 비밀 키 적용
         run: |
           echo "${{ secrets.CLOUD }}" | base64 --decode > second-hand-b/src/main/resources/application-cloud.yml
-          echo "${{ secrets.TESTDB }}" | base64 --decode > second-hand-b/src/main/resources/application-localdb.yml
           echo "${{ secrets.OAUTH2 }}" | base64 --decode > second-hand-b/src/main/resources/application-oauth2.yml
 
       - name: 프로젝트 빌드
