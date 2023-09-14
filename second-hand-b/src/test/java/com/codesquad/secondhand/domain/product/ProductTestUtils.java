@@ -60,7 +60,7 @@ public class ProductTestUtils {
     }
 
     public static LocalDateTime getDefaultTestCreatedTime() {
-        return LocalDateTime.of(2023,9,13,12,10);
+        return LocalDateTime.of(2023, 9, 13, 12, 10);
     }
 
     public static Member getDefaultTestWriter() {
@@ -68,7 +68,6 @@ public class ProductTestUtils {
                 TEST_EMAIL,
                 TEST_NICK_NAME,
                 TEST_PROFILE_IMAGE,
-                getDefaultTestRegion(),
                 Role.MEMBER);
     }
 

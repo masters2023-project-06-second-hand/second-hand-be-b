@@ -60,12 +60,18 @@ public abstract class AcceptanceTest {
     }
 
     private void initAccessToken() {
+        Member ayaanMember = new Member(AYAAN_EMAIL, AYAAN_NICKNAME, AYAAN_PROFILE_IMAGE, Role.MEMBER);
         Region ayyanRegion = regionRepository.findById(AYAAN_DEFAULT_REGION_ID).orElseThrow();
+        ayaanMember.addRegion(ayyanRegion);
+        ayaanMember.selectRegion(ayyanRegion);
+        Member ayaan = memberRepository.save(ayaanMember);
+
+        Member albertMember = new Member(ALBERT_EMAIL, ALBERT_NICKNAME, ALBERT_PROFILE_IMAGE, Role.MEMBER);
         Region albertRegion = regionRepository.findById(ALBERT_DEFAULT_REGION_ID).orElseThrow();
-        Member ayaan = memberRepository.save(
-                new Member(AYAAN_EMAIL, AYAAN_NICKNAME, AYAAN_PROFILE_IMAGE, ayyanRegion, Role.MEMBER));
-        Member albert = memberRepository.save(
-                new Member(ALBERT_EMAIL, ALBERT_NICKNAME, ALBERT_PROFILE_IMAGE, albertRegion, Role.MEMBER));
+        albertMember.addRegion(albertRegion);
+        albertMember.selectRegion(albertRegion);
+        Member albert = memberRepository.save(albertMember);
+
         final Date startDate = new Date();
         ayaanAccessToken = JwtTokenProvider.createAccessToken(AYAAN_EMAIL, ayaan.getIdStringValue(), startDate);
         albertAccessToken = JwtTokenProvider.createAccessToken(ALBERT_EMAIL, albert.getIdStringValue(), startDate);

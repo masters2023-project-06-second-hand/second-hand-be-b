@@ -8,11 +8,8 @@ import com.codesquad.secondhand.application.service.in.exception.MemberNotFoundE
 import com.codesquad.secondhand.application.service.in.exception.NotRegisteredMemberException;
 import com.codesquad.secondhand.domain.auth.RefreshToken;
 import com.codesquad.secondhand.domain.member.Member;
-import com.codesquad.secondhand.domain.member.Role;
-import com.codesquad.secondhand.domain.region.Region;
 import com.codesquad.secondhand.domain.units.JwtTokenProvider;
 import java.util.Date;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -22,11 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AuthService implements AuthUseCase {
 
-    private static final int REGIONS_FIRST_INDEX = 0;
-    private static final int REGIONS_SECOND_INDEX = 1;
     private static final int CLEANUP_ROUND_TIME = 5000;
     private final MemberService memberService;
-    private final RegionService regionService;
     private final RefreshTokenRepository refreshTokenRepository;
 
     @Transactional
@@ -39,8 +33,7 @@ public class AuthService implements AuthUseCase {
     @Transactional
     @Override
     public Tokens signUp(String email, SignUpRequest signUpRequest) {
-        Member member = toMember(email, signUpRequest);
-        Member savedMember = memberService.save(member);
+        Member savedMember = memberService.signUpMember(email, signUpRequest);
         return getTokens(email, savedMember);
     }
 
@@ -85,22 +78,5 @@ public class AuthService implements AuthUseCase {
         } catch (MemberNotFoundException e) {
             throw new NotRegisteredMemberException();
         }
-    }
-
-    private Member toMember(String email, SignUpRequest signUpRequest) {
-        List<Long> regionsId = signUpRequest.getRegionsId();
-        Region region1 = regionService.getById(regionsId.get(REGIONS_FIRST_INDEX));
-        Member member = new Member(
-                email,
-                signUpRequest.getNickname(),
-                signUpRequest.getProfileImg(),
-                region1,
-                Role.MEMBER
-        );
-        if (regionsId.size() > 1) {
-            Region region2 = regionService.getById(regionsId.get(REGIONS_SECOND_INDEX));
-            member.addRegion(region2);
-        }
-        return member;
     }
 }

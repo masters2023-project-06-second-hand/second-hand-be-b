@@ -1,10 +1,12 @@
-package com.codesquad.secondhand.application.service.in;
+package com.codesquad.secondhand.application.service.in.region;
 
-import com.codesquad.secondhand.application.port.in.RegionUseCase;
-import com.codesquad.secondhand.application.service.in.exception.RegionNotFoundException;
+import static com.codesquad.secondhand.application.service.in.region.RegionMapper.toRegionsInfo;
+
 import com.codesquad.secondhand.adapter.in.web.response.RegionInfo;
 import com.codesquad.secondhand.adapter.in.web.response.RegionInfos;
+import com.codesquad.secondhand.application.port.in.RegionUseCase;
 import com.codesquad.secondhand.application.port.out.RegionRepository;
+import com.codesquad.secondhand.application.service.in.exception.RegionNotFoundException;
 import com.codesquad.secondhand.domain.region.Region;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -32,9 +34,7 @@ public class RegionService implements RegionUseCase {
     }
 
     private RegionInfos toRegionInfos(Slice<Region> regions) {
-        List<RegionInfo> regionInfos = regions
-                .map(region -> new RegionInfo(region.getId(), region.getName()))
-                .getContent();
+        List<RegionInfo> regionInfos = toRegionsInfo(regions.getContent());
         return new RegionInfos(regions.hasNext(), regions.getNumber(), regionInfos);
     }
 }

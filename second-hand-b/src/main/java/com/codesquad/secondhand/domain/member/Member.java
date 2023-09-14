@@ -1,5 +1,6 @@
 package com.codesquad.secondhand.domain.member;
 
+import com.codesquad.secondhand.application.service.in.exception.NotExistsMemberRegionException;
 import com.codesquad.secondhand.domain.product.Product;
 import com.codesquad.secondhand.domain.region.Region;
 import java.io.Serializable;
@@ -46,12 +47,10 @@ public class Member implements Serializable {
     @Embedded
     private Likes likes = new Likes();
 
-    public Member(String email, String nickname, String profileImage, Region region, Role role) {
+    public Member(String email, String nickname, String profileImage, Role role) {
         this.email = email;
         this.nickname = nickname;
         this.profileImage = profileImage;
-        this.myRegions.addRegion(region);
-        this.selectedRegion = region;
         this.role = role;
     }
 
@@ -92,6 +91,9 @@ public class Member implements Serializable {
     }
 
     public void selectRegion(Region region) {
+        if (!myRegions.contains(region)) {
+            throw new NotExistsMemberRegionException();
+        }
         this.selectedRegion = region;
     }
 
@@ -113,9 +115,5 @@ public class Member implements Serializable {
 
     public boolean isSameId(long memberId) {
         return id.equals(memberId);
-    }
-
-    public boolean containsRegion(Region region) {
-        return myRegions.contains(region);
     }
 }
