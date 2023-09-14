@@ -1,6 +1,6 @@
 package com.codesquad.secondhand.domain.product;
 
-import com.codesquad.secondhand.application.port.in.response.ImageInfo;
+import com.codesquad.secondhand.adapter.in.web.response.ImageInfo;
 import com.codesquad.secondhand.domain.image.Image;
 import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.region.Region;

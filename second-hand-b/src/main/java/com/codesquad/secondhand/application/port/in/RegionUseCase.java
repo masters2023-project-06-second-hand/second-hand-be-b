@@ -1,6 +1,6 @@
 package com.codesquad.secondhand.application.port.in;
 
-import com.codesquad.secondhand.application.port.in.response.RegionInfos;
+import com.codesquad.secondhand.adapter.in.web.response.RegionInfos;
 import org.springframework.data.domain.Pageable;
 
 public interface RegionUseCase {

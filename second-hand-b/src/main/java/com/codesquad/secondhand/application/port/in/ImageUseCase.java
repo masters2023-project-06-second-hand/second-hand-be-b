@@ -1,7 +1,7 @@
 package com.codesquad.secondhand.application.port.in;
 
-import com.codesquad.secondhand.application.port.in.request.DeleteImageRequest;
-import com.codesquad.secondhand.application.port.in.response.ImageInfo;
+import com.codesquad.secondhand.adapter.in.web.request.DeleteImageRequest;
+import com.codesquad.secondhand.adapter.in.web.response.ImageInfo;
 
 public interface ImageUseCase {
 

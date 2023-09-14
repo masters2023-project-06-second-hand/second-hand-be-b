@@ -1,10 +1,10 @@
 package com.codesquad.secondhand.application.service.in;
 
+import com.codesquad.secondhand.adapter.in.web.response.CategoryDetail;
+import com.codesquad.secondhand.adapter.in.web.response.CategorySimpleDetail;
 import com.codesquad.secondhand.application.port.in.CategoryUseCase;
-import com.codesquad.secondhand.application.port.in.exception.CategoryNotFoundException;
-import com.codesquad.secondhand.application.port.in.response.CategoryDetail;
-import com.codesquad.secondhand.application.port.in.response.CategorySimpleDetail;
 import com.codesquad.secondhand.application.port.out.CategoryRepository;
+import com.codesquad.secondhand.application.service.in.exception.CategoryNotFoundException;
 import com.codesquad.secondhand.domain.product.Category;
 import java.util.List;
 import java.util.stream.Collectors;

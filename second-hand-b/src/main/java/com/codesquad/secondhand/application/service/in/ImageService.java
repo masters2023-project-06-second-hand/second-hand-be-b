@@ -1,10 +1,10 @@
 package com.codesquad.secondhand.application.service.in;
 
+import com.codesquad.secondhand.adapter.in.web.request.DeleteImageRequest;
+import com.codesquad.secondhand.adapter.in.web.response.ImageInfo;
 import com.codesquad.secondhand.application.port.in.ImageUseCase;
-import com.codesquad.secondhand.application.port.in.exception.ImageNotFoundException;
-import com.codesquad.secondhand.application.port.in.request.DeleteImageRequest;
-import com.codesquad.secondhand.application.port.in.response.ImageInfo;
 import com.codesquad.secondhand.application.port.out.ImageRepository;
+import com.codesquad.secondhand.application.service.in.exception.ImageNotFoundException;
 import com.codesquad.secondhand.domain.image.Image;
 import java.util.List;
 import javax.transaction.Transactional;

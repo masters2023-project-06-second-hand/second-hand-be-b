@@ -1,10 +1,10 @@
 package com.codesquad.secondhand.adapter.in.web;
 
+import com.codesquad.secondhand.adapter.in.web.request.ProductCreateRequest;
+import com.codesquad.secondhand.adapter.in.web.request.ProductModifyRequest;
+import com.codesquad.secondhand.adapter.in.web.response.ProductDetail;
+import com.codesquad.secondhand.adapter.in.web.response.ProductInfo;
 import com.codesquad.secondhand.application.port.in.ProductUseCase;
-import com.codesquad.secondhand.application.port.in.request.ProductCreateRequest;
-import com.codesquad.secondhand.application.port.in.request.ProductModifyRequest;
-import com.codesquad.secondhand.application.port.in.response.ProductDetail;
-import com.codesquad.secondhand.application.port.in.response.ProductInfo;
 import com.codesquad.secondhand.domain.member.Member;
 import java.util.List;
 import java.util.Map;
