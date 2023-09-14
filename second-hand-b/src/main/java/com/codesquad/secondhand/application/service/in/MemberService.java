@@ -1,5 +1,6 @@
 package com.codesquad.secondhand.application.service.in;
 
+import com.codesquad.secondhand.adapter.in.web.request.SignUpRequest;
 import com.codesquad.secondhand.adapter.in.web.response.CategorySimpleDetail;
 import com.codesquad.secondhand.adapter.in.web.response.MemberInfo;
 import com.codesquad.secondhand.adapter.in.web.response.ProductInfo;
@@ -8,9 +9,12 @@ import com.codesquad.secondhand.application.port.out.MemberRepository;
 import com.codesquad.secondhand.application.service.in.exception.MemberNotFoundException;
 import com.codesquad.secondhand.application.service.in.exception.PermissionDeniedException;
 import com.codesquad.secondhand.application.service.in.prodcut.ProductService;
+import com.codesquad.secondhand.application.service.in.region.RegionService;
 import com.codesquad.secondhand.domain.member.Member;
+import com.codesquad.secondhand.domain.member.Role;
 import com.codesquad.secondhand.domain.product.Product;
 import com.codesquad.secondhand.domain.product.Status;
+import com.codesquad.secondhand.domain.region.Region;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +24,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class MemberService implements MemberUseCase {
 
+    private static final int REGIONS_FIRST_INDEX = 0;
+    private static final int REGIONS_SECOND_INDEX = 1;
+    private static final int SIZE_2 = 2;
+
     private final MemberRepository memberRepository;
+    private final RegionService regionService;
     private final ProductService productService;
     private final CategoryService categoryService;
 
@@ -100,5 +109,27 @@ public class MemberService implements MemberUseCase {
     public Member getByEmail(String email) {
         return memberRepository.findByEmail(email)
                 .orElseThrow(MemberNotFoundException::new);
+    }
+
+    public Member signUpMember(String email, SignUpRequest signUpRequest) {
+        Member member = new Member(
+                email,
+                signUpRequest.getNickname(),
+                signUpRequest.getProfileImg(),
+                Role.MEMBER
+        );
+        addRegions(signUpRequest.getRegionsId(), member);
+        return save(member);
+    }
+
+    private void addRegions(List<Long> regionsId, Member member) {
+        Region firstRegion = regionService.getById(regionsId.get(REGIONS_FIRST_INDEX));
+        member.addRegion(firstRegion);
+        member.selectRegion(firstRegion);
+
+        if (regionsId.size() == SIZE_2) {
+            Region secondRegion = regionService.getById(regionsId.get(REGIONS_SECOND_INDEX));
+            member.addRegion(secondRegion);
+        }
     }
 }

@@ -4,6 +4,7 @@ import static org.mockito.BDDMockito.given;
 
 import com.codesquad.secondhand.application.service.in.exception.ExistsMemberRegionException;
 import com.codesquad.secondhand.application.service.in.exception.NotExistsMemberRegionException;
+import com.codesquad.secondhand.application.service.in.region.RegionService;
 import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.region.Region;
 import org.assertj.core.api.Assertions;
@@ -31,7 +32,8 @@ class MemberRegionServiceTest {
         Long memberId = 1L;
         Long regionId = 1L;
         Region region = new Region("역삼1동");
-        Member member = new Member("test@test", "name", "img", region, null);
+        Member member = new Member("test@test", "name", "img", null);
+        member.addRegion(region);
         given(memberService.getById(memberId)).willReturn(member);
         given(regionService.getById(regionId)).willReturn(region);
 
@@ -46,7 +48,8 @@ class MemberRegionServiceTest {
         // given
         Long memberId = 1L;
         Region region = new Region("역삼1동");
-        Member member = new Member("test@test", "name", "img", region, null);
+        Member member = new Member("test@test", "name", "img", null);
+        member.addRegion(region);
         given(memberService.getById(memberId)).willReturn(member);
 
         Long removeRegionId = 2L;
@@ -63,8 +66,9 @@ class MemberRegionServiceTest {
     void selectRegionForMember() {
         // given
         Long memberId = 1L;
+        Member member = new Member("test@test", "name", "img", null);
         Region region = new Region("역삼1동");
-        Member member = new Member("test@test", "name", "img", region, null);
+        member.addRegion(region);
         given(memberService.getById(memberId)).willReturn(member);
 
         Long selectRegionId = 2L;

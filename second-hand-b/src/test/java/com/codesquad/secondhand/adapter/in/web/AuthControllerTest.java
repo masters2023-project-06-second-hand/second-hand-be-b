@@ -1,12 +1,10 @@
 package com.codesquad.secondhand.adapter.in.web;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.codesquad.secondhand.adapter.in.web.request.RefreshTokenRequest;
 import com.codesquad.secondhand.adapter.in.web.request.SignUpRequest;
 import com.codesquad.secondhand.application.port.out.MemberRepository;
 import com.codesquad.secondhand.domain.member.Member;
@@ -16,7 +14,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityManager;
@@ -56,7 +53,7 @@ class AuthControllerTest {
 
     private Member getTestMember() {
         return memberRepository.save(
-                new Member(TEST_EMAIL, TEST_NICKNAME, TEST_PROFILE_IMAGE, null, Role.USER));
+                new Member(TEST_EMAIL, TEST_NICKNAME, TEST_PROFILE_IMAGE, Role.USER));
     }
 
     @DisplayName("signUpToken와 함께 회원가입을 요청하면 Tokens를 보낸다")

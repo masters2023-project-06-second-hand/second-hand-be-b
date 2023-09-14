@@ -3,8 +3,9 @@ package com.codesquad.secondhand.application.service.in;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 
-import com.codesquad.secondhand.application.service.in.exception.RegionNotFoundException;
 import com.codesquad.secondhand.application.port.out.RegionRepository;
+import com.codesquad.secondhand.application.service.in.exception.RegionNotFoundException;
+import com.codesquad.secondhand.application.service.in.region.RegionService;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

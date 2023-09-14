@@ -1,5 +1,7 @@
 package com.codesquad.secondhand.domain.member;
 
+import com.codesquad.secondhand.application.service.in.exception.ExistsMemberRegionException;
+import com.codesquad.secondhand.application.service.in.exception.NotExistsMemberRegionException;
 import com.codesquad.secondhand.domain.region.Region;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -28,10 +30,16 @@ public class MemberRegions implements Serializable {
     }
 
     public void addRegion(Region region) {
+        if (regions.contains(region)) {
+            throw new ExistsMemberRegionException();
+        }
         regions.add(region);
     }
 
     public void removeRegion(Region region) {
+        if (!regions.contains(region)) {
+            throw new NotExistsMemberRegionException();
+        }
         regions.remove(region);
     }
 
