@@ -18,7 +18,7 @@ class RegionAcceptanceTest extends AcceptanceTest {
         int size = 10;
 
         //when
-        var response = 지역목록을_조회한다(page, size, ayaanAccessToken);
+        var response = 지역목록을_조회한다(page, size, ayaanAccessToken, spec);
 
         //then
         지역목록_조회를_검증한다(page, size, response);
@@ -33,7 +33,7 @@ class RegionAcceptanceTest extends AcceptanceTest {
         String word = "역삼";
 
         //when
-        var response = 지역목록을_조회한다(page, size, word, ayaanAccessToken);
+        var response = 지역목록을_조회한다(page, size, word, ayaanAccessToken, spec);
 
         //then
         지역명_지역목록_조회를_검증한다(page, response);

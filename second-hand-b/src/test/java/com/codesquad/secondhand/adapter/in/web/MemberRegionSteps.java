@@ -3,8 +3,10 @@ package com.codesquad.secondhand.adapter.in.web;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.restassured.RestAssured;
+import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import java.util.Map;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.http.HttpStatus;
@@ -13,9 +15,15 @@ import org.springframework.http.MediaType;
 public class MemberRegionSteps {
 
     public static ExtractableResponse<Response> 멤버의_지역을_추가한다(Long memberId, Long regionId, String accessToken) {
+        return 멤버의_지역을_추가한다(memberId, regionId, accessToken, new RequestSpecBuilder().build());
+    }
+
+    public static ExtractableResponse<Response> 멤버의_지역을_추가한다(Long memberId, Long regionId, String accessToken,
+            RequestSpecification specification) {
         Map<String, Object> body = Map.of("id", regionId);
 
         return RestAssured.given().log().all()
+                .spec(specification)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .auth().oauth2(accessToken)
                 .body(body)
@@ -23,10 +31,12 @@ public class MemberRegionSteps {
                 .then().log().all().extract();
     }
 
-    public static ExtractableResponse<Response> 멤버의_지역을_삭제한다(Long memberId, Long regionId, String accessToken) {
+    public static ExtractableResponse<Response> 멤버의_지역을_삭제한다(Long memberId, Long regionId, String accessToken,
+            RequestSpecification specification) {
         Map<String, Object> body = Map.of("id", regionId);
 
         return RestAssured.given().log().all()
+                .spec(specification)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .auth().oauth2(accessToken)
                 .body(body)
@@ -35,7 +45,13 @@ public class MemberRegionSteps {
     }
 
     public static ExtractableResponse<Response> 멤버의_지역목록을_조회한다(Long memberId, String accessToken) {
+        return 멤버의_지역목록을_조회한다(memberId, accessToken, new RequestSpecBuilder().build());
+    }
+
+    public static ExtractableResponse<Response> 멤버의_지역목록을_조회한다(Long memberId, String accessToken,
+            RequestSpecification specification) {
         return RestAssured.given().log().all()
+                .spec(specification)
                 .auth().oauth2(accessToken)
                 .when().get("/api/members/{memberId}/regions", memberId)
                 .then().log().all().extract();
@@ -50,9 +66,11 @@ public class MemberRegionSteps {
         );
     }
 
-    public static ExtractableResponse<Response> 멤버의_지역을_선택한다(Long memberId, Long regionId, String accessToken) {
+    public static ExtractableResponse<Response> 멤버의_지역을_선택한다(Long memberId, Long regionId, String accessToken,
+            RequestSpecification specification) {
         Map<String, Object> body = Map.of("id", regionId);
         return RestAssured.given().log().all()
+                .spec(specification)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .auth().oauth2(accessToken)
                 .body(body)

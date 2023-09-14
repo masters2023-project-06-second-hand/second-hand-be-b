@@ -38,7 +38,7 @@ class MemberAcceptanceTest extends AcceptanceTest {
         var id = 상품을_등록한다(ayaanAccessToken, 1).jsonPath().getString("id");
 
         // when
-        var response = 관심상품에_담는다(id, albertAccessToken);
+        var response = 관심상품에_담는다(id, albertAccessToken, spec);
 
         // then
         관심상품은_담은_응답_검증(response);
@@ -52,7 +52,7 @@ class MemberAcceptanceTest extends AcceptanceTest {
         관심상품에_담는다(id, albertAccessToken);
 
         // when
-        var response = 관심상품에_제거한다(id, albertAccessToken);
+        var response = 관심상품에_제거한다(id, albertAccessToken, spec);
 
         // then
         관심상품은_담은_응답_검증(response);
@@ -68,7 +68,7 @@ class MemberAcceptanceTest extends AcceptanceTest {
         관심상품에_담는다(상품_아이디_2, albertAccessToken);
 
         // when
-        var response = 나의_관심상품_목록_조회한다(albertAccessToken);
+        var response = 나의_관심상품_목록_조회한다(albertAccessToken, spec);
 
         // then
         나의_관심상품_목록_조회_검증한다(response);
@@ -84,7 +84,7 @@ class MemberAcceptanceTest extends AcceptanceTest {
         관심상품에_담는다(상품_아이디_2, albertAccessToken);
 
         // when
-        var response = 나의_관심상품_목록_조회한다(albertAccessToken, 1);
+        var response = 나의_관심상품_목록_조회한다(albertAccessToken, 1, spec);
 
         // then
         나의_카테고리별_관심상품_목록_조회_결과_검증한다(response);
@@ -100,7 +100,7 @@ class MemberAcceptanceTest extends AcceptanceTest {
         관심상품에_담는다(상품_아이디_2, albertAccessToken);
 
         // when
-        var response = 나의_관심상품의_카테고리_목록_조회한다(albertAccessToken);
+        var response = 나의_관심상품의_카테고리_목록_조회한다(albertAccessToken, spec);
 
         // then
         나의_관심상품의_카테고리_목록_조회_결과_검증한다(response);
@@ -114,7 +114,7 @@ class MemberAcceptanceTest extends AcceptanceTest {
         상품을_등록한다(ayaanAccessToken, 2);
 
         // when
-        var response = 나의_판매상품_목록_조회한다(ayaanAccessToken);
+        var response = 나의_판매상품_목록_조회한다(ayaanAccessToken, spec);
 
         // then
         나의_판매상품의_목록_조회_결과_검증한다(response);
@@ -129,7 +129,7 @@ class MemberAcceptanceTest extends AcceptanceTest {
         상품상태를_수정한다(id, ayaanAccessToken);
 
         // when
-        var response = 나의_판매상품_목록을_상태별_조회한다(ayaanAccessToken, "판매중");
+        var response = 나의_판매상품_목록을_상태별_조회한다(ayaanAccessToken, "판매중", spec);
 
         // then
         나의_상태별_판매상품의_목록_조회_결과_검증한다(response);
@@ -142,7 +142,7 @@ class MemberAcceptanceTest extends AcceptanceTest {
         Long memberId = 1L;
 
         // when
-        var response = 멤버의_정보를_요청한다(memberId, ayaanAccessToken);
+        var response = 멤버의_정보를_요청한다(memberId, ayaanAccessToken, spec);
 
         // then
         멤버정보_요청을_검증한다(response);

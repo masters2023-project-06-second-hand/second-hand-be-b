@@ -18,7 +18,7 @@ class AuthAcceptanceTest extends AcceptanceTest {
         String signUpToken = JwtTokenProvider.createSignUpToken(AYAAN_EMAIL);
 
         // when
-        var 회원_토큰 = 회원_가입_한다(signUpToken);
+        var 회원_토큰 = 회원_가입_한다(signUpToken, spec);
 
         // then
         토큰_검증(회원_토큰);

@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
 class MemberRegionAcceptanceTest extends AcceptanceTest {
-    
+
     @Test
     @DisplayName("멤버에 대한 지역 추가 요청을 받으면 요청을 수행하고 201 상태코드로 응답한다.")
     void addRegionToMember() {
@@ -23,7 +23,7 @@ class MemberRegionAcceptanceTest extends AcceptanceTest {
         Long regionId = 1L;
 
         //when
-        var response = 멤버의_지역을_추가한다(memberId, regionId, ayaanAccessToken);
+        var response = 멤버의_지역을_추가한다(memberId, regionId, ayaanAccessToken, spec);
 
         //then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
@@ -38,7 +38,7 @@ class MemberRegionAcceptanceTest extends AcceptanceTest {
         멤버의_지역을_추가한다(memberId, regionId, ayaanAccessToken);
 
         //when
-        var response = 멤버의_지역을_삭제한다(memberId, regionId, ayaanAccessToken);
+        var response = 멤버의_지역을_삭제한다(memberId, regionId, ayaanAccessToken, spec);
 
         //then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
@@ -53,7 +53,7 @@ class MemberRegionAcceptanceTest extends AcceptanceTest {
         멤버의_지역을_추가한다(memberId, regionId1, ayaanAccessToken);
 
         //when
-        var response = 멤버의_지역목록을_조회한다(memberId, ayaanAccessToken);
+        var response = 멤버의_지역목록을_조회한다(memberId, ayaanAccessToken, spec);
 
         //then
         멤버의_지역목록_조회를_검증한다(response);
@@ -68,7 +68,7 @@ class MemberRegionAcceptanceTest extends AcceptanceTest {
         멤버의_지역을_추가한다(memberId, regionId, ayaanAccessToken);
 
         //when
-        var response = 멤버의_지역을_선택한다(memberId, regionId, ayaanAccessToken);
+        var response = 멤버의_지역을_선택한다(memberId, regionId, ayaanAccessToken, spec);
 
         //then
         멤버의_지역선택을_검증한다(memberId, ayaanAccessToken, response);

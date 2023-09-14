@@ -17,7 +17,7 @@ class CategoryAcceptanceTest extends AcceptanceTest {
         boolean includeImages = false;
 
         //when
-        var response = 카테고리_목록을_조회한다(includeImages, ayaanAccessToken);
+        var response = 카테고리_목록을_조회한다(includeImages, ayaanAccessToken, spec);
 
         //then
         카테고리_목록조회를_검증한다(response);
@@ -30,7 +30,7 @@ class CategoryAcceptanceTest extends AcceptanceTest {
         boolean includeImages = true;
 
         //when
-        var response = 카테고리_목록을_조회한다(includeImages, ayaanAccessToken);
+        var response = 카테고리_목록을_조회한다(includeImages, ayaanAccessToken, spec);
 
         //then
         이미지포함_카테고리_목록조회를_검증한다(response);
