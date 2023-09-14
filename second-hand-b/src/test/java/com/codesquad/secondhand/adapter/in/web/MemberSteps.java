@@ -103,4 +103,16 @@ public class MemberSteps {
                 .extract();
     }
 
+    public static ExtractableResponse<Response> 멤버의_정보를_요청한다(Long memberId, String accessToken) {
+        return RestAssured.given().log().all()
+                .auth().oauth2(accessToken)
+                .when().get("/api/members/{memberId}", memberId)
+                .then().log().all().extract();
+    }
+
+    public static void 멤버정보_요청을_검증한다(ExtractableResponse<Response> response) {
+        assertThat(response.jsonPath().getLong("id")).isEqualTo(1);
+        assertThat(response.jsonPath().getString("nickname")).isEqualTo("이안");
+        assertThat(response.jsonPath().getString("profileImg")).isEqualTo("url");
+    }
 }

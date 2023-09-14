@@ -1,7 +1,7 @@
 package com.codesquad.secondhand.adapter.in.web;
 
-import com.codesquad.secondhand.application.port.in.RegionUseCase;
 import com.codesquad.secondhand.adapter.in.web.response.RegionInfos;
+import com.codesquad.secondhand.application.port.in.RegionUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -22,7 +22,7 @@ public class RegionController {
     @GetMapping
     public ResponseEntity<RegionInfos> searchRegionsByName(
             @PageableDefault(sort = "id", direction = Direction.ASC) Pageable pageable,
-            @RequestParam String word) {
+            @RequestParam(defaultValue = "") String word) {
         RegionInfos regionInfos = regionUseCase.searchRegionsByName(word, pageable);
         return ResponseEntity.ok()
                 .body(regionInfos);

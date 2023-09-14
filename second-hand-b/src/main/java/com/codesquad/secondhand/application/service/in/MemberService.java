@@ -1,11 +1,12 @@
 package com.codesquad.secondhand.application.service.in;
 
+import com.codesquad.secondhand.adapter.in.web.response.CategorySimpleDetail;
+import com.codesquad.secondhand.adapter.in.web.response.MemberInfo;
+import com.codesquad.secondhand.adapter.in.web.response.ProductInfo;
 import com.codesquad.secondhand.application.port.in.MemberUseCase;
+import com.codesquad.secondhand.application.port.out.MemberRepository;
 import com.codesquad.secondhand.application.service.in.exception.MemberNotFoundException;
 import com.codesquad.secondhand.application.service.in.exception.PermissionDeniedException;
-import com.codesquad.secondhand.adapter.in.web.response.CategorySimpleDetail;
-import com.codesquad.secondhand.adapter.in.web.response.ProductInfo;
-import com.codesquad.secondhand.application.port.out.MemberRepository;
 import com.codesquad.secondhand.application.service.in.prodcut.ProductService;
 import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.product.Product;
@@ -33,9 +34,10 @@ public class MemberService implements MemberUseCase {
         }
     }
 
-    public Member getById(Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(MemberNotFoundException::new);
+    @Override
+    public MemberInfo getProfile(Member member, Long memberId) {
+        validateMemberPermission(member, memberId);
+        return new MemberInfo(member.getId(), member.getNickname(), member.getProfileImage());
     }
 
     @Transactional
@@ -88,6 +90,11 @@ public class MemberService implements MemberUseCase {
             return productService.getSoldOutByWriterId(memberId);
         }
         return productService.getSalesByWriterId(memberId);
+    }
+
+    public Member getById(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(MemberNotFoundException::new);
     }
 
     public Member getByEmail(String email) {

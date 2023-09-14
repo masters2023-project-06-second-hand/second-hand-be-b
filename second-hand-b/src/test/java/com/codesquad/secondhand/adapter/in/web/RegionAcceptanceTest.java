@@ -1,39 +1,41 @@
 package com.codesquad.secondhand.adapter.in.web;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.codesquad.secondhand.adapter.in.web.RegionSteps.지역명_지역목록_조회를_검증한다;
+import static com.codesquad.secondhand.adapter.in.web.RegionSteps.지역목록_조회를_검증한다;
+import static com.codesquad.secondhand.adapter.in.web.RegionSteps.지역목록을_조회한다;
 
 import com.codesquad.secondhand.utils.AcceptanceTest;
-import io.restassured.RestAssured;
-import io.restassured.response.ExtractableResponse;
-import io.restassured.response.Response;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class RegionAcceptanceTest extends AcceptanceTest {
 
     @Test
-    @DisplayName("지역 조회 요청을 받으면 page에 해당하는 지역 목록을 size 만큼 조회하여 반환한다.")
+    @DisplayName("page에 해당하는 지역 목록을 size 만큼 조회하여 반환한다.")
+    void searchRegions() {
+        //given
+        int page = 0;
+        int size = 10;
+
+        //when
+        var response = 지역목록을_조회한다(page, size, ayaanAccessToken);
+
+        //then
+        지역목록_조회를_검증한다(page, size, response);
+    }
+
+    @Test
+    @DisplayName("지역명에 해당하는 지역목록을 조회하여 반환한다.")
     void searchRegionsByName() {
         //given
         int page = 0;
         int size = 10;
-        String word = "";
+        String word = "역삼";
 
         //when
-        ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .queryParam("page", page)
-                .queryParam("size", size)
-                .queryParam("word", word)
-                .auth().oauth2(ayaanAccessToken)
-                .when().get("/api/regions")
-                .then().log().all().extract();
+        var response = 지역목록을_조회한다(page, size, word, ayaanAccessToken);
 
         //then
-        Assertions.assertAll(
-                () -> assertThat(response.jsonPath().getBoolean("hasNext")).isTrue(),
-                () -> assertThat(response.jsonPath().getInt("page")).isEqualTo(page),
-                () -> assertThat(response.jsonPath().getList("regions")).hasSize(size)
-        );
+        지역명_지역목록_조회를_검증한다(page, response);
     }
 }

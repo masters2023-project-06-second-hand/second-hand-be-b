@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class AuthenticationResponseHandlerImpl implements AuthenticationResponseHandler {
 
-    public static final String SIGN_UP_TOKEN = "signUpToken";
+    public static final String SIGN_UP_TOKEN = "signupToken";
     private final AuthUseCase authUseCase;
     private final ObjectMapper objectMapper;
 
@@ -38,6 +38,7 @@ public class AuthenticationResponseHandlerImpl implements AuthenticationResponse
         String signUpToken = JwtTokenProvider.createSignUpToken(email);
         ErrorResponse errorResponse = new ErrorResponse(HttpStatus.UNAUTHORIZED.toString(),
                 new Errors(Map.of(SIGN_UP_TOKEN, signUpToken)));
+        response.setStatus(HttpStatus.NO_CONTENT.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         PrintWriter out = response.getWriter();
         String signUpToken1 = objectMapper.writeValueAsString(errorResponse);
