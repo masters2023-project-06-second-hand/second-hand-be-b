@@ -24,12 +24,17 @@ jobs:
           distribution: 'corretto'
           java-version: '11'
 
-      # Gradle을 이용해 빌드를 진행합니다.
-      - name: Gradle 빌드
+      - name: 비밀 키 적용
+        run: |
+          echo "${{ secrets.CLOUD }}" | base64 --decode > second-hand-b/src/main/resources/application-cloud.yml
+          echo "${{ secrets.TESTDB }}" | base64 --decode > second-hand-b/src/main/resources/application-localdb.yml
+          echo "${{ secrets.OAUTH2 }}" | base64 --decode > second-hand-b/src/main/resources/application-oauth2.yml
+
+      - name: 프로젝트 빌드
         run: |
           cd second-hand-b
           chmod +x gradlew
-          ./gradlew build -x test
+          ./gradlew build
 
       # QEMU 에뮬레이터를 설정합니다.
       - name: QEMU 설정
