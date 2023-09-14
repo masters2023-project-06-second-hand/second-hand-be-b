@@ -16,6 +16,7 @@ import static com.codesquad.secondhand.adapter.in.web.MemberSteps.멤버의_정�
 import static com.codesquad.secondhand.adapter.in.web.MemberSteps.멤버정보_요청을_검증한다;
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품상태를_수정한다;
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품을_등록한다;
+import static com.codesquad.secondhand.utils.RestDocsUtils.출력_필드_추가;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -34,6 +35,8 @@ class MemberAcceptanceTest extends AcceptanceTest {
     @DisplayName("특정 상품을 내 관심상품에 추가")
     @Test
     void shouldAddProductToInterestedProductsList() {
+        출력_필드_추가("member_addLikeProduct", spec);
+
         // given
         var id = 상품을_등록한다(ayaanAccessToken, 1).jsonPath().getString("id");
 
@@ -47,6 +50,8 @@ class MemberAcceptanceTest extends AcceptanceTest {
     @DisplayName("내 관심상품에 담은 후, 해당 관심상품 삭제")
     @Test
     void shouldRemoveProductToInterestedProductsList() {
+        출력_필드_추가("member_removeLikeProduct", spec);
+
         // given
         var id = 상품을_등록한다(ayaanAccessToken, 1).jsonPath().getString("id");
         관심상품에_담는다(id, albertAccessToken);
@@ -61,6 +66,8 @@ class MemberAcceptanceTest extends AcceptanceTest {
     @DisplayName("관심상품 목록 조회 요청 시, 목록 반환")
     @Test
     void shouldReturnListOfInterestedProductsWhenRequested() {
+        출력_필드_추가("member_getLikeProducts", spec);
+
         // given
         var 상품_아이디_1 = 상품을_등록한다(ayaanAccessToken, 1).jsonPath().getString("id");
         var 상품_아이디_2 = 상품을_등록한다(ayaanAccessToken, 2).jsonPath().getString("id");
@@ -77,6 +84,8 @@ class MemberAcceptanceTest extends AcceptanceTest {
     @DisplayName("관심상품의 카테고리별 목록 조회 요청 시, 카테고리별 목록 반환")
     @Test
     void shouldReturnProductsGroupedByCategoryWhenFetchingFavorites() {
+        출력_필드_추가("member_getLikeProductsByCategory", spec);
+
         // given
         var 상품_아이디_1 = 상품을_등록한다(ayaanAccessToken, 1).jsonPath().getString("id");
         var 상품_아이디_2 = 상품을_등록한다(ayaanAccessToken, 2).jsonPath().getString("id");
@@ -93,6 +102,8 @@ class MemberAcceptanceTest extends AcceptanceTest {
     @DisplayName("나의 관심상품의 카테고리 목록 조회 요청 시, 카테고리 목록 반환")
     @Test
     void shouldReturnCategoriesOfInterestedProductsWhenRequested() {
+        출력_필드_추가("member_getLikeCategory", spec);
+
         // given
         var 상품_아이디_1 = 상품을_등록한다(ayaanAccessToken, 1).jsonPath().getString("id");
         var 상품_아이디_2 = 상품을_등록한다(ayaanAccessToken, 2).jsonPath().getString("id");
@@ -109,6 +120,8 @@ class MemberAcceptanceTest extends AcceptanceTest {
     @DisplayName("판매상품 목록 조회 요청 시, 내 상품 목록 반환")
     @Test
     void shouldReturnMySellingProductsWhenRequested() {
+        출력_필드_추가("member_getSalesProducts", spec);
+
         // given
         상품을_등록한다(ayaanAccessToken, 1);
         상품을_등록한다(ayaanAccessToken, 2);
@@ -123,6 +136,8 @@ class MemberAcceptanceTest extends AcceptanceTest {
     @DisplayName("상태별 판매상품 목록 조회 시, 내 상품 목록 반환")
     @Test
     void shouldReturnMyProductsByStatusWhenRequested() {
+        출력_필드_추가("member_getSalesProductsByStatus", spec);
+
         // given
         상품을_등록한다(ayaanAccessToken, 1);
         long id = 상품을_등록한다(ayaanAccessToken, 2).jsonPath().getLong("id");
@@ -138,6 +153,8 @@ class MemberAcceptanceTest extends AcceptanceTest {
     @Test
     @DisplayName("멤버의 정보 요청 시, 멤버의 정보 반환")
     void getProfile() {
+        출력_필드_추가("member_getProfile", spec);
+
         // given
         Long memberId = 1L;
 

@@ -3,6 +3,7 @@ package com.codesquad.secondhand.adapter.in.web;
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품용_이미지를_업로드한다;
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.이미지를_삭제한다;
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.회원용_이미지를_업로드한다;
+import static com.codesquad.secondhand.utils.RestDocsUtils.출력_필드_추가;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -25,7 +26,9 @@ class ImageAcceptanceTest extends AcceptanceTest {
 
     @Test
     @DisplayName("이미지 업로드 요청을 받으면 이미지 아이디와 S3에 업로드한 이미지 URL을 반환한다.")
-    void uploadWithServer() throws IOException {
+    void uploadForProduct() throws IOException {
+        출력_필드_추가("image_uploadImageForProduct", spec);
+
         //when
         String filePath = "/image/test.jpg";
         File file = new ClassPathResource(filePath).getFile();
@@ -38,7 +41,9 @@ class ImageAcceptanceTest extends AcceptanceTest {
 
     @Test
     @DisplayName("이미지 업로드 요청을 받으면 S3에 업로드한 이미지 URL을 반환한다.")
-    void uploadOnlyCloud() throws IOException {
+    void uploadForMember() throws IOException {
+        출력_필드_추가("image_uploadImageForMember", spec);
+
         //when
         String filePath = "/image/test.jpg";
         File file = new ClassPathResource(filePath).getFile();
@@ -52,6 +57,8 @@ class ImageAcceptanceTest extends AcceptanceTest {
     @Test
     @DisplayName("이미지 삭제 요청을 받으면 이미지를 삭제하고 204 상태코드로 응답한다.")
     void delete() throws IOException {
+        출력_필드_추가("image_delete", spec);
+
         //given
         String filePath = "/image/test.jpg";
         File file = new ClassPathResource(filePath).getFile();

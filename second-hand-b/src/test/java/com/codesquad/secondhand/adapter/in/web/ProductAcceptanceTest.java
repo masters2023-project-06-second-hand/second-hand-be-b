@@ -81,7 +81,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
         상품수정을_검증한다(id, ayaanAccessToken, response);
     }
 
-    @DisplayName("잘모된 상품 수정 요청이 오면 에러 메시지를 반환한다")
+    @DisplayName("잘못된 상품 수정 요청이 오면 에러 메시지를 반환한다")
     @Test
     void modifyWithWrongRequest() {
         출력_필드_추가("product_modifyWithWrongRequest", spec);

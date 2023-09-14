@@ -35,6 +35,4 @@ public class AuthSteps {
                 .then().log().all()
                 .extract();
     }
-
-
 }
