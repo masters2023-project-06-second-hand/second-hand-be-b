@@ -29,8 +29,8 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            ~/second-hand-b/.gradle/caches
-            ~/second-hand-b/.gradle/wrapper
+            ~/second-hand-b/gradle/caches
+            ~/second-hand-b/gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
