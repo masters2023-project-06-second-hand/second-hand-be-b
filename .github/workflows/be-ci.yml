@@ -29,9 +29,6 @@ jobs:
           MYSQL_DATABASE: secondhand
           MYSQL_USER: test
           MYSQL_PASSWORD: test
-        options: >-
-          --character-set-server=utf8mb4
-          --collation-server=utf8mb4_unicode_ci
 
     # 작업에서 실행될 순차적인 단계를 정의합니다.
     steps:

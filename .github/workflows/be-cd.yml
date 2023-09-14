@@ -22,9 +22,6 @@ jobs:
           MYSQL_DATABASE: secondhand
           MYSQL_USER: test
           MYSQL_PASSWORD: test
-        options: >-
-          --character-set-server=utf8mb4
-          --collation-server=utf8mb4_unicode_ci
 
     steps:
       # 저장소 코드를 체크아웃합니다.
