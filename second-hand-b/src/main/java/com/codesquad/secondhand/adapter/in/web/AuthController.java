@@ -4,6 +4,7 @@ import com.codesquad.secondhand.adapter.in.web.request.RefreshTokenRequest;
 import com.codesquad.secondhand.adapter.in.web.request.SignUpRequest;
 import com.codesquad.secondhand.adapter.in.web.response.Tokens;
 import com.codesquad.secondhand.application.port.in.AuthUseCase;
+import com.codesquad.secondhand.domain.member.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -36,4 +37,9 @@ public class AuthController {
         return ResponseEntity.ok(tokens);
     }
 
+    @PostMapping("/api/members/signout")
+    public ResponseEntity<Void> signOut(@AuthenticationPrincipal Member member) {
+        authUseCase.signOut(member);
+        return ResponseEntity.noContent().build();
+    }
 }

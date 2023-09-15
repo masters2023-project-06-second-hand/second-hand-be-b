@@ -40,6 +40,8 @@ public class OAuth2LoginSecurityConfig {
     private String[] anonymousPostAllowedUrls;
     @Value("${oauth2user.allowed.urls}")
     private String[] userAllowedUrls;
+    @Value("${member.allowed.urls}")
+    private String[] memberAllowedUrls;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity,
@@ -53,6 +55,8 @@ public class OAuth2LoginSecurityConfig {
                                 .permitAll()
                                 .mvcMatchers(HttpMethod.POST, userAllowedUrls)
                                 .hasAuthority(Role.USER.getKey())
+                                .mvcMatchers(HttpMethod.GET, memberAllowedUrls)
+                                .hasAnyAuthority(Role.MANAGER.getKey(), Role.MEMBER.getKey())
                                 .anyRequest()
                                 .hasAnyAuthority(Role.MANAGER.getKey(), Role.MEMBER.getKey())
                 )

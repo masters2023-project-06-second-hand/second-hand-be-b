@@ -4,6 +4,7 @@ import com.codesquad.secondhand.adapter.in.web.request.SignUpRequest;
 import com.codesquad.secondhand.adapter.in.web.response.Tokens;
 import com.codesquad.secondhand.application.port.in.AuthUseCase;
 import com.codesquad.secondhand.application.port.out.RefreshTokenRepository;
+import com.codesquad.secondhand.application.service.in.exception.InvalidRefreshTokenException;
 import com.codesquad.secondhand.application.service.in.exception.MemberNotFoundException;
 import com.codesquad.secondhand.application.service.in.exception.NotRegisteredMemberException;
 import com.codesquad.secondhand.domain.auth.RefreshToken;
@@ -11,7 +12,6 @@ import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.units.JwtTokenProvider;
 import java.util.Date;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AuthService implements AuthUseCase {
 
-    private static final int CLEANUP_ROUND_TIME = 5000;
     private final MemberService memberService;
     private final RefreshTokenRepository refreshTokenRepository;
 
@@ -37,21 +36,31 @@ public class AuthService implements AuthUseCase {
         return getTokens(email, savedMember);
     }
 
-    // TODO front end에서 local에서도 편하게 테스트 할 수 있게 refreshToken을 임시로 갱신 하지 않음
     @Override
     public Tokens getToken(String authentication) {
         Date now = new Date();
-        JwtTokenProvider.validate(authentication, now);
-        String email = JwtTokenProvider.getEmail(authentication);
+        if (!JwtTokenProvider.isValidRefreshToken(authentication, now)) {
+            throw new InvalidRefreshTokenException();
+        }
+        String email = JwtTokenProvider.getEmailFromRefreshToken(authentication);
+        RefreshToken refreshToken = getRefreshTokenByEmail(email);
+        refreshToken.validate(authentication);
         Member member = memberService.getByEmail(email);
-        var accessToken = getAccessToken(email, member.getIdStringValue(), new Date());
-        return new Tokens(accessToken, authentication, member.getId());
+        return getTokens(email, member);
     }
 
-    @Scheduled(fixedDelay = CLEANUP_ROUND_TIME)
-    public void cleanupExpiredRefreshTokens() {
-        Date now = new Date();
+    public void deleteByExpireTimeBefore(Date now) {
         refreshTokenRepository.deleteByExpireTimeBefore(now);
+    }
+
+    private RefreshToken getRefreshTokenByEmail(String email) {
+        return refreshTokenRepository.findByEmail(email)
+                .orElseThrow(InvalidRefreshTokenException::new);
+    }
+
+    @Override
+    public void signOut(Member member) {
+        refreshTokenRepository.deleteByEmail(member.getEmail());
     }
 
     private Tokens getTokens(String email, Member member) {

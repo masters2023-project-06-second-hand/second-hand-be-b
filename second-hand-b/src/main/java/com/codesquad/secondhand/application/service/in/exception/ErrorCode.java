@@ -6,9 +6,12 @@ public enum ErrorCode {
 
     // Common
     PERMISSION_DENIED(HttpStatus.UNAUTHORIZED, "C001", "이 작업을 수행하기 위한 필요한 권한이 없습니다."),
-    TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "C002", "토큰이 유효하지 않습니다. 다시 로그인해주세요."),
-    BAD_REQUEST(HttpStatus.BAD_REQUEST, "C003", "잘못 된 요청입니다."),
-    INVALID_ENTITY_STATE(HttpStatus.BAD_REQUEST,"C004","엔터티는 저장 후 유효한 ID를 가져야 하는데 null을 발견했습니다"),
+    BAD_REQUEST(HttpStatus.BAD_REQUEST, "C002", "잘못 된 요청입니다."),
+    INVALID_ENTITY_STATE(HttpStatus.BAD_REQUEST,"C003","엔터티는 저장 후 유효한 ID를 가져야 하는데 null을 발견했습니다"),
+
+    // Auth
+    TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "A001", "토큰이 유효하지 않습니다. 다시 로그인해주세요."),
+    INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "A002", "유효하지 않은 리프레시 토큰입니다. 새로운 토큰을 요청해주세요."),
 
     // Member
     MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "M001", "사용자를 찾을 수 없습니다."),

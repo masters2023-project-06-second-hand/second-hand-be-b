@@ -37,8 +37,8 @@ public class JwtSignInAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
         Date now = new Date();
-        if (JwtTokenProvider.validateToken(token, now) && JwtTokenProvider.isAccessToken(token)) {
-            String email = JwtTokenProvider.getEmail(token);
+        if (JwtTokenProvider.isValidAccessToken(token, now) && JwtTokenProvider.isAccessToken(token)) {
+            String email = JwtTokenProvider.getEmailFromAccessToken(token);
             Optional<Member> member = memberRepository.findByEmail(email);
             if (member.isPresent()) {
                 Authentication authentication = new JwtAccessToken(member.get(), member.get().getRoleAuthority());
