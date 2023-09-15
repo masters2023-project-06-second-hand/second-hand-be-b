@@ -1,5 +1,6 @@
 package com.codesquad.secondhand.domain.auth;
 
+import com.codesquad.secondhand.application.service.in.exception.InvalidRefreshTokenException;
 import com.codesquad.secondhand.domain.member.Member;
 import java.util.Date;
 import javax.persistence.Entity;
@@ -33,5 +34,15 @@ public class RefreshToken {
         this.expireTime = expireTime;
         this.member = member;
         this.email = email;
+    }
+
+    private boolean isSameTokenValue(String authentication) {
+        return tokenValue.equals(authentication);
+    }
+
+    public void validate(String authentication) {
+        if (!isSameTokenValue(authentication)) {
+            throw new InvalidRefreshTokenException();
+        }
     }
 }
