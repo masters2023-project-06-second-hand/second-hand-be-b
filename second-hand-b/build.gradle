@@ -74,11 +74,12 @@ asciidoctor {
 
 bootJar {
     dependsOn asciidoctor
-    from("${asciidoctor.outputDir}/html5") {
+    from("build/docs/asciidoc") {
         into 'static/docs'
     }
     enabled = true
 }
+
 jar {
     enabled = false
 }
