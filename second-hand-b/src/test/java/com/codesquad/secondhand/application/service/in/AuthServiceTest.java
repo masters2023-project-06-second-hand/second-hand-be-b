@@ -3,8 +3,8 @@ package com.codesquad.secondhand.application.service.in;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 
-import com.codesquad.secondhand.application.port.in.exception.MemberNotFoundException;
-import com.codesquad.secondhand.application.port.in.exception.NotRegisteredMemberException;
+import com.codesquad.secondhand.application.service.in.exception.MemberNotFoundException;
+import com.codesquad.secondhand.application.service.in.exception.NotRegisteredMemberException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

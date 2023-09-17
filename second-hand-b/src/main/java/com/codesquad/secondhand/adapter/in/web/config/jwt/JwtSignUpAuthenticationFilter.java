@@ -28,9 +28,8 @@ public class JwtSignUpAuthenticationFilter extends OncePerRequestFilter {
         }
         String token = JwtTokenProvider.resolveToken(request);
         Date now = new Date();
-        if (token != null && JwtTokenProvider.validateToken(token, now)
-                && !JwtTokenProvider.isAccessToken(token)) {
-            String email = JwtTokenProvider.getEmail(token);
+        if (token != null && JwtTokenProvider.isValidSignUpToken(token, now)) {
+            String email = JwtTokenProvider.getEmailFromSignUpToken(token);
             Authentication authentication = new JwtSignUpToken(email, Collections.singleton(new SimpleGrantedAuthority(
                     Role.USER.getKey())));
             authentication.setAuthenticated(true);

@@ -1,9 +1,10 @@
 package com.codesquad.secondhand.adapter.out.persistence;
 
-import com.codesquad.secondhand.adapter.out.persistence.imports.RefreshTokenJpaRepository;
+import com.codesquad.secondhand.adapter.out.persistence.imports.RefreshTokenCrudRepository;
 import com.codesquad.secondhand.application.port.out.RefreshTokenRepository;
 import com.codesquad.secondhand.domain.auth.RefreshToken;
 import java.util.Date;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -11,15 +12,25 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
 
-    private final RefreshTokenJpaRepository refreshTokenJpaRepository;
+    private final RefreshTokenCrudRepository refreshTokenCrudRepository;
 
     @Override
     public RefreshToken save(RefreshToken refreshToken) {
-        return refreshTokenJpaRepository.save(refreshToken);
+        return refreshTokenCrudRepository.save(refreshToken);
     }
 
     @Override
     public void deleteByExpireTimeBefore(Date date) {
-        refreshTokenJpaRepository.deleteByExpireTimeBefore(date);
+        refreshTokenCrudRepository.deleteByExpireTimeBefore(date);
+    }
+
+    @Override
+    public Optional<RefreshToken> findByEmail(String email) {
+        return refreshTokenCrudRepository.findByEmail(email);
+    }
+
+    @Override
+    public void deleteByEmail(String email) {
+        refreshTokenCrudRepository.deleteByEmail(email);
     }
 }

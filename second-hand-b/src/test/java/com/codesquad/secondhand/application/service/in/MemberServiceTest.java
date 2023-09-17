@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-import com.codesquad.secondhand.application.port.in.exception.MemberNotFoundException;
-import com.codesquad.secondhand.application.port.in.exception.PermissionDeniedException;
+import com.codesquad.secondhand.application.service.in.exception.MemberNotFoundException;
+import com.codesquad.secondhand.application.service.in.exception.PermissionDeniedException;
 import com.codesquad.secondhand.application.port.out.MemberRepository;
 import com.codesquad.secondhand.domain.member.Member;
 import java.util.Optional;

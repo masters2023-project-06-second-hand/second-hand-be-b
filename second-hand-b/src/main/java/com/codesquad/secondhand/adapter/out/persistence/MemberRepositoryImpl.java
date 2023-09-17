@@ -1,6 +1,6 @@
 package com.codesquad.secondhand.adapter.out.persistence;
 
-import com.codesquad.secondhand.adapter.out.persistence.imports.MemberJpaRepository;
+import com.codesquad.secondhand.adapter.out.persistence.imports.MemberCrudRepository;
 import com.codesquad.secondhand.application.port.out.MemberRepository;
 import com.codesquad.secondhand.domain.member.Member;
 import java.util.Optional;
@@ -11,20 +11,20 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class MemberRepositoryImpl implements MemberRepository {
 
-    private final MemberJpaRepository memberJpaRepository;
+    private final MemberCrudRepository memberCrudRepository;
 
     @Override
     public Optional<Member> findById(Long id) {
-        return memberJpaRepository.findById(id);
+        return memberCrudRepository.findById(id);
     }
 
     @Override
     public Optional<Member> findByEmail(String email) {
-        return memberJpaRepository.findByEmail(email);
+        return memberCrudRepository.findByEmail(email);
     }
 
     @Override
     public Member save(Member member) {
-        return memberJpaRepository.save(member);
+        return memberCrudRepository.save(member);
     }
 }

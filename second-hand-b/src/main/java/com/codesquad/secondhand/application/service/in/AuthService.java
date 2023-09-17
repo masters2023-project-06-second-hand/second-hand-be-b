@@ -1,18 +1,17 @@
 package com.codesquad.secondhand.application.service.in;
 
+import com.codesquad.secondhand.adapter.in.web.request.SignUpRequest;
+import com.codesquad.secondhand.adapter.in.web.response.Tokens;
 import com.codesquad.secondhand.application.port.in.AuthUseCase;
-import com.codesquad.secondhand.application.port.in.exception.MemberNotFoundException;
-import com.codesquad.secondhand.application.port.in.exception.NotRegisteredMemberException;
-import com.codesquad.secondhand.application.port.in.request.SignUpRequest;
-import com.codesquad.secondhand.application.port.in.response.Tokens;
 import com.codesquad.secondhand.application.port.out.RefreshTokenRepository;
+import com.codesquad.secondhand.application.service.in.exception.InvalidRefreshTokenException;
+import com.codesquad.secondhand.application.service.in.exception.MemberNotFoundException;
+import com.codesquad.secondhand.application.service.in.exception.NotRegisteredMemberException;
 import com.codesquad.secondhand.domain.auth.RefreshToken;
 import com.codesquad.secondhand.domain.member.Member;
-import com.codesquad.secondhand.domain.member.Role;
 import com.codesquad.secondhand.domain.units.JwtTokenProvider;
 import java.util.Date;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AuthService implements AuthUseCase {
 
-    private static final int CLEANUP_ROUND_TIME = 5000;
     private final MemberService memberService;
     private final RefreshTokenRepository refreshTokenRepository;
 
@@ -34,32 +32,42 @@ public class AuthService implements AuthUseCase {
     @Transactional
     @Override
     public Tokens signUp(String email, SignUpRequest signUpRequest) {
-        Member member = toMember(email, signUpRequest);
-        Member savedMember = memberService.save(member);
+        Member savedMember = memberService.signUpMember(email, signUpRequest);
         return getTokens(email, savedMember);
     }
 
     @Override
-    public Tokens getAccessToken(String authentication) {
-        String token = JwtTokenProvider.parseTokenFromAuthorization(authentication);
+    public Tokens getToken(String authentication) {
         Date now = new Date();
-        JwtTokenProvider.validate(token, now);
-        String email = JwtTokenProvider.getEmail(token);
+        if (!JwtTokenProvider.isValidRefreshToken(authentication, now)) {
+            throw new InvalidRefreshTokenException();
+        }
+        String email = JwtTokenProvider.getEmailFromRefreshToken(authentication);
+        RefreshToken refreshToken = getRefreshTokenByEmail(email);
+        refreshToken.validate(authentication);
         Member member = memberService.getByEmail(email);
         return getTokens(email, member);
     }
 
-    @Scheduled(fixedDelay = CLEANUP_ROUND_TIME)
-    public void cleanupExpiredRefreshTokens() {
-        Date now = new Date();
+    public void deleteByExpireTimeBefore(Date now) {
         refreshTokenRepository.deleteByExpireTimeBefore(now);
+    }
+
+    private RefreshToken getRefreshTokenByEmail(String email) {
+        return refreshTokenRepository.findByEmail(email)
+                .orElseThrow(InvalidRefreshTokenException::new);
+    }
+
+    @Override
+    public void signOut(Member member) {
+        refreshTokenRepository.deleteByEmail(member.getEmail());
     }
 
     private Tokens getTokens(String email, Member member) {
         Date startDate = new Date();
         var accessToken = getAccessToken(email, member.getIdStringValue(), startDate);
         var refreshToken = getRefreshToken(email, member, startDate);
-        return new Tokens(accessToken, refreshToken);
+        return new Tokens(accessToken, refreshToken, member.getId());
     }
 
     private String getAccessToken(String email, String id, Date startDate) {
@@ -77,17 +85,7 @@ public class AuthService implements AuthUseCase {
         try {
             return memberService.getByEmail(email);
         } catch (MemberNotFoundException e) {
-            throw new NotRegisteredMemberException(JwtTokenProvider.createSignUpToken(email));
+            throw new NotRegisteredMemberException();
         }
-    }
-
-    private static Member toMember(String email, SignUpRequest signUpRequest) {
-        return new Member(
-                email,
-                signUpRequest.getNickname(),
-                signUpRequest.getProfileImg(),
-                null,
-                Role.MEMBER
-        );
     }
 }

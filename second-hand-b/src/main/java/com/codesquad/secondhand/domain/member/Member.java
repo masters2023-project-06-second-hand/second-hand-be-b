@@ -1,19 +1,18 @@
 package com.codesquad.secondhand.domain.member;
 
-import com.codesquad.secondhand.application.port.in.response.RegionInfo;
+import com.codesquad.secondhand.application.service.in.exception.NotExistsMemberRegionException;
 import com.codesquad.secondhand.domain.product.Product;
 import com.codesquad.secondhand.domain.region.Region;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -40,7 +39,7 @@ public class Member implements Serializable {
     private String profileImage;
     @Embedded
     private MemberRegions myRegions = new MemberRegions();
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "selected_region_id")
     private Region selectedRegion;
     @Enumerated(EnumType.STRING)
@@ -48,12 +47,10 @@ public class Member implements Serializable {
     @Embedded
     private Likes likes = new Likes();
 
-    public Member(String email, String nickname, String profileImage, Region region, Role role) {
+    public Member(String email, String nickname, String profileImage, Role role) {
         this.email = email;
         this.nickname = nickname;
         this.profileImage = profileImage;
-        this.myRegions.addRegion(region);
-        this.selectedRegion = region;
         this.role = role;
     }
 
@@ -67,6 +64,10 @@ public class Member implements Serializable {
 
     public String getNickname() {
         return nickname;
+    }
+
+    public String getProfileImage() {
+        return profileImage;
     }
 
     public Region getSelectedRegion() {
@@ -85,16 +86,16 @@ public class Member implements Serializable {
         myRegions.removeRegion(region);
     }
 
-    public List<RegionInfo> fetchRegionInfos() {
-        return myRegions.getRegions().stream()
-                .map(region -> new RegionInfo(region.getId(), region.getName()))
-                .collect(Collectors.toUnmodifiableList());
+    public List<Region> fetchRegions() {
+        return myRegions.getRegions();
     }
 
     public void selectRegion(Region region) {
+        if (!myRegions.contains(region)) {
+            throw new NotExistsMemberRegionException();
+        }
         this.selectedRegion = region;
     }
-
 
     public Collection<GrantedAuthority> getRoleAuthority() {
         return Collections.singleton(new SimpleGrantedAuthority(role.getKey()));
@@ -110,14 +111,6 @@ public class Member implements Serializable {
 
     public boolean removeLikes(Product product) {
         return likes.remove(product);
-    }
-
-    public Set<Product> getProducts() {
-        return likes.getProducts();
-    }
-
-    public Set<Product> getProductsByCategoryId(long categoryId) {
-        return likes.getProductsByCategoryId(categoryId);
     }
 
     public boolean isSameId(long memberId) {

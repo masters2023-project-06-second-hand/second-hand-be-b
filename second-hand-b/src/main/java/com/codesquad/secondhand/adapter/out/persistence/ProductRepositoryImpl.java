@@ -1,11 +1,11 @@
 package com.codesquad.secondhand.adapter.out.persistence;
 
-import com.codesquad.secondhand.adapter.out.persistence.imports.ProductJpaRepository;
+import com.codesquad.secondhand.adapter.out.persistence.imports.ProductCrudRepository;
 import com.codesquad.secondhand.application.port.out.ProductRepository;
 import com.codesquad.secondhand.domain.product.Product;
 import com.codesquad.secondhand.domain.product.Status;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -13,45 +13,55 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class ProductRepositoryImpl implements ProductRepository {
 
-    private final ProductJpaRepository productJpaRepository;
+    private final ProductCrudRepository productCrudRepository;
 
     @Override
     public Product save(Product product) {
-        return productJpaRepository.save(product);
+        return productCrudRepository.save(product);
     }
 
     @Override
     public Optional<Product> findById(Long id) {
-        return productJpaRepository.findById(id);
+        return productCrudRepository.findById(id);
     }
 
     @Override
-    public Set<Product> findProductsByMemberIdAndCategoryId(long memberId, long categoryId) {
-        return productJpaRepository.findProductsByMemberIdAndCategoryId(memberId, categoryId);
+    public List<Product> findProductsByMemberId(long memberId) {
+        return productCrudRepository.findProductsByMemberId(memberId);
     }
 
     @Override
-    public Set<Product> findByWriterId(long writerId) {
-        return productJpaRepository.findByWriterId(writerId);
+    public List<Product> findProductsByMemberIdAndCategoryId(long memberId, long categoryId) {
+        return productCrudRepository.findProductsByMemberIdAndCategoryId(memberId, categoryId);
     }
 
     @Override
-    public Set<Product> findByWriterIdAndStatus(long memberId, Status status) {
-        return productJpaRepository.findByWriterIdAndStatus(memberId, status);
+    public List<Product> findByWriterId(long writerId) {
+        return productCrudRepository.findByWriterId(writerId);
     }
 
     @Override
-    public Set<Product> findByWriterIdAndStatusNot(long memberId, Status status) {
-        return productJpaRepository.findByWriterIdAndStatusNot(memberId, status);
+    public List<Product> findByWriterIdAndStatus(long writerId, Status status) {
+        return productCrudRepository.findByWriterIdAndStatus(writerId, status);
     }
 
     @Override
-    public Set<Product> findByRegionId(long regionId) {
-        return productJpaRepository.findByRegionId(regionId);
+    public List<Product> findByWriterIdAndStatusNot(long writerId, Status status) {
+        return productCrudRepository.findByWriterIdAndStatusNot(writerId, status);
     }
 
     @Override
-    public Set<Product> findByRegionIdAndCategoryId(long regionId, long categoryId) {
-        return productJpaRepository.findByRegionIdAndCategoryId(regionId, categoryId);
+    public List<Product> findByRegionId(long regionId) {
+        return productCrudRepository.findByRegionId(regionId);
+    }
+
+    @Override
+    public List<Product> findByRegionIdAndCategoryId(long regionId, long categoryId) {
+        return productCrudRepository.findByRegionIdAndCategoryId(regionId, categoryId);
+    }
+
+    @Override
+    public void deleteById(long productId) {
+        productCrudRepository.deleteById(productId);
     }
 }

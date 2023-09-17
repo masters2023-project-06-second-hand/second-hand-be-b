@@ -1,6 +1,5 @@
 package com.codesquad.secondhand.domain.units;
 
-import com.codesquad.secondhand.application.port.in.exception.TokenExpiredException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -13,7 +12,9 @@ import org.springframework.http.HttpHeaders;
 
 public class JwtTokenProvider {
 
-    private static final SecretKey KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private static final SecretKey ACCESS_TOKEN_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private static final SecretKey REFRESH_TOKEN_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private static final SecretKey SIGN_UP_TOKEN_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     private static final String IS_REGISTERED_CLAIM = "isRegistered";
     private static final String EMAIL_CLAIM = "email";
     private static final String SECOND_HAND_CLAIM = "second_hand";
@@ -26,9 +27,18 @@ public class JwtTokenProvider {
         throw new IllegalStateException("Utility class");
     }
 
-    public static Date getRefreshTokenExpiryDate(Date startDate) {
-        return new Date(startDate.getTime() + JwtTokenProvider.THIRTY_DAYS);
+    public static String createSignUpToken(String email) {
+        Date startDate = new Date();
+        return Jwts.builder()
+                .claim(EMAIL_CLAIM, email)
+                .setIssuer(SECOND_HAND_CLAIM)
+                .claim(IS_REGISTERED_CLAIM, false)
+                .setIssuedAt(startDate)
+                .setExpiration(getSignUpTokenExpiryDate(startDate))
+                .signWith(SIGN_UP_TOKEN_KEY)
+                .compact();
     }
+
 
     public static String createAccessToken(String email, String id, Date startDate) {
         return Jwts.builder()
@@ -38,7 +48,19 @@ public class JwtTokenProvider {
                 .setSubject(id)
                 .setIssuedAt(startDate)
                 .setExpiration(getAccessTokenExpiryDate(startDate))
-                .signWith(KEY)
+                .signWith(ACCESS_TOKEN_KEY)
+                .compact();
+    }
+
+    public static String createAccessToken(String email, String id, Date startDate, SecretKey accessTokenKey) {
+        return Jwts.builder()
+                .claim(EMAIL_CLAIM, email)
+                .claim(IS_REGISTERED_CLAIM, true)
+                .setIssuer(SECOND_HAND_CLAIM)
+                .setSubject(id)
+                .setIssuedAt(startDate)
+                .setExpiration(getAccessTokenExpiryDate(startDate))
+                .signWith(accessTokenKey)
                 .compact();
     }
 
@@ -50,12 +72,20 @@ public class JwtTokenProvider {
                 .setSubject(id)
                 .setIssuedAt(startDate)
                 .setExpiration(JwtTokenProvider.getRefreshTokenExpiryDate(startDate))
-                .signWith(KEY)
+                .signWith(REFRESH_TOKEN_KEY)
                 .compact();
+    }
+
+    private static Date getSignUpTokenExpiryDate(Date startDate) {
+        return new Date(startDate.getTime() + THIRTY_MIN);
     }
 
     private static Date getAccessTokenExpiryDate(Date startDate) {
         return new Date(startDate.getTime() + JwtTokenProvider.THIRTY_MIN);
+    }
+
+    public static Date getRefreshTokenExpiryDate(Date startDate) {
+        return new Date(startDate.getTime() + JwtTokenProvider.THIRTY_DAYS);
     }
 
     public static String parseTokenFromAuthorization(String header) {
@@ -70,10 +100,18 @@ public class JwtTokenProvider {
         return parseTokenFromAuthorization(header);
     }
 
-    public static boolean validateToken(String jwtToken, Date now) {
+    public static boolean isValidAccessToken(String jwtToken, Date now) {
+        return isValidToken(jwtToken, now, ACCESS_TOKEN_KEY);
+    }
+
+    public static boolean isValidSignUpToken(String jwtToken, Date now) {
+        return isValidToken(jwtToken, now, SIGN_UP_TOKEN_KEY);
+    }
+
+    private static boolean isValidToken(String jwtToken, Date now, SecretKey secretKey) {
         try {
             Jws<Claims> claims = Jwts.parserBuilder()
-                    .setSigningKey(KEY)
+                    .setSigningKey(secretKey)
                     .build()
                     .parseClaimsJws(jwtToken);
             return !claims.getBody()
@@ -84,39 +122,38 @@ public class JwtTokenProvider {
         }
     }
 
-    public static void validate(String jwtToken, Date now) {
-        if (!validateToken(jwtToken, now)) {
-            throw new TokenExpiredException();
-        }
-    }
-
-    public static String createSignUpToken(String email) {
-        Date startDate = new Date();
-        return Jwts.builder()
-                .claim(EMAIL_CLAIM, email)
-                .setIssuer(SECOND_HAND_CLAIM)
-                .claim(IS_REGISTERED_CLAIM, false)
-                .setIssuedAt(startDate)
-                .setExpiration(new Date(startDate.getTime() + THIRTY_MIN))
-                .signWith(KEY)
-                .compact();
+    public static boolean isValidRefreshToken(String jwtToken, Date now) {
+        return isValidToken(jwtToken, now, REFRESH_TOKEN_KEY);
     }
 
     public static boolean isAccessToken(String jwtToken) {
         Jws<Claims> claims = Jwts.parserBuilder()
-                .setSigningKey(KEY)
+                .setSigningKey(ACCESS_TOKEN_KEY)
                 .build()
                 .parseClaimsJws(jwtToken);
         return claims.getBody()
                 .get(IS_REGISTERED_CLAIM, Boolean.class);
     }
 
-    public static String getEmail(String jwtToken) {
+    public static String getEmailFromAccessToken(String jwtToken) {
+        return getEmailFromToken(jwtToken, ACCESS_TOKEN_KEY);
+    }
+
+    public static String getEmailFromSignUpToken(String jwtToken) {
+        return getEmailFromToken(jwtToken, SIGN_UP_TOKEN_KEY);
+    }
+
+    private static String getEmailFromToken(String jwtToken, SecretKey secretKey) {
         Jws<Claims> claims = Jwts.parserBuilder()
-                .setSigningKey(KEY)
+                .setSigningKey(secretKey)
                 .build()
                 .parseClaimsJws(jwtToken);
         return claims.getBody()
                 .get(EMAIL_CLAIM, String.class);
     }
+
+    public static String getEmailFromRefreshToken(String refreshToken) {
+        return getEmailFromToken(refreshToken, REFRESH_TOKEN_KEY);
+    }
+
 }

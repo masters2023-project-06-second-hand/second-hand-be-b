@@ -1,27 +1,24 @@
 package com.codesquad.secondhand.adapter.in.web;
 
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.startsWith;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.codesquad.secondhand.application.port.in.request.SignUpRequest;
+import com.codesquad.secondhand.adapter.in.web.request.SignUpRequest;
+import com.codesquad.secondhand.adapter.in.web.response.Tokens;
 import com.codesquad.secondhand.application.port.out.MemberRepository;
+import com.codesquad.secondhand.application.service.in.AuthService;
 import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.member.Role;
 import com.codesquad.secondhand.domain.units.JwtTokenProvider;
-import com.codesquad.secondhand.oauth.WithTestUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.EntityManager;
-import org.hamcrest.Matcher;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,33 +37,17 @@ class AuthControllerTest {
     public static final String TEST_EMAIL = "test@email.com";
     public static final String TEST_NICKNAME = "이안";
     public static final String TEST_PROFILE_IMAGE = "url";
+
     @Autowired
     MockMvc mockMvc;
-
     @Autowired
     ObjectMapper objectMapper;
-
     @Autowired
     MemberRepository memberRepository;
-
     @Autowired
     EntityManager entityManager;
-
-    private static Matcher<String> MatcherBearer() {
-        return startsWith("Bearer ");
-    }
-
-    @WithTestUser
-    @DisplayName("OAuth2.0 인증 했지만 해당 유저가 없으면 signup Token을 발급하여 가입하라고 redirect 한다")
-    @Test
-    void givenOAuth2Authentication_whenUserDoesNotExist_thenIssueSignupTokenAndRedirectForRegistration()
-            throws Exception {
-        mockMvc.perform(get("/api/members/signin"))
-                .andDo(print())
-                .andExpect(header().string(HttpHeaders.AUTHORIZATION, MatcherBearer()))
-                .andExpect(status().is3xxRedirection())
-        ;
-    }
+    @Autowired
+    AuthService authService;
 
     private String getTestRefreshToken(Member member, Date startDate) {
         return JwtTokenProvider.createRefreshToken(TEST_EMAIL, member.getIdStringValue(), startDate);
@@ -74,21 +55,7 @@ class AuthControllerTest {
 
     private Member getTestMember() {
         return memberRepository.save(
-                new Member(TEST_EMAIL, TEST_NICKNAME, TEST_PROFILE_IMAGE, null, Role.USER));
-    }
-
-    @WithTestUser
-    @DisplayName("Oauth2.0 인증 했고 행당 유저가 있으면 AccessToken를 Authtication Header로 RefreshToken은 Cookie Header에 담은 다음 Redirect한다")
-    @Test
-    void givenOAuth2Authentication_whenUserExists_thenSetTokensInHeadersAndRedirect() throws Exception {
-        getTestMember();
-
-        mockMvc.perform(get("/api/members/signin"))
-                .andDo(print())
-                .andExpect(header().string(HttpHeaders.AUTHORIZATION, MatcherBearer()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(header().string(HttpHeaders.SET_COOKIE, containsString("refresh_token")))
-        ;
+                new Member(TEST_EMAIL, TEST_NICKNAME, TEST_PROFILE_IMAGE, Role.USER));
     }
 
     @DisplayName("signUpToken와 함께 회원가입을 요청하면 Tokens를 보낸다")
@@ -107,6 +74,7 @@ class AuthControllerTest {
                 .andDo(print())
                 .andExpect(jsonPath("accessToken").exists())
                 .andExpect(jsonPath("refreshToken").exists())
+                .andExpect(jsonPath("memberId").exists())
                 .andExpect(status().isOk());
     }
 
@@ -115,17 +83,39 @@ class AuthControllerTest {
     void shouldReturnNewTokensWhenRequestedWithRefreshToken() throws Exception {
         // given
         Member member = getTestMember();
-        Date startDate = new Date();
-        String refreshToken = getTestRefreshToken(member, startDate);
+        Tokens tokens = authService.signIn(member.getEmail());
+        Map<String, String> body = Map.of("refreshToken", tokens.getRefreshToken());
 
         // when,then
-        mockMvc.perform(get("/api/members/accesstoken")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + refreshToken)
+        mockMvc.perform(post("/api/oauth2/token")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(body))
                 )
                 .andDo(print())
                 .andExpect(jsonPath("accessToken").exists())
                 .andExpect(jsonPath("refreshToken").exists())
                 .andExpect(status().isOk());
+    }
+
+    @DisplayName("무효한 refreshToken으로 AccessToken을 요청하면 새로 만든 Tokens를 보낸다")
+    @Test
+    void shouldReturnErrorMessageWhenRequestedWithInvalidRefreshToken() throws Exception {
+        // given
+        Member member = getTestMember();
+        Date startDate = new Date();
+        String refreshToken = getTestRefreshToken(member, startDate);
+        Map<String, String> content = Map.of("refreshToken", refreshToken);
+
+        // when,then
+        mockMvc.perform(post("/api/oauth2/token")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(content))
+                )
+                .andDo(print())
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("status").exists())
+                .andExpect(jsonPath("message").exists())
+        ;
     }
 
     @DisplayName("만료된 refreshToken으로 AccessToken을 요청하면 에러 메시지를 보낸다")
@@ -136,10 +126,40 @@ class AuthControllerTest {
         LocalDate localDate = LocalDate.of(2023, 1, 1);
         Date startDate = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         String refreshToken = getTestRefreshToken(member, startDate);
+        Map<String, String> content = Map.of("refreshToken", refreshToken);
 
         // when,then
-        mockMvc.perform(get("/api/members/accesstoken")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + refreshToken)
+        mockMvc.perform(post("/api/oauth2/token")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(content))
+                )
+                .andDo(print())
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("status").exists())
+                .andExpect(jsonPath("message").exists())
+        ;
+    }
+
+    @DisplayName("로그인 아웃 요청 후 refresh 토큰을 다시 사용할 수 없다")
+    @Test
+    void shouldInvalidateRefreshTokenAfterLogout() throws Exception {
+        // given
+        Member member = getTestMember();
+        Tokens tokens = authService.signIn(member.getEmail());
+        Map<String, String> body = Map.of("refreshToken", tokens.getRefreshToken());
+
+        // when
+        mockMvc.perform(post("/api/members/signout")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokens.getAccessToken())
+                )
+                .andDo(print())
+                .andExpect(status().isNoContent());
+
+        //
+        mockMvc.perform(post("/api/oauth2/token")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(body))
                 )
                 .andDo(print())
                 .andExpect(status().isUnauthorized())
