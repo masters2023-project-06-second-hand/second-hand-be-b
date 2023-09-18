@@ -27,21 +27,21 @@ public interface ProductCrudRepository extends CrudRepository<Product, Long> {
     @Query(
             "select product_ from Product product_"
                     + " join fetch product_.region"
-                    + " where product_.writer.id = :writerId"
+                    + " where product_.writerId = :writerId"
     )
     List<Product> findByWriterId(long writerId);
 
     @Query(
             "select product_ from Product product_"
                     + " join fetch product_.region"
-                    + " where product_.writer.id = :writerId and product_.status = :status"
+                    + " where product_.writerId = :writerId and product_.status = :status"
     )
     List<Product> findByWriterIdAndStatus(long writerId, Status status);
 
     @Query(
             "select product_ from Product product_"
                     + " join fetch product_.region"
-                    + " where product_.writer.id = :writerId and product_.status != :status"
+                    + " where product_.writerId = :writerId and product_.status != :status"
     )
     List<Product> findByWriterIdAndStatusNot(long writerId, Status status);
 

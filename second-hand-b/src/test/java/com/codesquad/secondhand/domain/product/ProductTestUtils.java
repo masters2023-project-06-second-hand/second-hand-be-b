@@ -35,13 +35,12 @@ public class ProductTestUtils {
         List<Image> images = getDefaultTestImages();
         Region region = getDefaultTestRegion();
         LocalDateTime testCreatedTime = getDefaultTestCreatedTime();
-        Member testWriter = getDefaultTestWriter();
         Category testCategory = getDefaultTestCategory();
         return new Product(
                 TEST_NAME,
                 TEST_CONTENT,
                 TEST_PRICE,
-                testWriter,
+                0,
                 testCategory,
                 TEST_THUMBNAIL_IMG_URL,
                 images,

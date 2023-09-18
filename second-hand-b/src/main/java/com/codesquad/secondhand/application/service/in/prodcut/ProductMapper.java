@@ -22,12 +22,12 @@ public class ProductMapper {
     }
 
     public static ProductInfo toProductInfo(Product product) {
-        Member member = product.getWriter();
+        long writerId = product.getWriterId();
         Region region = product.getRegion();
         Status status = product.getStatus();
         String thumbnailUrl = product.getThumbnailUrl();
         return new ProductInfo(product.getId(),
-                member.getId(),
+                writerId,
                 thumbnailUrl,
                 product.getName(),
                 region.getName(),
@@ -44,8 +44,7 @@ public class ProductMapper {
                 .collect(Collectors.toList());
     }
 
-    public static ProductDetail toProductDetail(Product product) {
-        Member member = product.getWriter();
+    public static ProductDetail toProductDetail(Product product, Member member) {
         Category category = product.getCategory();
         Region region = product.getRegion();
         Status status = product.getStatus();

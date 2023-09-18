@@ -1,7 +1,6 @@
 package com.codesquad.secondhand.domain.product;
 
 import com.codesquad.secondhand.domain.image.Image;
-import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.region.Region;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -34,9 +33,8 @@ public class Product {
     private String content;
     @Column(nullable = false)
     private int price;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "writer_id")
-    private Member writer;
+    @Column(nullable = false)
+    private Long writerId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
@@ -52,12 +50,12 @@ public class Product {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    public Product(String name, String content, int price, Member writer, Category category, String thumbnailUrl,
+    public Product(String name, String content, int price, long writerId, Category category, String thumbnailUrl,
             List<Image> images, Region region, Status status, LocalDateTime createdAt) {
         this.name = name;
         this.content = content;
         this.price = price;
-        this.writer = writer;
+        this.writerId = writerId;
         this.category = category;
         this.thumbnailUrl = thumbnailUrl;
         this.images = new Images(images);
@@ -87,10 +85,6 @@ public class Product {
 
     public Long getId() {
         return id;
-    }
-
-    public Member getWriter() {
-        return writer;
     }
 
     public Category getCategory() {
@@ -123,5 +117,9 @@ public class Product {
 
     public String getThumbnailUrl() {
         return thumbnailUrl;
+    }
+
+    public long getWriterId() {
+        return writerId;
     }
 }

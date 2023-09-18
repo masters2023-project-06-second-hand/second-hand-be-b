@@ -1,5 +1,6 @@
 package com.codesquad.secondhand.application.service.in.prodcut;
 
+import static com.codesquad.secondhand.domain.product.ProductTestUtils.getDefaultTestWriter;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.codesquad.secondhand.adapter.in.web.response.ImageInfo;
@@ -36,17 +37,17 @@ class ProductMapperTest {
     void toProductDetail() {
         // given
         Product product = ProductTestUtils.createTestProduct();
+        Member member = getDefaultTestWriter();
 
         // when
-        ProductDetail productDetail = ProductMapper.toProductDetail(product);
+        ProductDetail productDetail = ProductMapper.toProductDetail(product, member);
 
         // then
-        validateToProductDetail(product, productDetail);
+        validateToProductDetail(product, member, productDetail);
     }
 
-    private static void validateToProductDetail(Product product, ProductDetail productDetail) {
-        Member writer = product.getWriter();
-        ProductWriter productWriter = new ProductWriter(writer.getId(), writer.getNickname());
+    private static void validateToProductDetail(Product product, Member member, ProductDetail productDetail) {
+        ProductWriter productWriter = new ProductWriter(member.getId(), member.getNickname());
         List<Image> images = product.fetchImages();
         List<ImageInfo> imageInfos = ImageMapper.toImageInfos(images);
         Assertions.assertAll(
@@ -66,7 +67,7 @@ class ProductMapperTest {
     private static void validateMapToProductInfo(ProductInfo targetProductInfo, Product product) {
         Assertions.assertAll(
                 () -> assertThat(targetProductInfo.getId()).isEqualTo(product.getId()),
-                () -> assertThat(targetProductInfo.getWriterId()).isEqualTo(product.getWriter().getId()),
+                () -> assertThat(targetProductInfo.getWriterId()).isEqualTo(product.getWriterId()),
                 () -> assertThat(targetProductInfo.getThumbnailUrl()).isEqualTo(product.getThumbnailUrl()),
                 () -> assertThat(targetProductInfo.getName()).isEqualTo(product.getName()),
                 () -> assertThat(targetProductInfo.getRegion()).isEqualTo(product.getRegion().getName()),
