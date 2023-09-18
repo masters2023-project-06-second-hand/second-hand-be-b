@@ -10,7 +10,7 @@ public interface CategoryJpaRepository extends JpaRepository<Category, Long> {
     @Query(
             "select category_ from Member member_ "
                     + "join member_.likes.products product_ "
-                    + "join product_.category category_ "
+                    + "join Category as category_ on category_.id = product_.categoryId "
                     + "where member_.id = :memberId"
     )
     List<Category> findCategoryByMemberId(long memberId);

@@ -1,5 +1,6 @@
 package com.codesquad.secondhand.application.service.in.prodcut;
 
+import static com.codesquad.secondhand.domain.product.ProductTestUtils.getDefaultTestCategory;
 import static com.codesquad.secondhand.domain.product.ProductTestUtils.getDefaultTestWriter;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -10,6 +11,7 @@ import com.codesquad.secondhand.adapter.in.web.response.ProductWriter;
 import com.codesquad.secondhand.application.service.in.image.ImageMapper;
 import com.codesquad.secondhand.domain.image.Image;
 import com.codesquad.secondhand.domain.member.Member;
+import com.codesquad.secondhand.domain.product.Category;
 import com.codesquad.secondhand.domain.product.Product;
 import com.codesquad.secondhand.domain.product.ProductTestUtils;
 import java.util.List;
@@ -38,15 +40,17 @@ class ProductMapperTest {
         // given
         Product product = ProductTestUtils.createTestProduct();
         Member member = getDefaultTestWriter();
+        Category category = getDefaultTestCategory();
 
         // when
-        ProductDetail productDetail = ProductMapper.toProductDetail(product, member);
+        ProductDetail productDetail = ProductMapper.toProductDetail(product, category, member);
 
         // then
-        validateToProductDetail(product, member, productDetail);
+        validateToProductDetail(product, member, category, productDetail);
     }
 
-    private static void validateToProductDetail(Product product, Member member, ProductDetail productDetail) {
+    private static void validateToProductDetail(Product product, Member member, Category category,
+            ProductDetail productDetail) {
         ProductWriter productWriter = new ProductWriter(member.getId(), member.getNickname());
         List<Image> images = product.fetchImages();
         List<ImageInfo> imageInfos = ImageMapper.toImageInfos(images);
@@ -54,7 +58,7 @@ class ProductMapperTest {
                 () -> assertThat(productDetail.getId()).isEqualTo(product.getId()),
                 () -> assertThat(productDetail.getWriter()).usingRecursiveComparison().isEqualTo(productWriter),
                 () -> assertThat(productDetail.getProductName()).isEqualTo(product.getName()),
-                () -> assertThat(productDetail.getCategoryName()).isEqualTo(product.getCategory().getName()),
+                () -> assertThat(productDetail.getCategoryName()).isEqualTo(category.getName()),
                 () -> assertThat(productDetail.getRegionName()).isEqualTo(product.getRegion().getName()),
                 () -> assertThat(productDetail.getStatus()).isEqualTo(product.getStatus().getName()),
                 () -> assertThat(productDetail.getContent()).isEqualTo(product.getContent()),

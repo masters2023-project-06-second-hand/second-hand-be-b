@@ -35,9 +35,7 @@ public class Product {
     private int price;
     @Column(nullable = false)
     private Long writerId;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
-    private Category category;
+    private Long categoryId;
     @Embedded
     private Images images = new Images();
     @JoinColumn(name = "thumbnail_id", nullable = false)
@@ -50,13 +48,13 @@ public class Product {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    public Product(String name, String content, int price, long writerId, Category category, String thumbnailUrl,
+    public Product(String name, String content, int price, long writerId, Long categoryId, String thumbnailUrl,
             List<Image> images, Region region, Status status, LocalDateTime createdAt) {
         this.name = name;
         this.content = content;
         this.price = price;
         this.writerId = writerId;
-        this.category = category;
+        this.categoryId = categoryId;
         this.thumbnailUrl = thumbnailUrl;
         this.images = new Images(images);
         this.region = region;
@@ -64,12 +62,12 @@ public class Product {
         this.createdAt = createdAt;
     }
 
-    public void modifyProduct(String name, String content, int price, Category category, String thumbnailUrl,
+    public void modifyProduct(String name, String content, int price, Long categoryId, String thumbnailUrl,
             List<Image> images, Region region) {
         this.name = name;
         this.content = content;
         this.price = price;
-        this.category = category;
+        this.categoryId = categoryId;
         this.thumbnailUrl = thumbnailUrl;
         this.images.modify(images);
         this.region = region;
@@ -87,8 +85,8 @@ public class Product {
         return id;
     }
 
-    public Category getCategory() {
-        return category;
+    public Long getCategoryId() {
+        return categoryId;
     }
 
     public Region getRegion() {

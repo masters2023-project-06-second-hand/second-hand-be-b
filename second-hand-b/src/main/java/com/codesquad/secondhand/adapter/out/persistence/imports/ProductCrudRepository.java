@@ -20,7 +20,7 @@ public interface ProductCrudRepository extends CrudRepository<Product, Long> {
             " select member_product from Member member_ "
                     + " join member_.likes.products member_product"
                     + " join fetch member_product.region"
-                    + " where member_.id = :memberId and member_product.category.id = :categoryId"
+                    + " where member_.id = :memberId and member_product.categoryId = :categoryId"
     )
     List<Product> findProductsByMemberIdAndCategoryId(long memberId, long categoryId);
 
@@ -55,7 +55,7 @@ public interface ProductCrudRepository extends CrudRepository<Product, Long> {
     @Query(
             "select product_ from Product product_"
                     + " join fetch product_.region region_"
-                    + " where region_.id = :regionId and product_.category.id = :categoryId"
+                    + " where region_.id = :regionId and product_.categoryId = :categoryId"
     )
     List<Product> findByRegionIdAndCategoryId(long regionId, long categoryId);
 }

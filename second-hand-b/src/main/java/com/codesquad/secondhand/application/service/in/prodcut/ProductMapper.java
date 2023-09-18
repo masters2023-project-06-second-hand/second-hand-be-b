@@ -44,8 +44,7 @@ public class ProductMapper {
                 .collect(Collectors.toList());
     }
 
-    public static ProductDetail toProductDetail(Product product, Member member) {
-        Category category = product.getCategory();
+    public static ProductDetail toProductDetail(Product product,Category category, Member member) {
         Region region = product.getRegion();
         Status status = product.getStatus();
         List<Image> images = product.fetchImages();

@@ -39,7 +39,9 @@ public class ProductFacade implements ProductUseCase {
         Product product = productService.getById(id);
         long writerId = product.getWriterId();
         Member member = memberService.getById(writerId);
-        return toProductDetail(product, member);
+        Long categoryId = product.getCategoryId();
+        Category category = categoryService.getById(categoryId);
+        return toProductDetail(product, category, member);
     }
 
 
@@ -95,7 +97,7 @@ public class ProductFacade implements ProductUseCase {
                 productCreateRequest.getContent(),
                 productCreateRequest.getPrice(),
                 member.getId(),
-                category,
+                category.getId(),
                 thumbnailUrl,
                 images,
                 region,
@@ -115,7 +117,7 @@ public class ProductFacade implements ProductUseCase {
                 productModifyRequest.getName(),
                 productModifyRequest.getContent(),
                 productModifyRequest.getPrice(),
-                category,
+                category.getId(),
                 thumbnailUrl,
                 images,
                 region);
