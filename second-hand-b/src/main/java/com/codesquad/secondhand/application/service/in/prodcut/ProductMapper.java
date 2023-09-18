@@ -13,7 +13,6 @@ import com.codesquad.secondhand.domain.product.Product;
 import com.codesquad.secondhand.domain.product.Status;
 import com.codesquad.secondhand.domain.region.Region;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ProductMapper {
 
@@ -21,9 +20,8 @@ public class ProductMapper {
         throw new UnsupportedOperationException();
     }
 
-    public static ProductInfo toProductInfo(Product product) {
+    public static ProductInfo toProductInfo(Product product, Region region) {
         long writerId = product.getWriterId();
-        Region region = product.getRegion();
         Status status = product.getStatus();
         String thumbnailUrl = product.getThumbnailUrl();
         return new ProductInfo(product.getId(),
@@ -38,14 +36,7 @@ public class ProductMapper {
                 0);
     }
 
-    public static List<ProductInfo> toProductsInfo(List<Product> products) {
-        return products.stream()
-                .map(ProductMapper::toProductInfo)
-                .collect(Collectors.toList());
-    }
-
-    public static ProductDetail toProductDetail(Product product,Category category, Member member) {
-        Region region = product.getRegion();
+    public static ProductDetail toProductDetail(Product product, Category category, Member member, Region region) {
         Status status = product.getStatus();
         List<Image> images = product.fetchImages();
         List<ImageInfo> imageInfos = toImageInfos(images);

@@ -1,6 +1,7 @@
 package com.codesquad.secondhand.application.service.in.prodcut;
 
 import static com.codesquad.secondhand.application.service.in.prodcut.ProductMapper.toProductDetail;
+import static com.codesquad.secondhand.application.service.in.prodcut.ProductMapper.toProductInfo;
 
 import com.codesquad.secondhand.adapter.in.web.request.ProductCreateRequest;
 import com.codesquad.secondhand.adapter.in.web.request.ProductModifyRequest;
@@ -19,6 +20,7 @@ import com.codesquad.secondhand.domain.product.Status;
 import com.codesquad.secondhand.domain.region.Region;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,7 +43,9 @@ public class ProductFacade implements ProductUseCase {
         Member member = memberService.getById(writerId);
         Long categoryId = product.getCategoryId();
         Category category = categoryService.getById(categoryId);
-        return toProductDetail(product, category, member);
+        long regionId = product.getRegionId();
+        Region region = regionService.getById(regionId);
+        return toProductDetail(product, category, member, region);
     }
 
 
@@ -70,13 +74,15 @@ public class ProductFacade implements ProductUseCase {
     @Transactional(readOnly = true)
     @Override
     public List<ProductInfo> getProductsByRegion(long regionId) {
-        return productService.getProductsByRegion(regionId);
+        List<Product> products = productService.getProductsByRegion(regionId);
+        return toProductsInfo(products);
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<ProductInfo> getProductsByRegionAndCategory(long regionId, long categoryId) {
-        return productService.getProductsByRegionAndCategory(regionId, categoryId);
+        List<Product> products = productService.getProductsByRegionAndCategory(regionId, categoryId);
+        return toProductsInfo(products);
     }
 
     @Transactional
@@ -100,7 +106,7 @@ public class ProductFacade implements ProductUseCase {
                 category.getId(),
                 thumbnailUrl,
                 images,
-                region,
+                region.getId(),
                 Status.ON_SALES,
                 LocalDateTime.now());
     }
@@ -120,7 +126,13 @@ public class ProductFacade implements ProductUseCase {
                 category.getId(),
                 thumbnailUrl,
                 images,
-                region);
+                region.getId());
+    }
+
+    private List<ProductInfo> toProductsInfo(List<Product> products) {
+        return products.stream()
+                .map(product -> toProductInfo(product, regionService.getById(product.getRegionId())))
+                .collect(Collectors.toList());
     }
 
 }

@@ -22,7 +22,6 @@ public class ProductTestUtils {
     public static final String MODIFIED_CATEGORY_NAME1 = "modifiedCategoryName";
     public static final String MODIFIED_IMG_URL_1 = "modifiedImgUrl1";
     public static final String MODIFIED_IMG_URL_2 = "modifiedImgUrl2";
-    public static final String MODIFIED_REGION_NAME = "modifiedRegionName";
     public static final String MODIFIED_PRODUCT_NAME = "modifiedProductName";
     public static final String MODIFIED_PRODUCT_CONTENT = "modifiedProductContent";
     public static final int MODIFIED_PRODUCT_PRICE = 2000;
@@ -33,7 +32,6 @@ public class ProductTestUtils {
 
     public static Product createTestProduct() {
         List<Image> images = getDefaultTestImages();
-        Region region = getDefaultTestRegion();
         LocalDateTime testCreatedTime = getDefaultTestCreatedTime();
         Category testCategory = getDefaultTestCategory();
         return new Product(
@@ -44,7 +42,7 @@ public class ProductTestUtils {
                 testCategory.getId(),
                 TEST_THUMBNAIL_IMG_URL,
                 images,
-                region,
+                1,
                 getTestDefaultStatus(),
                 testCreatedTime
         );

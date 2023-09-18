@@ -8,10 +8,14 @@ import org.springframework.data.jpa.repository.Query;
 public interface CategoryJpaRepository extends JpaRepository<Category, Long> {
 
     @Query(
-            "select category_ from Member member_ "
+            "select category_ from Category category_ "
+                    + "where category_.id "
+                    + "in ("
+                    + "select product_.categoryId "
+                    + "from Member member_ "
                     + "join member_.likes.products product_ "
-                    + "join Category as category_ on category_.id = product_.categoryId "
                     + "where member_.id = :memberId"
+                    + ")"
     )
     List<Category> findCategoryByMemberId(long memberId);
 }

@@ -8,54 +8,25 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface ProductCrudRepository extends CrudRepository<Product, Long> {
 
-    @Query(
-            " select member_product from Member member_ "
-                    + " join member_.likes.products member_product"
-                    + " join fetch member_product.region"
-                    + " where member_.id = :memberId"
+    @Query(" select member_product from Member member_ "
+            + " join member_.likes.products member_product"
+            + " where member_.id = :memberId"
     )
-    List<Product> findProductsByMemberId(long memberId);
+    List<Product> findLikesByMemberId(long memberId);
 
-    @Query(
-            " select member_product from Member member_ "
-                    + " join member_.likes.products member_product"
-                    + " join fetch member_product.region"
-                    + " where member_.id = :memberId and member_product.categoryId = :categoryId"
+    @Query(" select member_product from Member member_ "
+            + " join member_.likes.products member_product"
+            + " where member_.id = :memberId and member_product.categoryId = :categoryId"
     )
-    List<Product> findProductsByMemberIdAndCategoryId(long memberId, long categoryId);
+    List<Product> findLikesByMemberIdAndCategoryId(long memberId, long categoryId);
 
-    @Query(
-            "select product_ from Product product_"
-                    + " join fetch product_.region"
-                    + " where product_.writerId = :writerId"
-    )
     List<Product> findByWriterId(long writerId);
 
-    @Query(
-            "select product_ from Product product_"
-                    + " join fetch product_.region"
-                    + " where product_.writerId = :writerId and product_.status = :status"
-    )
     List<Product> findByWriterIdAndStatus(long writerId, Status status);
 
-    @Query(
-            "select product_ from Product product_"
-                    + " join fetch product_.region"
-                    + " where product_.writerId = :writerId and product_.status != :status"
-    )
     List<Product> findByWriterIdAndStatusNot(long writerId, Status status);
 
-    @Query(
-            "select product_ from Product product_"
-                    + " join fetch product_.region region_"
-                    + " where region_.id = :regionId"
-    )
     List<Product> findByRegionId(long regionId);
 
-    @Query(
-            "select product_ from Product product_"
-                    + " join fetch product_.region region_"
-                    + " where region_.id = :regionId and product_.categoryId = :categoryId"
-    )
     List<Product> findByRegionIdAndCategoryId(long regionId, long categoryId);
 }

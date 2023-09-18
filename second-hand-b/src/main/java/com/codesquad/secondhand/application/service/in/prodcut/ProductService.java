@@ -1,8 +1,5 @@
 package com.codesquad.secondhand.application.service.in.prodcut;
 
-import static com.codesquad.secondhand.application.service.in.prodcut.ProductMapper.toProductsInfo;
-
-import com.codesquad.secondhand.adapter.in.web.response.ProductInfo;
 import com.codesquad.secondhand.application.port.out.ProductRepository;
 import com.codesquad.secondhand.application.service.in.exception.InvalidEntityStateException;
 import com.codesquad.secondhand.application.service.in.exception.ProductNotFoundException;
@@ -31,14 +28,12 @@ public class ProductService {
         product.modifyStatus(status);
     }
 
-    public List<ProductInfo> getProductsByRegion(long regionId) {
-        List<Product> products = productRepository.findByRegionId(regionId);
-        return toProductsInfo(products);
+    public List<Product> getProductsByRegion(long regionId) {
+        return productRepository.findByRegionId(regionId);
     }
 
-    public List<ProductInfo> getProductsByRegionAndCategory(long regionId, long categoryId) {
-        List<Product> products = productRepository.findByRegionIdAndCategoryId(regionId, categoryId);
-        return toProductsInfo(products);
+    public List<Product> getProductsByRegionAndCategory(long regionId, long categoryId) {
+        return productRepository.findByRegionIdAndCategoryId(regionId, categoryId);
     }
 
     public void delete(long id) {
@@ -50,31 +45,26 @@ public class ProductService {
                 .orElseThrow(ProductNotFoundException::new);
     }
 
-    public List<ProductInfo> getProductsByMemberId(long memberId) {
-        List<Product> products = productRepository.findProductsByMemberId(memberId);
-        return toProductsInfo(products);
+    public List<Product> getLikesByMemberId(long memberId) {
+        return productRepository.findLikesByMemberId(memberId);
     }
 
-    public List<ProductInfo> getProductsByMemberIdAndCategoryId(long memberId, long categoryId) {
-        List<Product> products = productRepository.findProductsByMemberIdAndCategoryId(
+    public List<Product> getLikesByMemberIdAndCategoryId(long memberId, long categoryId) {
+        return productRepository.findLikesByMemberIdAndCategoryId(
                 memberId,
                 categoryId
         );
-        return toProductsInfo(products);
     }
 
-    public List<ProductInfo> getByWriterId(long memberId) {
-        List<Product> products = productRepository.findByWriterId(memberId);
-        return toProductsInfo(products);
+    public List<Product> getByWriterId(long memberId) {
+        return productRepository.findByWriterId(memberId);
     }
 
-    public List<ProductInfo> getSoldOutByWriterId(long memberId) {
-        List<Product> products = productRepository.findByWriterIdAndStatus(memberId, Status.SOLD_OUT);
-        return toProductsInfo(products);
+    public List<Product> getSoldOutByWriterId(long memberId) {
+        return productRepository.findByWriterIdAndStatus(memberId, Status.SOLD_OUT);
     }
 
-    public List<ProductInfo> getSalesByWriterId(long memberId) {
-        List<Product> products = productRepository.findByWriterIdAndStatusNot(memberId, Status.SOLD_OUT);
-        return toProductsInfo(products);
+    public List<Product> getSalesByWriterId(long memberId) {
+        return productRepository.findByWriterIdAndStatusNot(memberId, Status.SOLD_OUT);
     }
 }
