@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { useAtom } from 'jotai';
+import { useSetAtom } from 'jotai';
 import { usePageNavigator } from '@hooks/usePageNavigator';
 import { signupTokenAtom } from '@atoms/loginAtom';
 import { fetchLogin, useHandleLogin } from '@api/auth/login';
@@ -13,7 +13,7 @@ export const CallbackPage = () => {
   const { navigateToJoin, navigateToHome } = usePageNavigator();
 
   const handleLogin = useHandleLogin();
-  const [, setSignupToken] = useAtom(signupTokenAtom);
+  const setSignupToken = useSetAtom(signupTokenAtom);
 
   useEffect(() => {
     const URL = window.location.href;

@@ -6,6 +6,7 @@ import { Icon } from '@components/Icon/Icon';
 import { useSetUserRegionMutation } from '@api/region/region';
 import { useAtom } from 'jotai';
 import { userRegionsAtom } from '@atoms/userAtom';
+import extractRegionName from '@utils/extractRegionName';
 
 export const RegionSettingModal: React.FC<RegionSettingModalProps> = ({
   style,
@@ -49,7 +50,7 @@ export const RegionSettingModal: React.FC<RegionSettingModalProps> = ({
               $isSelected={userRegions.selectedRegion.id === region.id}
               onClick={() => handleSelectedRegion(region.id)}
             >
-              <p>{region.name}</p>
+              <p>{extractRegionName(region.name)}</p>
               <DeleteButton
                 onClick={(e) => {
                   e.stopPropagation();

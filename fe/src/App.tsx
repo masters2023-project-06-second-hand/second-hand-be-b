@@ -5,6 +5,7 @@ import { ThemeProvider } from 'styled-components';
 import { RouterProvider } from 'react-router-dom';
 import { Loading } from '@pages/Loading';
 import { GlobalModal } from '@components/Modal/GlobalModal';
+import { Toast } from '@components/Toast/Toast';
 import router from '@routes/router';
 
 const queryClient = new QueryClient({
@@ -24,6 +25,7 @@ function App() {
         <ReactQueryDevtools initialIsOpen={false} />
         <ThemeProvider theme={theme}>
           <RouterProvider router={router} fallbackElement={<Loading />} />
+          <Toast />
           <GlobalModal />
         </ThemeProvider>
       </QueryClientProvider>

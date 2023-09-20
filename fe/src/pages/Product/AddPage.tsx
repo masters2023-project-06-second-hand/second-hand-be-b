@@ -12,25 +12,43 @@ import { Tag } from '@components/Tag/Tag';
 import { Textarea } from '@components/Textarea/Textarea';
 import { useInput } from '@hooks/useInput';
 import { usePrice } from '@hooks/usePrice';
-import { usePageNavigator } from '@hooks/usePageNavigator';
 import { Categories } from '@api/category/types';
 import { useCategoriesWithoutImages } from '@api/category/useCategories';
 import { MAX_IMAGE_SIZE } from '@constants/constants';
 import generateRecommendCategory from '@utils/generateRecommendCategory';
+import { Product } from '@api/product/types';
+import { Icon } from '@components/Icon/Icon';
+import { useAtom } from 'jotai';
+import { userRegionsAtom } from '@atoms/userAtom';
+import { usePageNavigator } from '@hooks/usePageNavigator';
+import extractRegionName from '@utils/extractRegionName';
 
-export const AddPage = () => {
-  const { navigateToGoBack } = usePageNavigator();
+export const AddPage = ({
+  productData,
+  goDetailPage,
+}: {
+  productData?: Product;
+  goDetailPage?(): void;
+}) => {
   const category = useCategoriesWithoutImages();
+  const { navigateToGoBack } = usePageNavigator();
+  const [userRegions] = useAtom(userRegionsAtom);
   const [imgFiles, setImgFiles] = useState<File[]>([]);
   const [productImgs, setProductImgs] = useState<string[]>([]);
-  const { value: name, onChange: onChangeName } = useInput();
-  const { value: content, onChange: onChangeContent } = useInput();
-  const { value: price, onChange: onChangePrice } = usePrice();
+  const { value: name, onChange: onChangeName } = useInput(
+    productData?.productName
+  );
+  const { value: content, onChange: onChangeContent } = useInput(
+    productData?.content
+  );
+  const { value: price, onChange: onChangePrice } = usePrice(
+    productData?.price.toString()
+  );
   const [selectedCategory, setSelectedCategory] = useState<number>();
   const [recommendCategories, setRecommendCategories] =
     useState<Categories[]>();
   const isAllRequired = imgFiles.length === 0 || name === '' || content === '';
-  const hasName = name.length !== 0;
+  const hasName = name;
 
   // To do: 카테로그 추천 로직 변경
   useEffect(() => {
@@ -69,7 +87,7 @@ export const AddPage = () => {
           <TextButton
             size="M"
             textColor="neutralTextStrong"
-            onClick={navigateToGoBack}
+            onClick={productData ? goDetailPage : navigateToGoBack}
           >
             닫기
           </TextButton>
@@ -106,16 +124,21 @@ export const AddPage = () => {
             <Input value={name} onChange={onChangeName} />
           </div>
           {hasName && (
-            <RecommendCategories>
-              {recommendCategories?.map((tag) => (
-                <Tag
-                  key={tag.id}
-                  title={tag.name}
-                  isSelected={selectedCategory === tag.id}
-                  onClick={() => setSelectedCategory(tag.id)}
-                />
-              ))}
-            </RecommendCategories>
+            <RecommendCategoryWrapper>
+              <RecommendCategories>
+                {recommendCategories?.map((tag) => (
+                  <Tag
+                    key={tag.id}
+                    title={tag.name}
+                    isSelected={selectedCategory === tag.id}
+                    onClick={() => setSelectedCategory(tag.id)}
+                  />
+                ))}
+              </RecommendCategories>
+              <MoreCategoryButton>
+                <Icon name="chevronRight" stroke="neutralTextStrong" />
+              </MoreCategoryButton>
+            </RecommendCategoryWrapper>
           )}
         </NameSection>
         <PriceSection>
@@ -127,14 +150,18 @@ export const AddPage = () => {
         </PriceSection>
         <ContentSection>
           <Textarea
-            placeholder="역삼 1동에 올릴 게시물 내용을 작성해주세요.(판매금지 물품은 게시가 제한될 수 있어요.)"
+            placeholder={`${extractRegionName(
+              userRegions.selectedRegion.name
+            )}에 올릴 게시물 내용을 작성해주세요.(판매금지 물품은 게시가 제한될 수 있어요.)`}
             value={content}
             onChange={onChangeContent}
           />
         </ContentSection>
       </Contents>
       <ActionBar>
-        <EditBar regionName="역삼1동" />
+        <EditBar
+          regionName={extractRegionName(userRegions.selectedRegion.name)}
+        />
       </ActionBar>
     </>
   );
@@ -177,7 +204,6 @@ const PriceSection = styled(Section)``;
 const ContentSection = styled(Section)``;
 
 const RecommendCategories = styled.div`
-  padding-top: 16px;
   display: flex;
   gap: 4px;
 `;
@@ -197,4 +223,20 @@ const ImgScroll = styled.div`
   width: max-content;
   height: 100%;
   gap: 16px;
+`;
+
+const RecommendCategoryWrapper = styled.div`
+  padding-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const MoreCategoryButton = styled.button`
+  padding: 0px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;

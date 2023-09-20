@@ -4,6 +4,7 @@ import { useAtom } from 'jotai';
 import { isLoginAtom } from '@atoms/loginAtom';
 import { useModal } from '@components/Modal/useModal';
 import { Dropdown } from './Dropdown';
+import extractRegionName from '@utils/extractRegionName';
 
 type Regions = {
   id: number;
@@ -41,15 +42,13 @@ export const RegionDropdown: React.FC<DropdownProps> = ({
           }}
           $isSelected={region.id === selectedRegionId}
         >
-          {region.name}
+          {extractRegionName(region.name)}
         </Option>
       ))}
-      {isLogin ? (
+      {isLogin && (
         <Setting onClick={() => openModal('regionSetting', {})}>
           내 동네 설정하기
         </Setting>
-      ) : (
-        ''
       )}
     </Dropdown>
   );

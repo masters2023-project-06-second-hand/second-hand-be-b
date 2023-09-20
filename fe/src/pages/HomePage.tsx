@@ -12,6 +12,7 @@ import {
   useSetUserRegionMutation,
   useGetUserReigions,
 } from '@api/region/region';
+import extractRegionName from '@utils/extractRegionName';
 
 const items = [
   {
@@ -130,7 +131,7 @@ export const HomePage = () => {
           <RegionDropdown
             trigger={
               <TextButton size="M" textColor="neutralTextStrong">
-                {userRegions.selectedRegion.name}
+                {extractRegionName(userRegions.selectedRegion.name)}
                 <Icon name="chevronDown" size="M" stroke="neutralTextStrong" />
               </TextButton>
             }

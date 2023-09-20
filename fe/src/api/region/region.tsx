@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import { userInfoAtom, userRegionsAtom } from '@atoms/userAtom';
 import { privateApi } from '../index';
 import { API_ENDPOINTS } from '@constants/endpoints';
@@ -38,7 +38,7 @@ export const addUserRegion = async (userId: number, regionId: number) => {
 
 export const useGetUserReigions = (): void => {
   const [userInfo] = useAtom(userInfoAtom);
-  const [, setUserRegions] = useAtom(userRegionsAtom);
+  const setUserRegions = useSetAtom(userRegionsAtom);
 
   useQuery<UserRegions>(
     [QUERY_KEYS.USER_REGIONS(userInfo ? userInfo.id : null)],
