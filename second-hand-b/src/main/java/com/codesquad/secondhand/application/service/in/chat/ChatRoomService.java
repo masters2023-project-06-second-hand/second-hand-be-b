@@ -20,4 +20,9 @@ public class ChatRoomService {
         return chatRoomRepository.findByProductIdAndSellerIdAndBuyerId(productId, sellerId, buyerId)
                 .orElseThrow(ChatRoomNotFoundException::new);
     }
+
+    ChatRoom getById(long chatRoomId) {
+        return chatRoomRepository.findById(chatRoomId)
+                .orElseThrow(ChatRoomNotFoundException::new);
+    }
 }

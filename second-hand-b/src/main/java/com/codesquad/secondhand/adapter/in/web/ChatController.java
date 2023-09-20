@@ -1,6 +1,7 @@
 package com.codesquad.secondhand.adapter.in.web;
 
 import com.codesquad.secondhand.adapter.in.web.request.ChatRoomIdRequest;
+import com.codesquad.secondhand.adapter.in.web.response.ChatRoomDetail;
 import com.codesquad.secondhand.adapter.in.web.response.ChatRoomId;
 import com.codesquad.secondhand.application.port.in.ChatUseCase;
 import com.codesquad.secondhand.domain.member.Member;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,5 +26,13 @@ public class ChatController {
         ChatRoomId chatRoomId = chatUseCase.getChatRoomId(chatRoomIdRequest.getProductId(),
                 chatRoomIdRequest.getSellerId(), member);
         return ResponseEntity.ok(chatRoomId);
+    }
+
+    @GetMapping("/api/chats/{chatRoomId}")
+    public ResponseEntity<ChatRoomDetail> getChatRoomDetail(
+            @AuthenticationPrincipal Member member,
+            @PathVariable Long chatRoomId) {
+        ChatRoomDetail chatRoomDetail = chatUseCase.getChatRoomDetail(chatRoomId, member);
+        return ResponseEntity.ok(chatRoomDetail);
     }
 }

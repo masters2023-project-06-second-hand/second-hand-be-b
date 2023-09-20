@@ -22,4 +22,9 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
     public Optional<ChatRoom> findByProductIdAndSellerIdAndBuyerId(long productId, long sellerId, long buyerId) {
         return chatRoomCrudRepository.findByProductIdAndSellerIdAndBuyerId(productId, sellerId, buyerId);
     }
+
+    @Override
+    public Optional<ChatRoom> findById(long chatRoomId) {
+        return chatRoomCrudRepository.findById(chatRoomId);
+    }
 }

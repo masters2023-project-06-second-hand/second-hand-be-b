@@ -32,7 +32,7 @@ public class ChatRoom {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "buyer_id")
     private Member buyer;
-    @Column(name = "created_at", nullable = false)
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
     public ChatRoom(Product product, Member seller, Member buyer, LocalDateTime createdAt) {
@@ -44,5 +44,16 @@ public class ChatRoom {
 
     public Long getId() {
         return id;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public String getOpponentName(Long memberId) {
+        if (seller.isSameId(memberId)) {
+            return buyer.getNickname();
+        }
+        return seller.getNickname();
     }
 }

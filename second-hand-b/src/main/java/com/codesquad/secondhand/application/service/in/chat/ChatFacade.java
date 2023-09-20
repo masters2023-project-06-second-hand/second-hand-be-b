@@ -1,13 +1,18 @@
 package com.codesquad.secondhand.application.service.in.chat;
 
+import static com.codesquad.secondhand.application.service.in.chat.ChatMapper.toChatRoomDetail;
+
+import com.codesquad.secondhand.adapter.in.web.response.ChatRoomDetail;
 import com.codesquad.secondhand.adapter.in.web.response.ChatRoomId;
 import com.codesquad.secondhand.application.port.in.ChatUseCase;
 import com.codesquad.secondhand.application.service.in.exception.ChatRoomNotFoundException;
 import com.codesquad.secondhand.application.service.in.prodcut.ProductService;
+import com.codesquad.secondhand.domain.chat.ChatMessage;
 import com.codesquad.secondhand.domain.chat.ChatRoom;
 import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.product.Product;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ChatFacade implements ChatUseCase {
 
     private final ChatRoomService chatRoomService;
+    private final ChatMessageService chatMessageService;
     private final ProductService productService;
 
     @Transactional
@@ -30,6 +36,13 @@ public class ChatFacade implements ChatUseCase {
             ChatRoom savedChatRoom = chatRoomService.save(chatRoom);
             return new ChatRoomId(savedChatRoom.getId());
         }
+    }
+
+    @Override
+    public ChatRoomDetail getChatRoomDetail(long chatRoomId, Member member) {
+        ChatRoom chatRoom = chatRoomService.getById(chatRoomId);
+        List<ChatMessage> chatMessages = chatMessageService.getChatMessagesByChatRoomId(chatRoomId);
+        return toChatRoomDetail(chatRoom, chatMessages, member);
     }
 
     private ChatRoom toChatRoom(long productId, Member member) {
