@@ -1,7 +1,8 @@
 package com.codesquad.secondhand.adapter.in.web.config;
 
-import com.codesquad.secondhand.adapter.in.web.config.jwt.JwtSignInAuthenticationFilter;
-import com.codesquad.secondhand.adapter.in.web.config.jwt.JwtSignUpAuthenticationFilter;
+import com.codesquad.secondhand.adapter.in.web.security.filter.JwtSignInAuthenticationFilter;
+import com.codesquad.secondhand.adapter.in.web.security.filter.JwtSignUpAuthenticationFilter;
+import com.codesquad.secondhand.adapter.in.web.security.handler.OAuth2LoginSuccessHandler;
 import com.codesquad.secondhand.application.port.in.MemberUseCase;
 import com.codesquad.secondhand.domain.member.Role;
 import java.util.List;

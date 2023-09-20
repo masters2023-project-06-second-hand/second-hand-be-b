@@ -1,6 +1,5 @@
 package com.codesquad.secondhand.domain.product;
 
-import com.codesquad.secondhand.domain.image.Image;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.Column;

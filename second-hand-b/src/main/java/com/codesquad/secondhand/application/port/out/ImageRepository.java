@@ -1,6 +1,6 @@
 package com.codesquad.secondhand.application.port.out;
 
-import com.codesquad.secondhand.domain.image.Image;
+import com.codesquad.secondhand.domain.product.Image;
 import java.util.List;
 import java.util.Optional;
 

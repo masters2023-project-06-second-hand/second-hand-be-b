@@ -12,7 +12,6 @@ import static com.codesquad.secondhand.domain.product.ProductTestUtils.createTes
 import static com.codesquad.secondhand.domain.product.ProductTestUtils.getDefaultTestImages;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.codesquad.secondhand.domain.image.Image;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

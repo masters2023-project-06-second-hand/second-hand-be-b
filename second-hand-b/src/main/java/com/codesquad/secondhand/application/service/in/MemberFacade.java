@@ -5,7 +5,7 @@ import static com.codesquad.secondhand.application.service.in.prodcut.ProductMap
 
 import com.codesquad.secondhand.adapter.in.web.response.CategorySimpleDetail;
 import com.codesquad.secondhand.adapter.in.web.response.MemberInfo;
-import com.codesquad.secondhand.adapter.in.web.response.ProductInfo;
+import com.codesquad.secondhand.adapter.in.web.response.product.ProductInfo;
 import com.codesquad.secondhand.application.port.in.MemberUseCase;
 import com.codesquad.secondhand.application.service.in.prodcut.ProductService;
 import com.codesquad.secondhand.application.service.in.region.RegionService;

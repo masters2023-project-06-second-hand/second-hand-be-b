@@ -1,12 +1,12 @@
 package com.codesquad.secondhand.application.service.in.prodcut;
 
-import static com.codesquad.secondhand.application.service.in.image.ImageMapper.toImageInfos;
+import static com.codesquad.secondhand.application.service.in.prodcut.ImageMapper.toImageInfos;
 
-import com.codesquad.secondhand.adapter.in.web.response.ImageInfo;
-import com.codesquad.secondhand.adapter.in.web.response.ProductDetail;
-import com.codesquad.secondhand.adapter.in.web.response.ProductInfo;
-import com.codesquad.secondhand.adapter.in.web.response.ProductWriter;
-import com.codesquad.secondhand.domain.image.Image;
+import com.codesquad.secondhand.adapter.in.web.response.product.ImageInfo;
+import com.codesquad.secondhand.adapter.in.web.response.product.ProductDetail;
+import com.codesquad.secondhand.adapter.in.web.response.product.ProductInfo;
+import com.codesquad.secondhand.adapter.in.web.response.product.ProductWriter;
+import com.codesquad.secondhand.domain.product.Image;
 import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.product.Category;
 import com.codesquad.secondhand.domain.product.Product;
