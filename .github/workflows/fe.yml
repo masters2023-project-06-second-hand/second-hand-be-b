@@ -7,9 +7,6 @@ on:
   push:
     branches:
       - fe
-  pull_request:
-    branches:
-      - fe
   # 워크플로우를 수동으로 실행할 수 있는 옵션을 제공합니다.
   # GitHub 웹 인터페이스에서 "Run workflow" 버튼을 통해 실행할 수 있습니다.
   workflow_dispatch:
@@ -38,7 +35,7 @@ jobs:
           echo "${{ secrets.FE_ENV }}" | base64 --decode > fe/.env
 
       # 프로젝트의 의존성을 설치합니다.
-      - name: 의존성 설치
+      - name: 의존성 설치경
         run: |
           cd fe
           npm install
@@ -88,18 +85,10 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i private_key.pem $USER@$HOST "
             sudo docker pull $TAG
           
-            # fe1이 실행 중이면 fe2로 시작하고, fe1을 중지 및 삭제
-            if sudo docker ps --format '{{.Names}}' | grep -q 'fe1'; then
-              sudo docker run -d --name fe2 --network=secondhand $TAG
-              sudo docker stop fe1
-              sudo docker rm fe1
-            # fe2가 실행 중이면 fe1로 시작하고, fe2를 중지 및 삭제
-            elif sudo docker ps --format '{{.Names}}' | grep -q 'fe2'; then
-              sudo docker run -d --name fe1 --network=secondhand $TAG
-              sudo docker stop fe2
-              sudo docker rm fe2
-            else
-            # 위의 두 경우가 아니면 기본 동작을 실행할 수 있습니다
-              sudo docker run -d --name fe1 --network=secondhand $TAG
-            fi
+            sudo docker stop fe1
+            sudo docker rm fe1
+            sudo docker run -d --name fe1 --network=secondhand $TAG
+            sudo docker stop fe2
+            sudo docker rm fe2
+            sudo docker run -d --name fe2 --network=secondhand $TAG
           "
