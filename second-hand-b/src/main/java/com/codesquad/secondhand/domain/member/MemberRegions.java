@@ -1,6 +1,7 @@
 package com.codesquad.secondhand.domain.member;
 
 import com.codesquad.secondhand.application.service.in.exception.ExistsMemberRegionException;
+import com.codesquad.secondhand.application.service.in.exception.MinimumRegionRequirementException;
 import com.codesquad.secondhand.application.service.in.exception.NotExistsMemberRegionException;
 import com.codesquad.secondhand.domain.region.Region;
 import java.io.Serializable;
@@ -19,6 +20,8 @@ import lombok.NoArgsConstructor;
 @Embeddable
 public class MemberRegions implements Serializable {
 
+    public static final int FIRST_INDEX = 0;
+    public static final int MINIMUM_SIZE = 1;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "member_region",
             joinColumns = @JoinColumn(name = "member_id"),
@@ -36,11 +39,15 @@ public class MemberRegions implements Serializable {
         regions.add(region);
     }
 
-    public void removeRegion(Region region) {
+    public Region removeRegion(Region region) {
         if (!regions.contains(region)) {
             throw new NotExistsMemberRegionException();
         }
+        if (regions.size() <= MINIMUM_SIZE) {
+            throw new MinimumRegionRequirementException();
+        }
         regions.remove(region);
+        return regions.get(FIRST_INDEX);
     }
 
     public boolean contains(Region region) {

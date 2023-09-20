@@ -21,6 +21,7 @@ public enum ErrorCode {
     REGION_NOT_FOUND(HttpStatus.BAD_REQUEST, "R001", "동네를 찾을 수 없습니다."),
     EXISTS_MEMBER_REGION(HttpStatus.BAD_REQUEST, "R002", "이미 존재하는 멤버의 동네입니다."),
     NOT_EXISTS_MEMBER_REGION(HttpStatus.BAD_REQUEST, "R003", "사용자의 동네와 일치하지 않습니다."),
+    MINIMUM_REGION_REQUIREMENT(HttpStatus.BAD_REQUEST, "R004", "사용자는 최소한 하나의 지역을 가지고 있어야 합니다."),
 
     // Product
     PRODUCT_NOT_FOUND(HttpStatus.BAD_REQUEST, "P001", "상품을 찾을 수 없습니다."),

@@ -83,7 +83,7 @@ public class Member implements Serializable {
     }
 
     public void removeRegion(Region region) {
-        myRegions.removeRegion(region);
+        this.selectedRegion = myRegions.removeRegion(region);
     }
 
     public List<Region> fetchRegions() {
