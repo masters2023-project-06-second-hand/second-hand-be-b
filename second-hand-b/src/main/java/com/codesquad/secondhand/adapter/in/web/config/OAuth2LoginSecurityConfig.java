@@ -2,7 +2,7 @@ package com.codesquad.secondhand.adapter.in.web.config;
 
 import com.codesquad.secondhand.adapter.in.web.config.jwt.JwtSignInAuthenticationFilter;
 import com.codesquad.secondhand.adapter.in.web.config.jwt.JwtSignUpAuthenticationFilter;
-import com.codesquad.secondhand.application.port.out.MemberRepository;
+import com.codesquad.secondhand.application.port.in.MemberUseCase;
 import com.codesquad.secondhand.domain.member.Role;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,8 +44,11 @@ public class OAuth2LoginSecurityConfig {
     private String[] memberAllowedUrls;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity,
-            MemberRepository memberRepository, OAuth2LoginSuccessHandler successHandler) throws Exception {
+    public SecurityFilterChain filterChain(
+            HttpSecurity httpSecurity,
+            OAuth2LoginSuccessHandler successHandler,
+            MemberUseCase memberUseCase
+    ) throws Exception {
         return httpSecurity
                 .authorizeHttpRequests(
                         requestMatcherRegistry -> requestMatcherRegistry
@@ -65,7 +68,7 @@ public class OAuth2LoginSecurityConfig {
                         new JwtSignUpAuthenticationFilter(),
                         OAuth2AuthorizationRequestRedirectFilter.class)
                 .addFilterBefore(
-                        new JwtSignInAuthenticationFilter(memberRepository),
+                        new JwtSignInAuthenticationFilter(memberUseCase),
                         JwtSignUpAuthenticationFilter.class)
                 .oauth2Login(configurer -> configurer.successHandler(successHandler))
                 .cors().configurationSource(corsConfigurationSource())
@@ -96,10 +99,9 @@ public class OAuth2LoginSecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         var configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(allowedOrigins);
+        configuration.setAllowedOrigins(List.of("*"));
         configuration.setAllowedMethods(allowedMethods);
         configuration.setAllowedHeaders(allowedHeaders);
-        configuration.setAllowCredentials(true);
         var urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
         urlBasedCorsConfigurationSource.registerCorsConfiguration(corsMappingPattern, configuration);
         return urlBasedCorsConfigurationSource;

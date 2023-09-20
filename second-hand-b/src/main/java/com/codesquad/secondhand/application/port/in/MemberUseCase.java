@@ -21,4 +21,6 @@ public interface MemberUseCase {
     List<ProductInfo> getMySellingProducts(Member member, long memberId);
 
     List<ProductInfo> getMySellingProductsByStatus(Member member, long memberId, String statusName);
+
+    Member getByEmail(String email);
 }

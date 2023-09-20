@@ -1,12 +1,11 @@
 package com.codesquad.secondhand.adapter.in.web.config.jwt;
 
 import com.codesquad.secondhand.adapter.in.web.security.JwtAccessToken;
-import com.codesquad.secondhand.application.port.out.MemberRepository;
+import com.codesquad.secondhand.application.port.in.MemberUseCase;
 import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.units.JwtTokenProvider;
 import java.io.IOException;
 import java.util.Date;
-import java.util.Optional;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -17,10 +16,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 public class JwtSignInAuthenticationFilter extends OncePerRequestFilter {
 
-    private final MemberRepository memberRepository;
+    private final MemberUseCase memberUseCase;
 
-    public JwtSignInAuthenticationFilter(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
+    public JwtSignInAuthenticationFilter(MemberUseCase memberUseCase) {
+        this.memberUseCase = memberUseCase;
     }
 
     @Override
@@ -39,14 +38,12 @@ public class JwtSignInAuthenticationFilter extends OncePerRequestFilter {
         Date now = new Date();
         if (JwtTokenProvider.isValidAccessToken(token, now) && JwtTokenProvider.isAccessToken(token)) {
             String email = JwtTokenProvider.getEmailFromAccessToken(token);
-            Optional<Member> member = memberRepository.findByEmail(email);
-            if (member.isPresent()) {
-                Authentication authentication = new JwtAccessToken(member.get(), member.get().getRoleAuthority());
-                authentication.setAuthenticated(true);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                filterChain.doFilter(request, response);
-                return;
-            }
+            Member member = memberUseCase.getByEmail(email);
+            Authentication authentication = new JwtAccessToken(member, member.getRoleAuthority());
+            authentication.setAuthenticated(true);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            filterChain.doFilter(request, response);
+            return;
         }
         filterChain.doFilter(request, response);
     }
