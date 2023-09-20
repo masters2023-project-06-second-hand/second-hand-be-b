@@ -73,3 +73,6 @@ jobs:
         with:
           files: |
             second-hand-b/build/test-results/**/*.xml
+
+      - name: Coveralls
+        uses: coverallsapp/github-action@v2
