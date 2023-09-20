@@ -292,4 +292,28 @@ public class ProductSteps {
                 .when().delete("/api/products/{productId}", productId)
                 .then().log().all().extract();
     }
+
+    public static void regionid로_조회된_상품몰록_검증(ExtractableResponse<Response> response) {
+        Assertions.assertAll(
+                () -> org.assertj.core.api.Assertions.assertThat(
+                                response.jsonPath().getList("products.id", String.class))
+                        .containsExactlyInAnyOrder("1", "2"),
+                () -> org.assertj.core.api.Assertions.assertThat(
+                        response.jsonPath().getObject("hasNext", Boolean.class)).isNotNull(),
+                () -> org.assertj.core.api.Assertions.assertThat(response.jsonPath().getObject("page", Long.class))
+                        .isNotNull()
+        );
+    }
+
+    public static void regionid와_categoryId로_조회된_지역목록_검증(ExtractableResponse<Response> response) {
+        Assertions.assertAll(
+                () -> org.assertj.core.api.Assertions.assertThat(
+                                response.jsonPath().getList("products.id", String.class))
+                        .containsExactlyInAnyOrder("2", "3"),
+                () -> org.assertj.core.api.Assertions.assertThat(
+                        response.jsonPath().getObject("hasNext", Boolean.class)).isNotNull(),
+                () -> org.assertj.core.api.Assertions.assertThat(response.jsonPath().getObject("page", Long.class))
+                        .isNotNull()
+        );
+    }
 }

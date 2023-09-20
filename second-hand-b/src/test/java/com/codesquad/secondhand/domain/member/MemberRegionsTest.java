@@ -29,14 +29,17 @@ class MemberRegionsTest {
     void removeRegion() {
         // given
         MemberRegions memberRegions = new MemberRegions();
-        Region region = new Region("강남구 역삼1동");
-        memberRegions.addRegion(region);
+        Region region1 = new Region("강남구 역삼1동");
+        memberRegions.addRegion(region1);
+        Region region2 = new Region("강남구 역삼2동");
+        memberRegions.addRegion(region2);
+
 
         // when
-        memberRegions.removeRegion(region);
+        memberRegions.removeRegion(region1);
 
         // then
         List<Region> regions = memberRegions.getRegions();
-        assertThat(regions).isEmpty();
+        assertThat(regions).size().isEqualTo(1);
     }
 }

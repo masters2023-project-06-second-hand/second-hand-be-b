@@ -4,14 +4,14 @@ import com.codesquad.secondhand.adapter.in.web.request.product.ModifyStatusReque
 import com.codesquad.secondhand.adapter.in.web.request.product.ProductCreateRequest;
 import com.codesquad.secondhand.adapter.in.web.request.product.ProductModifyRequest;
 import com.codesquad.secondhand.adapter.in.web.response.product.ProductDetail;
-import com.codesquad.secondhand.adapter.in.web.response.product.ProductInfo;
+import com.codesquad.secondhand.adapter.in.web.response.product.ProductsInfo;
 import com.codesquad.secondhand.application.port.in.ProductUseCase;
 import com.codesquad.secondhand.domain.member.Member;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -64,16 +64,16 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductInfo>> getProductList(
+    public ResponseEntity<ProductsInfo> getProductList(
             @RequestParam long regionId
-            , @RequestParam Optional<Long> categoryId) {
+            , @RequestParam Optional<Long> categoryId, Pageable pageable) {
         if (categoryId.isPresent()) {
-            List<ProductInfo> productsByRegionAndCategory = productUseCase
-                    .getProductsByRegionAndCategory(regionId, categoryId.get());
+            ProductsInfo productsByRegionAndCategory = productUseCase
+                    .getProductsByRegionAndCategory(regionId, categoryId.get(), pageable);
             return ResponseEntity.ok()
                     .body(productsByRegionAndCategory);
         }
-        List<ProductInfo> productsByRegion = productUseCase.getProductsByRegion(regionId);
+        ProductsInfo productsByRegion = productUseCase.getProductsByRegion(regionId, pageable);
         return ResponseEntity.ok()
                 .body(productsByRegion);
     }

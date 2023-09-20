@@ -2,31 +2,32 @@ package com.codesquad.secondhand.adapter.out.persistence.imports;
 
 import com.codesquad.secondhand.domain.product.Product;
 import com.codesquad.secondhand.domain.product.Status;
-import java.util.List;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 
-public interface ProductCrudRepository extends CrudRepository<Product, Long> {
+public interface ProductCrudRepository extends JpaRepository<Product, Long> {
 
     @Query(" select member_product from Member member_ "
             + " join member_.likes.products member_product"
-            + " where member_.id = :memberId"
+            + " where member_.id = :memberId "
     )
-    List<Product> findLikesByMemberId(long memberId);
+    Slice<Product> findLikesByMemberId(long memberId, Pageable pageable);
 
-    @Query(" select member_product from Member member_ "
+    @Query(value = " select member_product from Member member_ "
             + " join member_.likes.products member_product"
             + " where member_.id = :memberId and member_product.categoryId = :categoryId"
     )
-    List<Product> findLikesByMemberIdAndCategoryId(long memberId, long categoryId);
+    Slice<Product> findLikesByMemberIdAndCategoryId(long memberId, long categoryId, Pageable pageable);
 
-    List<Product> findByWriterId(long writerId);
+    Slice<Product> findByWriterId(long writerId, Pageable pageable);
 
-    List<Product> findByWriterIdAndStatus(long writerId, Status status);
+    Slice<Product> findByWriterIdAndStatus(long writerId, Status status, Pageable pageable);
 
-    List<Product> findByWriterIdAndStatusNot(long writerId, Status status);
+    Slice<Product> findByWriterIdAndStatusNot(long writerId, Status status, Pageable pageable);
 
-    List<Product> findByRegionId(long regionId);
+    Slice<Product> findByRegionId(long regionId, Pageable pageable);
 
-    List<Product> findByRegionIdAndCategoryId(long regionId, long categoryId);
+    Slice<Product> findByRegionIdAndCategoryId(long regionId, long categoryId, Pageable pageable);
 }

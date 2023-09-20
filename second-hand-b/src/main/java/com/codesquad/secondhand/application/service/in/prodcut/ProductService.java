@@ -5,8 +5,9 @@ import com.codesquad.secondhand.application.service.in.exception.InvalidEntitySt
 import com.codesquad.secondhand.application.service.in.exception.ProductNotFoundException;
 import com.codesquad.secondhand.domain.product.Product;
 import com.codesquad.secondhand.domain.product.Status;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,12 +29,12 @@ public class ProductService {
         product.modifyStatus(status);
     }
 
-    public List<Product> getProductsByRegion(long regionId) {
-        return productRepository.findByRegionId(regionId);
+    public Slice<Product> getProductsByRegion(long regionId, Pageable pageable) {
+        return productRepository.findByRegionId(regionId, pageable);
     }
 
-    public List<Product> getProductsByRegionAndCategory(long regionId, long categoryId) {
-        return productRepository.findByRegionIdAndCategoryId(regionId, categoryId);
+    public Slice<Product> getProductsByRegionAndCategory(long regionId, long categoryId, Pageable pageable) {
+        return productRepository.findByRegionIdAndCategoryId(regionId, categoryId, pageable);
     }
 
     public void delete(long id) {
@@ -45,26 +46,27 @@ public class ProductService {
                 .orElseThrow(ProductNotFoundException::new);
     }
 
-    public List<Product> getLikesByMemberId(long memberId) {
-        return productRepository.findLikesByMemberId(memberId);
+    public Slice<Product> getLikesByMemberId(long memberId, Pageable pageable) {
+        return productRepository.findLikesByMemberId(memberId, pageable);
     }
 
-    public List<Product> getLikesByMemberIdAndCategoryId(long memberId, long categoryId) {
+    public Slice<Product> getLikesByMemberIdAndCategoryId(long memberId, long categoryId, Pageable pageable) {
         return productRepository.findLikesByMemberIdAndCategoryId(
                 memberId,
-                categoryId
+                categoryId,
+                pageable
         );
     }
 
-    public List<Product> getByWriterId(long memberId) {
-        return productRepository.findByWriterId(memberId);
+    public Slice<Product> getByWriterId(long memberId, Pageable pageable) {
+        return productRepository.findByWriterId(memberId, pageable);
     }
 
-    public List<Product> getSoldOutByWriterId(long memberId) {
-        return productRepository.findByWriterIdAndStatus(memberId, Status.SOLD_OUT);
+    public Slice<Product> getSoldOutByWriterId(long memberId, Pageable pageable) {
+        return productRepository.findByWriterIdAndStatus(memberId, Status.SOLD_OUT, pageable);
     }
 
-    public List<Product> getSalesByWriterId(long memberId) {
-        return productRepository.findByWriterIdAndStatusNot(memberId, Status.SOLD_OUT);
+    public Slice<Product> getSalesByWriterId(long memberId, Pageable pageable) {
+        return productRepository.findByWriterIdAndStatusNot(memberId, Status.SOLD_OUT, pageable);
     }
 }

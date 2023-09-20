@@ -4,9 +4,10 @@ import com.codesquad.secondhand.adapter.out.persistence.imports.ProductCrudRepos
 import com.codesquad.secondhand.application.port.out.ProductRepository;
 import com.codesquad.secondhand.domain.product.Product;
 import com.codesquad.secondhand.domain.product.Status;
-import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -26,38 +27,38 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public List<Product> findLikesByMemberId(long memberId) {
-        return productCrudRepository.findLikesByMemberId(memberId);
+    public Slice<Product> findLikesByMemberId(long memberId, Pageable pageable) {
+        return productCrudRepository.findLikesByMemberId(memberId, pageable);
     }
 
     @Override
-    public List<Product> findLikesByMemberIdAndCategoryId(long memberId, long categoryId) {
-        return productCrudRepository.findLikesByMemberIdAndCategoryId(memberId, categoryId);
+    public Slice<Product> findLikesByMemberIdAndCategoryId(long memberId, long categoryId, Pageable pageable) {
+        return productCrudRepository.findLikesByMemberIdAndCategoryId(memberId, categoryId, pageable);
     }
 
     @Override
-    public List<Product> findByWriterId(long writerId) {
-        return productCrudRepository.findByWriterId(writerId);
+    public Slice<Product> findByWriterId(long writerId, Pageable pageable) {
+        return productCrudRepository.findByWriterId(writerId, pageable);
     }
 
     @Override
-    public List<Product> findByWriterIdAndStatus(long writerId, Status status) {
-        return productCrudRepository.findByWriterIdAndStatus(writerId, status);
+    public Slice<Product> findByWriterIdAndStatus(long writerId, Status status, Pageable pageable) {
+        return productCrudRepository.findByWriterIdAndStatus(writerId, status, pageable);
     }
 
     @Override
-    public List<Product> findByWriterIdAndStatusNot(long writerId, Status status) {
-        return productCrudRepository.findByWriterIdAndStatusNot(writerId, status);
+    public Slice<Product> findByWriterIdAndStatusNot(long writerId, Status status, Pageable pageable) {
+        return productCrudRepository.findByWriterIdAndStatusNot(writerId, status, pageable);
     }
 
     @Override
-    public List<Product> findByRegionId(long regionId) {
-        return productCrudRepository.findByRegionId(regionId);
+    public Slice<Product> findByRegionId(long regionId, Pageable pageable) {
+        return productCrudRepository.findByRegionId(regionId, pageable);
     }
 
     @Override
-    public List<Product> findByRegionIdAndCategoryId(long regionId, long categoryId) {
-        return productCrudRepository.findByRegionIdAndCategoryId(regionId, categoryId);
+    public Slice<Product> findByRegionIdAndCategoryId(long regionId, long categoryId, Pageable pageable) {
+        return productCrudRepository.findByRegionIdAndCategoryId(regionId, categoryId, pageable);
     }
 
     @Override

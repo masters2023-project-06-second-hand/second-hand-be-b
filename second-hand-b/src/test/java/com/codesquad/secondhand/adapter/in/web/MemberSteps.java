@@ -9,6 +9,7 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import java.util.HashMap;
 import java.util.Map;
+import org.junit.jupiter.api.Assertions;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
@@ -49,13 +50,21 @@ public class MemberSteps {
     }
 
     public static void 나의_관심상품_목록_조회_검증한다(ExtractableResponse<Response> response) {
-        assertThat(response.jsonPath().getList("id", String.class))
-                .containsExactlyInAnyOrder("1", "2");
+        Assertions.assertAll(
+                () -> assertThat(response.jsonPath().getList("products.id", String.class))
+                        .containsExactlyInAnyOrder("1", "2"),
+                () -> assertThat(response.jsonPath().getObject("hasNext", Boolean.class)).isNotNull(),
+                () -> assertThat(response.jsonPath().getObject("page", Long.class)).isNotNull()
+        );
     }
 
     public static void 나의_카테고리별_관심상품_목록_조회_결과_검증한다(ExtractableResponse<Response> response) {
-        assertThat(response.jsonPath().getList("id", String.class))
-                .containsExactlyInAnyOrder("1");
+        Assertions.assertAll(
+                () -> assertThat(response.jsonPath().getList("products.id", String.class))
+                        .containsExactlyInAnyOrder("1"),
+                () -> assertThat(response.jsonPath().getObject("hasNext", Boolean.class)).isNotNull(),
+                () -> assertThat(response.jsonPath().getObject("page", Long.class)).isNotNull()
+        );
     }
 
     public static void 나의_관심상품의_카테고리_목록_조회_결과_검증한다(ExtractableResponse<Response> response) {
@@ -64,13 +73,21 @@ public class MemberSteps {
     }
 
     public static void 나의_판매상품의_목록_조회_결과_검증한다(ExtractableResponse<Response> response) {
-        assertThat(response.jsonPath().getList("id", String.class))
-                .containsExactlyInAnyOrder("1", "2");
+        Assertions.assertAll(
+                () -> assertThat(response.jsonPath().getList("products.id", String.class))
+                        .containsExactlyInAnyOrder("1", "2"),
+                () -> assertThat(response.jsonPath().getObject("hasNext", Boolean.class)).isNotNull(),
+                () -> assertThat(response.jsonPath().getObject("page", Long.class)).isNotNull()
+        );
     }
 
     public static void 나의_상태별_판매상품의_목록_조회_결과_검증한다(ExtractableResponse<Response> response) {
-        assertThat(response.jsonPath().getList("id", String.class))
-                .containsExactlyInAnyOrder("1");
+        Assertions.assertAll(
+                () -> assertThat(response.jsonPath().getList("products.id", String.class))
+                        .containsExactlyInAnyOrder("1"),
+                () -> assertThat(response.jsonPath().getObject("hasNext", Boolean.class)).isNotNull(),
+                () -> assertThat(response.jsonPath().getObject("page", Long.class)).isNotNull()
+        );
     }
 
     public static ExtractableResponse<Response> 나의_관심상품_목록_조회한다(String accessToken,

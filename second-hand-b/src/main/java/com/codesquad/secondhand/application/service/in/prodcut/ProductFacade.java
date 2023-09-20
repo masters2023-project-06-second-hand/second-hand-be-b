@@ -1,5 +1,6 @@
 package com.codesquad.secondhand.application.service.in.prodcut;
 
+import static com.codesquad.secondhand.application.service.in.MemberUtils.validateMemberPermission;
 import static com.codesquad.secondhand.application.service.in.prodcut.ProductMapper.toProductDetail;
 import static com.codesquad.secondhand.application.service.in.prodcut.ProductMapper.toProductInfo;
 
@@ -7,13 +8,14 @@ import com.codesquad.secondhand.adapter.in.web.request.product.ProductCreateRequ
 import com.codesquad.secondhand.adapter.in.web.request.product.ProductModifyRequest;
 import com.codesquad.secondhand.adapter.in.web.response.product.ProductDetail;
 import com.codesquad.secondhand.adapter.in.web.response.product.ProductInfo;
+import com.codesquad.secondhand.adapter.in.web.response.product.ProductsInfo;
 import com.codesquad.secondhand.application.port.in.ProductUseCase;
 import com.codesquad.secondhand.application.service.in.CategoryService;
 import com.codesquad.secondhand.application.service.in.MemberService;
 import com.codesquad.secondhand.application.service.in.region.RegionService;
-import com.codesquad.secondhand.domain.product.Image;
 import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.product.Category;
+import com.codesquad.secondhand.domain.product.Image;
 import com.codesquad.secondhand.domain.product.Product;
 import com.codesquad.secondhand.domain.product.Status;
 import com.codesquad.secondhand.domain.region.Region;
@@ -21,6 +23,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,15 +76,15 @@ public class ProductFacade implements ProductUseCase {
 
     @Transactional(readOnly = true)
     @Override
-    public List<ProductInfo> getProductsByRegion(long regionId) {
-        List<Product> products = productService.getProductsByRegion(regionId);
+    public ProductsInfo getProductsByRegion(long regionId, Pageable pageable) {
+        Slice<Product> products = productService.getProductsByRegion(regionId, pageable);
         return toProductsInfo(products);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public List<ProductInfo> getProductsByRegionAndCategory(long regionId, long categoryId) {
-        List<Product> products = productService.getProductsByRegionAndCategory(regionId, categoryId);
+    public ProductsInfo getProductsByRegionAndCategory(long regionId, long categoryId, Pageable pageable) {
+        Slice<Product> products = productService.getProductsByRegionAndCategory(regionId, categoryId, pageable);
         return toProductsInfo(products);
     }
 
@@ -88,6 +92,48 @@ public class ProductFacade implements ProductUseCase {
     @Override
     public void delete(long id) {
         productService.delete(id);
+    }
+
+
+    @Override
+    public ProductsInfo getMySellingProductsByStatus(Member member, long memberId, String statusName,
+            Pageable pageable) {
+        validateMemberPermission(member, memberId);
+        Status status = Status.findByName(statusName);
+        if (Status.isSoldOut(status)) {
+            Slice<Product> products = productService.getSoldOutByWriterId(memberId, pageable);
+            return toProductsInfo(products);
+        }
+        Slice<Product> products = productService.getSalesByWriterId(memberId, pageable);
+        return toProductsInfo(products);
+    }
+
+    @Override
+    public ProductsInfo getMySellingProducts(Member member, long memberId, Pageable pageable) {
+        validateMemberPermission(member, memberId);
+        Slice<Product> products = productService.getByWriterId(memberId, pageable);
+        return toProductsInfo(products);
+    }
+
+    @Override
+    public ProductsInfo fetchMemberFavoriteProducts(Member member, long memberId, Long categoryId, Pageable pageable) {
+        validateMemberPermission(member, memberId);
+        Slice<Product> products = productService.getLikesByMemberIdAndCategoryId(memberId, categoryId, pageable);
+        return toProductsInfo(products);
+    }
+
+    @Transactional
+    @Override
+    public void toggleProductLikeStatus(Member member, Long productId, boolean isLiked) {
+        Product product = productService.getById(productId);
+        memberService.toggleProductLikeStatus(member, isLiked, product);
+    }
+
+    @Override
+    public ProductsInfo fetchMemberFavoriteProducts(Member member, long memberId, Pageable pageable) {
+        validateMemberPermission(member, memberId);
+        Slice<Product> products = productService.getLikesByMemberId(memberId, pageable);
+        return toProductsInfo(products);
     }
 
     private Product toProduct(ProductCreateRequest productCreateRequest, Member member) {
@@ -128,10 +174,10 @@ public class ProductFacade implements ProductUseCase {
                 region.getId());
     }
 
-    private List<ProductInfo> toProductsInfo(List<Product> products) {
-        return products.stream()
+    private ProductsInfo toProductsInfo(Slice<Product> products) {
+        List<ProductInfo> productInfoList = products.stream()
                 .map(product -> toProductInfo(product, regionService.getById(product.getRegionId())))
                 .collect(Collectors.toList());
+        return new ProductsInfo(productInfoList, products.hasNext(), products.getNumber());
     }
-
 }
