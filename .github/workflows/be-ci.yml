@@ -77,6 +77,19 @@ jobs:
   Coveralls:
     runs-on: ubuntu-latest
 
+    services:
+      mysql_db:
+        image: mysql:8.0
+        ports:
+          - 3306:3306 # HOST:CONTAINER
+        env:
+          MYSQL_ROOT_PASSWORD: admin
+          MYSQL_DATABASE: secondhand
+          MYSQL_USER: test
+          MYSQL_PASSWORD: test
+
+    # 작업에서 실행될 순차적인 단계를 정의합니다.
+
     steps:
       - name: 코드 체크아웃
         uses: actions/checkout@v4
