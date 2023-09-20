@@ -78,7 +78,10 @@ public class AuthService implements AuthUseCase {
 
     @Override
     public void signOut(Member member) {
-        refreshTokenRepository.deleteByEmail(member.getEmail());
+        String email = member.getEmail();
+        if (refreshTokenRepository.existsByEmail(email)) {
+            refreshTokenRepository.deleteByEmail(email);
+        }
     }
 
     private Tokens getTokens(String email, Member member) {
