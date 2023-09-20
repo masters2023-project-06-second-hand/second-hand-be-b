@@ -83,10 +83,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i private_key.pem $USER@$HOST "
             sudo docker pull $TAG
           
-            sudo docker stop fe1
-            sudo docker rm fe1
-            sudo docker run -d --name fe1 --network=secondhand $TAG
-            sudo docker stop fe2
-            sudo docker rm fe2
-            sudo docker run -d --name fe2 --network=secondhand $TAG
+            sudo docker stop fe
+            sudo docker rm fe
+            sudo docker run -d --name fe --network=secondhand $TAG
           "
