@@ -1,9 +1,13 @@
 import { API_ENDPOINTS } from '@constants/endpoints';
 import { privateApi, publicApi } from '..';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  QueryKey,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { Product, ProductStatus } from './types';
 import { QUERY_KEYS } from '@api/queryKey';
-import { useNavigate } from 'react-router-dom';
 
 const getProductDetail = async (productId: number) => {
   const { data } = await publicApi.get(API_ENDPOINTS.PRODUCT_DETAIL(productId));
@@ -36,16 +40,14 @@ const updateProductStatus = async (
   return response.data;
 };
 
-export const useChangeProductStatusMutation = () => {
+export const useChangeProductStatusMutation = (queryKey: QueryKey) => {
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation(
     (data: StatusMutation) => updateProductStatus(data.productId, data.status),
     {
-      onSuccess: (_, variables) => {
-        queryClient.invalidateQueries([
-          QUERY_KEYS.PRODUCT_DETAIL(variables.productId),
-        ]);
+      onSuccess: () => {
+        queryClient.invalidateQueries(queryKey);
       },
     }
   );
@@ -59,13 +61,13 @@ const deleteProduct = async (productId: number) => {
   return response.data;
 };
 
-export const useDeleteProductMutation = () => {
-  const navigate = useNavigate();
+export const useDeleteProductMutation = (queryKey: QueryKey) => {
+  const queryClient = useQueryClient();
   const { mutate } = useMutation(
     (productId: number) => deleteProduct(productId),
     {
       onSuccess: () => {
-        navigate('/');
+        queryClient.invalidateQueries(queryKey);
       },
     }
   );

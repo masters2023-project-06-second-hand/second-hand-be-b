@@ -7,11 +7,11 @@ import { LikePage } from '@pages/LikePage';
 import { ChatPage } from '@pages/ChatPage';
 import { AccountPage } from '@pages/AccountPage';
 import { ErrorPage } from '@pages/ErrorPage';
-import { DetailPage } from '@pages/DetailPage';
 import { JoinPage } from '@pages/JoinPage';
-import { AddPage } from '@pages/AddPage';
+import { AddPage } from '@pages/Product/AddPage';
 import { CallbackPage } from '@pages/CallbackPage';
 import { PATH } from '@constants/path';
+import { ProductPage } from '@pages/Product/ProductPage';
 
 const router = createBrowserRouter([
   {
@@ -47,7 +47,7 @@ const router = createBrowserRouter([
           },
           {
             path: `${PATH.DETAIL}/:id`,
-            element: <DetailPage />,
+            element: <ProductPage />,
           },
           {
             path: PATH.ADD,

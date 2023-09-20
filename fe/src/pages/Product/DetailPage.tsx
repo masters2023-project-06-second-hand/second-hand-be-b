@@ -9,33 +9,35 @@ import { SellerInfo } from '@components/SellerInfo/SellerInfo';
 import { States } from '@components/States/States';
 import { usePageNavigator } from '@hooks/usePageNavigator';
 import displayTimeAgo from '@utils/displayTimeAgo';
-import { useParams } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import { userInfoAtom } from '@atoms/userAtom';
-import { Loading } from './Loading';
-import { ErrorPage } from './ErrorPage';
 import { MenuDropdown } from '@components/Dropdown/MenuDropdown';
 import { STATES_OF_PRODUCT } from '@constants/constants';
 import { useModal } from '@components/Modal/useModal';
 import {
   useChangeProductStatusMutation,
   useDeleteProductMutation,
-  useProductDetail,
 } from '@api/product/product';
-import { ProductStatus } from '@api/product/types';
+import { Product, ProductStatus } from '@api/product/types';
+import extractRegionName from '@utils/extractRegionName';
+import { QUERY_KEYS } from '@api/queryKey';
 
-export const DetailPage = () => {
-  const { id } = useParams();
+export const DetailPage = ({
+  productData,
+  goEditPage,
+}: {
+  productData: Product;
+  goEditPage(): void;
+}) => {
   const [userInfo] = useAtom(userInfoAtom);
   const { navigateToGoBack } = usePageNavigator();
   const { openModal } = useModal();
-
-  const { data, isLoading, isError } = useProductDetail(Number(id));
-  const changeProductStatus = useChangeProductStatusMutation();
-  const deleteProduct = useDeleteProductMutation();
-
-  if (isLoading) return <Loading />;
-  if (isError) return <ErrorPage />;
+  const changeProductStatus = useChangeProductStatusMutation(
+    QUERY_KEYS.PRODUCT_DETAIL(productData.id)
+  );
+  const deleteProduct = useDeleteProductMutation(
+    QUERY_KEYS.PRODUCT_DETAIL(productData.id)
+  );
 
   const openConfirmAlert = (productName: string) => {
     openModal('alert', {
@@ -43,12 +45,12 @@ export const DetailPage = () => {
       leftButtonText: '취소',
       rightButtonText: '삭제',
       onDelete: () => {
-        deleteProduct.mutate(data.id);
+        deleteProduct.mutate(productData.id);
       },
     });
   };
 
-  const isWriter = userInfo?.id === data.writer.id;
+  const isWriter = userInfo?.id !== productData.writer.id;
 
   const stat = {
     chattingCount: 2,
@@ -81,44 +83,47 @@ export const DetailPage = () => {
             }
             position="bottom-right"
           >
-            <li>게시물 수정</li>
-            <li onClick={() => openConfirmAlert(data.productName)}>삭제</li>
+            <li onClick={goEditPage}>게시물 수정</li>
+            <li onClick={() => openConfirmAlert(productData.productName)}>
+              삭제
+            </li>
           </MenuDropdown>
         )}
       </Header>
       <Content>
         <ImgContent>
-          <ProductImg src={data.images[0].imgUrl} />
+          <ProductImg src={productData.images[0].imgUrl} />
         </ImgContent>
         <InfoContent>
-          <SellerInfo nickname={data.writer.nickname} />
+          <SellerInfo nickname={productData.writer.nickname} />
           <MenuDropdown
-            trigger={<States name={data.status} />}
+            trigger={<States name={productData.status} />}
             position="bottom-left"
           >
-            {STATES_OF_PRODUCT.filter((status) => status !== data.status).map(
-              (statusList: ProductStatus) => (
-                <li
-                  key={statusList}
-                  onClick={() => {
-                    changeProductStatus.mutate({
-                      productId: data.id,
-                      status: statusList,
-                    });
-                  }}
-                >
-                  {statusList}
-                </li>
-              )
-            )}
+            {STATES_OF_PRODUCT.filter(
+              (status) => status !== productData.status
+            ).map((statusList: ProductStatus) => (
+              <li
+                key={statusList}
+                onClick={() => {
+                  changeProductStatus.mutate({
+                    productId: productData.id,
+                    status: statusList,
+                  });
+                }}
+              >
+                {statusList}
+              </li>
+            ))}
           </MenuDropdown>
           <Title>
-            <ProductName>{data.productName}</ProductName>
+            <ProductName>{productData.productName}</ProductName>
             <ProductInfo>
-              {data.categoryName} ・ {displayTimeAgo(data.createdAt)}
+              {productData.categoryName} ・{' '}
+              {displayTimeAgo(productData.createdAt)}
             </ProductInfo>
           </Title>
-          <ProductContent>{data.content}</ProductContent>
+          <ProductContent>{productData.content}</ProductContent>
           <ProductStats>
             채팅 {stat.chattingCount} 관심 {stat.likeCount} 조회{' '}
             {stat.viewCount}
@@ -127,9 +132,13 @@ export const DetailPage = () => {
       </Content>
       <ActionBar>
         {isWriter ? (
-          <EditBar regionName={data.regionName} />
+          <EditBar regionName={extractRegionName(productData.regionName)} />
         ) : (
-          <PostBar id={data.id} isLiked={stat.isLiked} price={data.price} />
+          <PostBar
+            id={productData.id}
+            isLiked={stat.isLiked}
+            price={productData.price}
+          />
         )}
       </ActionBar>
     </>
