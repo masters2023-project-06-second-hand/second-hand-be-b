@@ -14,4 +14,7 @@ public interface RegionRepository {
 
     Slice<Region> findByRegionsByName(String word, Pageable pageable);
 
+    boolean existsById(long regionId);
+
+    List<Region> findAllById(List<Long> regionsId);
 }

@@ -29,7 +29,7 @@ public class MemberFacade implements MemberUseCase {
     @Override
     public List<CategorySimpleDetail> fetchMemberInterestCategories(Member member, long memberId) {
         validateMemberPermission(member, memberId);
-        return categoryService.getCategoryByMemberId(memberId);
+        return categoryService.getLikesCategoryByMemberId(memberId);
     }
 
     @Override

@@ -20,7 +20,7 @@ public class RegionService implements RegionUseCase {
 
     private final RegionRepository regionRepository;
 
-    public Region getById(Long id) {
+    public Region getById(long id) {
         return regionRepository.findById(id)
                 .orElseThrow(() -> {
                     throw new RegionNotFoundException();
@@ -31,6 +31,17 @@ public class RegionService implements RegionUseCase {
     public RegionInfos searchRegionsByName(String word, Pageable pageable) {
         Slice<Region> regions = regionRepository.findByRegionsByName(word, pageable);
         return toRegionInfos(regions);
+    }
+
+    public void validateRegionId(long regionId) {
+        if (regionRepository.existsById(regionId)) {
+            return;
+        }
+        throw new RegionNotFoundException();
+    }
+
+    public List<Region> getAll(List<Long> regionsId) {
+        return regionRepository.findAllById(regionsId);
     }
 
     private RegionInfos toRegionInfos(Slice<Region> regions) {

@@ -2,7 +2,7 @@ package com.codesquad.secondhand.application.port.in;
 
 import com.codesquad.secondhand.adapter.in.web.response.MemberRegionInfos;
 
-public interface MemberRegionUseCase {
+public interface MyRegionsUseCase {
 
     /**
      * memberId에 해당하는 멤버에 regionId에 해당하는 지역을 추가한다.

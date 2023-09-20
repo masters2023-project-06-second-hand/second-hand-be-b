@@ -65,4 +65,9 @@ public class ProductRepositoryImpl implements ProductRepository {
     public void deleteById(long productId) {
         productCrudRepository.deleteById(productId);
     }
+
+    @Override
+    public boolean existById(long productId) {
+        return productCrudRepository.existsById(productId);
+    }
 }

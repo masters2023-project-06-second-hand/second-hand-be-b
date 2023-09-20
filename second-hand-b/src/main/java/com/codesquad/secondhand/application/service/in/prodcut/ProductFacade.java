@@ -44,8 +44,7 @@ public class ProductFacade implements ProductUseCase {
         Product product = productService.getById(id);
         long writerId = product.getWriterId();
         Member member = memberService.getById(writerId);
-        Long categoryId = product.getCategoryId();
-        Category category = categoryService.getById(categoryId);
+        Category category = product.getCategory();
         long regionId = product.getRegionId();
         Region region = regionService.getById(regionId);
         return toProductDetail(product, category, member, region);
@@ -125,8 +124,8 @@ public class ProductFacade implements ProductUseCase {
     @Transactional
     @Override
     public void toggleProductLikeStatus(Member member, Long productId, boolean isLiked) {
-        Product product = productService.getById(productId);
-        memberService.toggleProductLikeStatus(member, isLiked, product);
+        productService.validateProductId(productId);
+        memberService.toggleProductLikeStatus(member, isLiked, productId);
     }
 
     @Override
@@ -148,7 +147,7 @@ public class ProductFacade implements ProductUseCase {
                 productCreateRequest.getContent(),
                 productCreateRequest.getPrice(),
                 member.getId(),
-                category.getId(),
+                category,
                 thumbnailUrl,
                 images,
                 region.getId(),
@@ -168,7 +167,7 @@ public class ProductFacade implements ProductUseCase {
                 productModifyRequest.getName(),
                 productModifyRequest.getContent(),
                 productModifyRequest.getPrice(),
-                category.getId(),
+                category,
                 thumbnailUrl,
                 images,
                 region.getId());

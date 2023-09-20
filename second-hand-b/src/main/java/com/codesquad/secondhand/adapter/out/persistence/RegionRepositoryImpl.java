@@ -5,6 +5,8 @@ import com.codesquad.secondhand.application.port.out.RegionRepository;
 import com.codesquad.secondhand.domain.region.Region;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -29,5 +31,17 @@ public class RegionRepositoryImpl implements RegionRepository {
     @Override
     public Slice<Region> findByRegionsByName(String word, Pageable pageable) {
         return regionCrudRepository.findByNameContains(word, pageable);
+    }
+
+    @Override
+    public boolean existsById(long regionId) {
+        return regionCrudRepository.existsById(regionId);
+    }
+
+    @Override
+    public List<Region> findAllById(List<Long> regionsId) {
+        Iterable<Region> regions = regionCrudRepository.findAllById(regionsId);
+        return StreamSupport.stream(regions.spliterator(), false)
+                .collect(Collectors.toList());
     }
 }

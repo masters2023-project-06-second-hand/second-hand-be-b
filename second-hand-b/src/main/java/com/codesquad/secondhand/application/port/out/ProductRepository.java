@@ -27,4 +27,6 @@ public interface ProductRepository {
     Slice<Product> findByRegionIdAndCategoryId(long regionId, long categoryId, Pageable pageable);
 
     void deleteById(long productId);
+
+    boolean existById(long productId);
 }

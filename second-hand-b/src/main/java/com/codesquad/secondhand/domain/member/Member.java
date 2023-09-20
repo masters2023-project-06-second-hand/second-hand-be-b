@@ -1,9 +1,6 @@
 package com.codesquad.secondhand.domain.member;
 
 import com.codesquad.secondhand.application.service.in.exception.NotExistsMemberRegionException;
-import com.codesquad.secondhand.domain.product.Product;
-import com.codesquad.secondhand.domain.region.Region;
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -12,12 +9,9 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -27,7 +21,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "member")
-public class Member implements Serializable {
+public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,10 +32,8 @@ public class Member implements Serializable {
     private String nickname;
     private String profileImage;
     @Embedded
-    private MemberRegions myRegions = new MemberRegions();
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "selected_region_id")
-    private Region selectedRegion;
+    private MyRegions myRegions = new MyRegions();
+    private long selectedRegionId;
     @Enumerated(EnumType.STRING)
     private Role role;
     @Embedded
@@ -52,6 +44,7 @@ public class Member implements Serializable {
         this.nickname = nickname;
         this.profileImage = profileImage;
         this.role = role;
+        this.likes = new Likes();
     }
 
     public Long getId() {
@@ -70,31 +63,35 @@ public class Member implements Serializable {
         return profileImage;
     }
 
-    public Region getSelectedRegion() {
-        return selectedRegion;
+    public long getSelectedRegionId() {
+        return selectedRegionId;
     }
 
     public Role getRole() {
         return role;
     }
 
-    public void addRegion(Region region) {
-        myRegions.addRegion(region);
+    public void addRegion(long regionId) {
+        myRegions.addRegion(regionId);
     }
 
-    public void removeRegion(Region region) {
-        this.selectedRegion = myRegions.removeRegion(region);
+    public void removeRegion(long regionId) {
+        this.selectedRegionId = myRegions.removeRegion(regionId);
     }
 
-    public List<Region> fetchRegions() {
+    public List<Long> fetchRegions() {
         return myRegions.getRegions();
     }
 
-    public void selectRegion(Region region) {
-        if (!myRegions.contains(region)) {
+    public List<Long> fetchProducts() {
+        return likes.getProducts();
+    }
+
+    public void selectRegion(long regionId) {
+        if (!myRegions.contains(regionId)) {
             throw new NotExistsMemberRegionException();
         }
-        this.selectedRegion = region;
+        this.selectedRegionId = regionId;
     }
 
     public Collection<GrantedAuthority> getRoleAuthority() {
@@ -105,12 +102,12 @@ public class Member implements Serializable {
         return String.valueOf(id);
     }
 
-    public boolean addLikes(Product product) {
-        return likes.add(product);
+    public boolean addLikes(long productId) {
+        return likes.add(productId);
     }
 
-    public boolean removeLikes(Product product) {
-        return likes.remove(product);
+    public boolean removeLikes(long productId) {
+        return likes.remove(productId);
     }
 
     public boolean isSameId(long memberId) {

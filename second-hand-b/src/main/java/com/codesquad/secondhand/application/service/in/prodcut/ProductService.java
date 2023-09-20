@@ -69,4 +69,11 @@ public class ProductService {
     public Slice<Product> getSalesByWriterId(long memberId, Pageable pageable) {
         return productRepository.findByWriterIdAndStatusNot(memberId, Status.SOLD_OUT, pageable);
     }
+
+    public void validateProductId(long productId) {
+        if (productRepository.existById(productId)) {
+            return;
+        }
+        throw new ProductNotFoundException();
+    }
 }

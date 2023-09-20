@@ -14,7 +14,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
-class MemberRegionAcceptanceTest extends AcceptanceTest {
+class MyRegionAcceptanceTest extends AcceptanceTest {
+
+    public static final Long 이안_아이디 = 1L;
 
     @Test
     @DisplayName("멤버에 대한 지역 추가 요청을 받으면 요청을 수행하고 201 상태코드로 응답한다.")
@@ -22,11 +24,10 @@ class MemberRegionAcceptanceTest extends AcceptanceTest {
         출력_필드_추가("memberRegion_add", spec);
 
         //given
-        Long memberId = 1L;
-        Long regionId = 1L;
+        Long regionId = 2L;
 
         //when
-        var response = 멤버의_지역을_추가한다(memberId, regionId, ayaanAccessToken, spec);
+        var response = 멤버의_지역을_추가한다(이안_아이디, regionId, ayaanAccessToken, spec);
 
         //then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
@@ -38,12 +39,13 @@ class MemberRegionAcceptanceTest extends AcceptanceTest {
         출력_필드_추가("memberRegion_remove", spec);
 
         //given
-        Long memberId = 1L;
-        Long regionId = 1L;
-        멤버의_지역을_추가한다(memberId, regionId, ayaanAccessToken);
+        Long 삭제될_리전_아이디 = 1L;
+        Long 다른_리전_아이디 = 2L;
+        멤버의_지역을_추가한다(이안_아이디, 삭제될_리전_아이디, ayaanAccessToken);
+        멤버의_지역을_추가한다(이안_아이디, 다른_리전_아이디, ayaanAccessToken);
 
         //when
-        var response = 멤버의_지역을_삭제한다(memberId, regionId, ayaanAccessToken, spec);
+        var response = 멤버의_지역을_삭제한다(이안_아이디, 삭제될_리전_아이디, ayaanAccessToken, spec);
 
         //then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
@@ -55,12 +57,11 @@ class MemberRegionAcceptanceTest extends AcceptanceTest {
         출력_필드_추가("memberRegion_getRegionsByMember", spec);
 
         //given
-        Long memberId = 1L;
-        Long regionId1 = 1L;
-        멤버의_지역을_추가한다(memberId, regionId1, ayaanAccessToken);
+        Long regionId1 = 3L;
+        멤버의_지역을_추가한다(이안_아이디, regionId1, ayaanAccessToken);
 
         //when
-        var response = 멤버의_지역목록을_조회한다(memberId, ayaanAccessToken, spec);
+        var response = 멤버의_지역목록을_조회한다(이안_아이디, ayaanAccessToken, spec);
 
         //then
         멤버의_지역목록_조회를_검증한다(response);
@@ -72,14 +73,13 @@ class MemberRegionAcceptanceTest extends AcceptanceTest {
         출력_필드_추가("memberRegion_select", spec);
 
         //given
-        Long memberId = 1L;
         Long regionId = 2L;
-        멤버의_지역을_추가한다(memberId, regionId, ayaanAccessToken);
+        멤버의_지역을_추가한다(이안_아이디, regionId, ayaanAccessToken);
 
         //when
-        var response = 멤버의_지역을_선택한다(memberId, regionId, ayaanAccessToken, spec);
+        var response = 멤버의_지역을_선택한다(이안_아이디, regionId, ayaanAccessToken, spec);
 
         //then
-        멤버의_지역선택을_검증한다(memberId, ayaanAccessToken, response);
+        멤버의_지역선택을_검증한다(이안_아이디, ayaanAccessToken, response);
     }
 }

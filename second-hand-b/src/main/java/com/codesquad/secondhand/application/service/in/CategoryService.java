@@ -24,7 +24,7 @@ public class CategoryService implements CategoryUseCase {
                 });
     }
 
-    public List<CategorySimpleDetail> getCategoryByMemberId(long memberId) {
+    public List<CategorySimpleDetail> getLikesCategoryByMemberId(long memberId) {
         List<Category> categories = categoryRepository.findCategoryByMemberId(memberId);
         return toCategorySimpleDetail(categories);
     }

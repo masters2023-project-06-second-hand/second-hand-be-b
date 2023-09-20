@@ -1,6 +1,6 @@
 package com.codesquad.secondhand.adapter.in.web.controller;
 
-import com.codesquad.secondhand.application.port.in.MemberRegionUseCase;
+import com.codesquad.secondhand.application.port.in.MyRegionsUseCase;
 import com.codesquad.secondhand.adapter.in.web.response.MemberRegionInfos;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -20,25 +20,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MemberRegionController {
 
-    private final MemberRegionUseCase memberRegionUseCase;
+    private final MyRegionsUseCase myRegionsUseCase;
 
     @PostMapping
     public ResponseEntity<Void> addRegionToMember(@PathVariable Long memberId,
             @RequestBody Map<String, Long> request) {
-        memberRegionUseCase.addRegionToMember(memberId, request.get("id"));
+        myRegionsUseCase.addRegionToMember(memberId, request.get("id"));
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @DeleteMapping
     public ResponseEntity<Void> removeRegionFromMember(@PathVariable Long memberId,
             @RequestBody Map<String, Long> request) {
-        memberRegionUseCase.removeRegionFromMember(memberId, request.get("id"));
+        myRegionsUseCase.removeRegionFromMember(memberId, request.get("id"));
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @GetMapping
     public ResponseEntity<MemberRegionInfos> getRegionsOfMember(@PathVariable Long memberId) {
-        MemberRegionInfos memberRegionList = memberRegionUseCase.getRegionsOfMember(memberId);
+        MemberRegionInfos memberRegionList = myRegionsUseCase.getRegionsOfMember(memberId);
         return ResponseEntity.ok()
                 .body(memberRegionList);
     }
@@ -46,7 +46,7 @@ public class MemberRegionController {
     @PutMapping
     public ResponseEntity<Void> selectRegionForMember(@PathVariable Long memberId,
             @RequestBody Map<String, Long> request) {
-        memberRegionUseCase.selectRegionForMember(memberId, request.get("id"));
+        myRegionsUseCase.selectRegionForMember(memberId, request.get("id"));
         return ResponseEntity.ok().build();
     }
 }

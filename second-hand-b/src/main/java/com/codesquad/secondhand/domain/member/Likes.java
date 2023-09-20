@@ -1,30 +1,31 @@
 package com.codesquad.secondhand.domain.member;
 
-import com.codesquad.secondhand.domain.product.Product;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import javax.persistence.ElementCollection;
 import javax.persistence.Embeddable;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
 @Embeddable
-public class Likes {
+@NoArgsConstructor
+public class Likes implements Serializable {
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "member_likes_product",
-            joinColumns = @JoinColumn(name = "member_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id"))
-    private List<Product> products = new ArrayList<>();
+    private static final long serialVersionUID = 1905122041950251207L;
 
-    public boolean add(Product product) {
-        return products.add(product);
+    @ElementCollection
+    private List<Long> productsId = new ArrayList<>();
+
+    public boolean add(long productId) {
+        return productsId.add(productId);
     }
 
-    public boolean remove(Product product) {
-        return products.remove(product);
+    public boolean remove(long productId) {
+        return productsId.remove(productId);
+    }
+
+    public List<Long> getProducts() {
+        return Collections.unmodifiableList(productsId);
     }
 }

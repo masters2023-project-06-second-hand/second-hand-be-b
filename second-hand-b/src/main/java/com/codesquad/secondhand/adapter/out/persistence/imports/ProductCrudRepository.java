@@ -9,15 +9,24 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface ProductCrudRepository extends JpaRepository<Product, Long> {
 
-    @Query(" select member_product from Member member_ "
-            + " join member_.likes.products member_product"
+    @Query(" select product_ from Product product_  "
+            + " where product_.id in ("
+            + " select likes_ "
+            + " from Member member_ "
+            + " join member_.likes.productsId likes_"
             + " where member_.id = :memberId "
+            + ")"
     )
     Slice<Product> findLikesByMemberId(long memberId, Pageable pageable);
 
-    @Query(value = " select member_product from Member member_ "
-            + " join member_.likes.products member_product"
-            + " where member_.id = :memberId and member_product.categoryId = :categoryId"
+    @Query(" select product_ from Product product_  "
+            + " where product_.category.id = :categoryId "
+            + " and product_.id in ("
+            + " select likes_ "
+            + " from Member member_ "
+            + " join member_.likes.productsId likes_"
+            + " where member_.id = :memberId "
+            + ")"
     )
     Slice<Product> findLikesByMemberIdAndCategoryId(long memberId, long categoryId, Pageable pageable);
 

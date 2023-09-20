@@ -10,7 +10,6 @@ import com.codesquad.secondhand.application.service.in.exception.NotRegisteredMe
 import com.codesquad.secondhand.application.service.in.region.RegionService;
 import com.codesquad.secondhand.domain.auth.RefreshToken;
 import com.codesquad.secondhand.domain.member.Member;
-import com.codesquad.secondhand.domain.region.Region;
 import com.codesquad.secondhand.domain.units.JwtTokenProvider;
 import java.util.Date;
 import java.util.List;
@@ -43,12 +42,14 @@ public class AuthService implements AuthUseCase {
     public Tokens signUp(String email, SignUpRequest signUpRequest) {
         List<Long> regionsId = signUpRequest.getRegionsId();
         Member member = memberService.signUpMember(email, signUpRequest.getNickname(), signUpRequest.getProfileImg());
-        Region firstRegion = regionService.getById(regionsId.get(REGIONS_FIRST_INDEX));
-        member.addRegion(firstRegion);
-        member.selectRegion(firstRegion);
+        long firstRegionId = regionsId.get(REGIONS_FIRST_INDEX);
+        regionService.validateRegionId(firstRegionId);
+        member.addRegion(firstRegionId);
+        member.selectRegion(firstRegionId);
 
         if (hasSecondRegion(regionsId)) {
-            Region secondRegion = regionService.getById(regionsId.get(REGIONS_SECOND_INDEX));
+            long secondRegion = regionsId.get(REGIONS_SECOND_INDEX);
+            regionService.validateRegionId(secondRegion);
             member.addRegion(secondRegion);
         }
         return getTokens(email, member);
