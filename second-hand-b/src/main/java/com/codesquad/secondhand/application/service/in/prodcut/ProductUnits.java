@@ -1,7 +1,7 @@
 package com.codesquad.secondhand.application.service.in.prodcut;
 
 import com.codesquad.secondhand.application.service.in.exception.MinimumImageRequirementException;
-import com.codesquad.secondhand.domain.image.Image;
+import com.codesquad.secondhand.domain.product.Image;
 import java.util.List;
 
 public class ProductUnits {

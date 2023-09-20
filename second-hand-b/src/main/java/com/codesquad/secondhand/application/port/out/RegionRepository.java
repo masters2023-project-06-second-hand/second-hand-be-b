@@ -13,4 +13,5 @@ public interface RegionRepository {
     void saveAll(List<Region> regions);
 
     Slice<Region> findByRegionsByName(String word, Pageable pageable);
+
 }

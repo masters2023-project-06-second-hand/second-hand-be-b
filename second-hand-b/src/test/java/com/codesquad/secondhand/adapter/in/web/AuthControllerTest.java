@@ -5,8 +5,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.codesquad.secondhand.adapter.in.web.request.SignUpRequest;
-import com.codesquad.secondhand.adapter.in.web.response.Tokens;
+import com.codesquad.secondhand.adapter.in.web.request.security.SignUpRequest;
+import com.codesquad.secondhand.adapter.in.web.response.security.Tokens;
 import com.codesquad.secondhand.application.port.out.MemberRepository;
 import com.codesquad.secondhand.application.service.in.AuthService;
 import com.codesquad.secondhand.domain.member.Member;

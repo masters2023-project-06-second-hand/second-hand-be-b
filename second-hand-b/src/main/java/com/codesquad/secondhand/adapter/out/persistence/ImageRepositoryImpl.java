@@ -2,7 +2,7 @@ package com.codesquad.secondhand.adapter.out.persistence;
 
 import com.codesquad.secondhand.adapter.out.persistence.imports.ImageJpaRepository;
 import com.codesquad.secondhand.application.port.out.ImageRepository;
-import com.codesquad.secondhand.domain.image.Image;
+import com.codesquad.secondhand.domain.product.Image;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;

@@ -1,16 +1,19 @@
 package com.codesquad.secondhand.application.service.in;
 
-import com.codesquad.secondhand.adapter.in.web.request.SignUpRequest;
-import com.codesquad.secondhand.adapter.in.web.response.Tokens;
+import com.codesquad.secondhand.adapter.in.web.request.security.SignUpRequest;
+import com.codesquad.secondhand.adapter.in.web.response.security.Tokens;
 import com.codesquad.secondhand.application.port.in.AuthUseCase;
 import com.codesquad.secondhand.application.port.out.RefreshTokenRepository;
 import com.codesquad.secondhand.application.service.in.exception.InvalidRefreshTokenException;
 import com.codesquad.secondhand.application.service.in.exception.MemberNotFoundException;
 import com.codesquad.secondhand.application.service.in.exception.NotRegisteredMemberException;
+import com.codesquad.secondhand.application.service.in.region.RegionService;
 import com.codesquad.secondhand.domain.auth.RefreshToken;
 import com.codesquad.secondhand.domain.member.Member;
+import com.codesquad.secondhand.domain.region.Region;
 import com.codesquad.secondhand.domain.units.JwtTokenProvider;
 import java.util.Date;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,8 +22,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AuthService implements AuthUseCase {
 
+    private static final int REGIONS_FIRST_INDEX = 0;
+    private static final int REGIONS_SECOND_INDEX = 1;
+    private static final int SIZE_2 = 2;
+
+
     private final MemberService memberService;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final RegionService regionService;
 
     @Transactional
     @Override
@@ -32,8 +41,17 @@ public class AuthService implements AuthUseCase {
     @Transactional
     @Override
     public Tokens signUp(String email, SignUpRequest signUpRequest) {
-        Member savedMember = memberService.signUpMember(email, signUpRequest);
-        return getTokens(email, savedMember);
+        List<Long> regionsId = signUpRequest.getRegionsId();
+        Member member = memberService.signUpMember(email, signUpRequest.getNickname(), signUpRequest.getProfileImg());
+        Region firstRegion = regionService.getById(regionsId.get(REGIONS_FIRST_INDEX));
+        member.addRegion(firstRegion);
+        member.selectRegion(firstRegion);
+
+        if (hasSecondRegion(regionsId)) {
+            Region secondRegion = regionService.getById(regionsId.get(REGIONS_SECOND_INDEX));
+            member.addRegion(secondRegion);
+        }
+        return getTokens(email, member);
     }
 
     @Override
@@ -87,5 +105,9 @@ public class AuthService implements AuthUseCase {
         } catch (MemberNotFoundException e) {
             throw new NotRegisteredMemberException();
         }
+    }
+
+    private static boolean hasSecondRegion(List<Long> regionsId) {
+        return regionsId.size() == SIZE_2;
     }
 }

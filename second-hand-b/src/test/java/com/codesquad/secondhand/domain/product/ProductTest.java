@@ -7,14 +7,11 @@ import static com.codesquad.secondhand.domain.product.ProductTestUtils.MODIFIED_
 import static com.codesquad.secondhand.domain.product.ProductTestUtils.MODIFIED_PRODUCT_CONTENT;
 import static com.codesquad.secondhand.domain.product.ProductTestUtils.MODIFIED_PRODUCT_NAME;
 import static com.codesquad.secondhand.domain.product.ProductTestUtils.MODIFIED_PRODUCT_PRICE;
-import static com.codesquad.secondhand.domain.product.ProductTestUtils.MODIFIED_REGION_NAME;
 import static com.codesquad.secondhand.domain.product.ProductTestUtils.MODIFIED_THUMBNAIL_URL;
 import static com.codesquad.secondhand.domain.product.ProductTestUtils.createTestProduct;
 import static com.codesquad.secondhand.domain.product.ProductTestUtils.getDefaultTestImages;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.codesquad.secondhand.domain.image.Image;
-import com.codesquad.secondhand.domain.region.Region;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -67,13 +64,9 @@ class ProductTest {
     public static void modifiedProduct(Product product) {
         Category modifiedCategory = getModifiedCategory();
         List<Image> modifiedImages = getModifiedImages();
-        Region modifiedRegion = getModifiedRegion();
-        product.modifyProduct(MODIFIED_PRODUCT_NAME, MODIFIED_PRODUCT_CONTENT, MODIFIED_PRODUCT_PRICE, modifiedCategory,
-                MODIFIED_THUMBNAIL_URL, modifiedImages, modifiedRegion);
-    }
-
-    private static Region getModifiedRegion() {
-        return new Region(MODIFIED_REGION_NAME);
+        product.modifyProduct(MODIFIED_PRODUCT_NAME, MODIFIED_PRODUCT_CONTENT, MODIFIED_PRODUCT_PRICE,
+                modifiedCategory.getId(),
+                MODIFIED_THUMBNAIL_URL, modifiedImages, 1);
     }
 
     private static Category getModifiedCategory() {
@@ -91,10 +84,10 @@ class ProductTest {
                 () -> assertThat(product.getName()).isEqualTo(MODIFIED_PRODUCT_NAME),
                 () -> assertThat(product.getContent()).isEqualTo(MODIFIED_PRODUCT_CONTENT),
                 () -> assertThat(product.getPrice()).isEqualTo(MODIFIED_PRODUCT_PRICE),
-                () -> assertThat(product.getCategory()).usingRecursiveComparison().isEqualTo(getModifiedCategory()),
+                () -> assertThat(product.getCategoryId()).isEqualTo(getModifiedCategory().getId()),
                 () -> assertThat(product.getThumbnailUrl()).isEqualTo(MODIFIED_THUMBNAIL_URL),
                 () -> assertThat(product.fetchImages()).usingRecursiveComparison().isEqualTo(getModifiedImages()),
-                () -> assertThat(product.getRegion()).usingRecursiveComparison().isEqualTo(getModifiedRegion())
+                () -> assertThat(product.getRegionId()).isEqualTo(1)
         );
     }
 

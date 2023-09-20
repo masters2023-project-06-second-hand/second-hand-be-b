@@ -1,8 +1,5 @@
 package com.codesquad.secondhand.domain.product;
 
-import com.codesquad.secondhand.domain.image.Image;
-import com.codesquad.secondhand.domain.member.Member;
-import com.codesquad.secondhand.domain.region.Region;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.Column;
@@ -10,12 +7,10 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -34,47 +29,43 @@ public class Product {
     private String content;
     @Column(nullable = false)
     private int price;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "writer_id")
-    private Member writer;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
-    private Category category;
+    @Column(nullable = false)
+    private Long writerId;
+    private Long categoryId;
     @Embedded
     private Images images = new Images();
     @JoinColumn(name = "thumbnail_id", nullable = false)
     private String thumbnailUrl;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "region_id")
-    private Region region;
+    @Column(nullable = false)
+    private Long regionId;
     @Enumerated(EnumType.STRING)
     private Status status;
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    public Product(String name, String content, int price, Member writer, Category category, String thumbnailUrl,
-            List<Image> images, Region region, Status status, LocalDateTime createdAt) {
+    public Product(String name, String content, int price, long writerId, Long categoryId, String thumbnailUrl,
+            List<Image> images, long regionId, Status status, LocalDateTime createdAt) {
         this.name = name;
         this.content = content;
         this.price = price;
-        this.writer = writer;
-        this.category = category;
+        this.writerId = writerId;
+        this.categoryId = categoryId;
         this.thumbnailUrl = thumbnailUrl;
         this.images = new Images(images);
-        this.region = region;
+        this.regionId = regionId;
         this.status = status;
         this.createdAt = createdAt;
     }
 
-    public void modifyProduct(String name, String content, int price, Category category, String thumbnailUrl,
-            List<Image> images, Region region) {
+    public void modifyProduct(String name, String content, int price, Long categoryId, String thumbnailUrl,
+            List<Image> images, long regionId) {
         this.name = name;
         this.content = content;
         this.price = price;
-        this.category = category;
+        this.categoryId = categoryId;
         this.thumbnailUrl = thumbnailUrl;
         this.images.modify(images);
-        this.region = region;
+        this.regionId = regionId;
     }
 
     public void modifyStatus(String status) {
@@ -89,16 +80,12 @@ public class Product {
         return id;
     }
 
-    public Member getWriter() {
-        return writer;
+    public Long getCategoryId() {
+        return categoryId;
     }
 
-    public Category getCategory() {
-        return category;
-    }
-
-    public Region getRegion() {
-        return region;
+    public long getRegionId() {
+        return regionId;
     }
 
     public Status getStatus() {
@@ -123,5 +110,9 @@ public class Product {
 
     public String getThumbnailUrl() {
         return thumbnailUrl;
+    }
+
+    public long getWriterId() {
+        return writerId;
     }
 }

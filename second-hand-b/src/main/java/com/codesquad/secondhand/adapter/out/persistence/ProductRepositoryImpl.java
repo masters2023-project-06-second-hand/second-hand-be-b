@@ -26,13 +26,13 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public List<Product> findProductsByMemberId(long memberId) {
-        return productCrudRepository.findProductsByMemberId(memberId);
+    public List<Product> findLikesByMemberId(long memberId) {
+        return productCrudRepository.findLikesByMemberId(memberId);
     }
 
     @Override
-    public List<Product> findProductsByMemberIdAndCategoryId(long memberId, long categoryId) {
-        return productCrudRepository.findProductsByMemberIdAndCategoryId(memberId, categoryId);
+    public List<Product> findLikesByMemberIdAndCategoryId(long memberId, long categoryId) {
+        return productCrudRepository.findLikesByMemberIdAndCategoryId(memberId, categoryId);
     }
 
     @Override

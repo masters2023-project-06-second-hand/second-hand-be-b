@@ -57,7 +57,7 @@ class MemberServiceTest {
         given(member.isSameId(1)).willReturn(false);
 
         // when
-        assertThatThrownBy(() -> MemberService.validateMemberPermission(member, notSameId))
+        assertThatThrownBy(() -> MemberUtils.validateMemberPermission(member, notSameId))
                 .isInstanceOf(PermissionDeniedException.class);
     }
 }

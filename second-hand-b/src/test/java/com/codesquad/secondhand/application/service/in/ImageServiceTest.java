@@ -5,7 +5,7 @@ import static org.mockito.BDDMockito.given;
 
 import com.codesquad.secondhand.application.port.out.ImageRepository;
 import com.codesquad.secondhand.application.service.in.exception.ImageNotFoundException;
-import com.codesquad.secondhand.application.service.in.image.ImageService;
+import com.codesquad.secondhand.application.service.in.prodcut.ImageService;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

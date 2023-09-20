@@ -1,6 +1,5 @@
 package com.codesquad.secondhand.domain.product;
 
-import com.codesquad.secondhand.domain.image.Image;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
