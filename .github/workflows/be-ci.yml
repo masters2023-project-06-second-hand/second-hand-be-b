@@ -76,3 +76,5 @@ jobs:
 
       - name: Coveralls
         uses: coverallsapp/github-action@v2
+        with:
+          base-path: second-hand-b/build/test-results/**/*.xml
