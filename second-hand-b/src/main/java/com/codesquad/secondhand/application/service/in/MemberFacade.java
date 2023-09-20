@@ -85,6 +85,10 @@ public class MemberFacade implements MemberUseCase {
         return toProductsInfo(products);
     }
 
+    @Override
+    public Member getByEmail(String email) {
+        return memberService.getByEmail(email);
+    }
 
     private List<ProductInfo> toProductsInfo(List<Product> products) {
         return products.stream()
