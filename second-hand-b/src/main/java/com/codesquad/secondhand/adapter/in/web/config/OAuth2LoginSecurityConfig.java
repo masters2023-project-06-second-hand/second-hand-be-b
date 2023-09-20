@@ -103,6 +103,7 @@ public class OAuth2LoginSecurityConfig {
         configuration.setAllowedOrigins(allowedOrigins);
         configuration.setAllowedMethods(allowedMethods);
         configuration.setAllowedHeaders(allowedHeaders);
+        configuration.setAllowCredentials(true);
         var urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
         urlBasedCorsConfigurationSource.registerCorsConfiguration(corsMappingPattern, configuration);
         return urlBasedCorsConfigurationSource;
