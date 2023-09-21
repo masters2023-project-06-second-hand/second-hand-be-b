@@ -3,9 +3,9 @@ package com.codesquad.secondhand.application.service.in;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 
-import com.codesquad.secondhand.application.port.out.ImageRepository;
-import com.codesquad.secondhand.application.service.in.common.exception.ImageNotFoundException;
-import com.codesquad.secondhand.application.service.in.command.ImageCommandService;
+import com.codesquad.secondhand.command.port.out.ImageRepository;
+import com.codesquad.secondhand.common.exception.ImageNotFoundException;
+import com.codesquad.secondhand.command.service.in.ImageCommandService;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

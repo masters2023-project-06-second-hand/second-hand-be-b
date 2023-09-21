@@ -3,11 +3,11 @@ package com.codesquad.secondhand.application.service.in;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 
-import com.codesquad.secondhand.application.port.out.MemberRepository;
-import com.codesquad.secondhand.application.service.in.common.utils.MemberUtils;
-import com.codesquad.secondhand.application.service.in.common.exception.MemberNotFoundException;
-import com.codesquad.secondhand.application.service.in.common.exception.PermissionDeniedException;
-import com.codesquad.secondhand.application.service.in.query.MemberQueryService;
+import com.codesquad.secondhand.command.port.out.MemberRepository;
+import com.codesquad.secondhand.common.utils.MemberUtils;
+import com.codesquad.secondhand.common.exception.MemberNotFoundException;
+import com.codesquad.secondhand.common.exception.PermissionDeniedException;
+import com.codesquad.secondhand.query.service.MemberQueryService;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

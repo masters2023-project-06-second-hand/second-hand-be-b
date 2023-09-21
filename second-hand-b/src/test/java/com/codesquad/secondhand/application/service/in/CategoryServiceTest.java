@@ -3,9 +3,9 @@ package com.codesquad.secondhand.application.service.in;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 
-import com.codesquad.secondhand.application.port.out.CategoryRepository;
-import com.codesquad.secondhand.application.service.in.common.exception.CategoryNotFoundException;
-import com.codesquad.secondhand.application.service.in.query.CategoryQueryService;
+import com.codesquad.secondhand.command.port.out.CategoryRepository;
+import com.codesquad.secondhand.common.exception.CategoryNotFoundException;
+import com.codesquad.secondhand.query.service.CategoryQueryService;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

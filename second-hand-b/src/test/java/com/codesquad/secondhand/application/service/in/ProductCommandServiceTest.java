@@ -4,12 +4,12 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
-import com.codesquad.secondhand.application.port.out.ProductRepository;
-import com.codesquad.secondhand.application.service.in.common.exception.InvalidEntityStateException;
-import com.codesquad.secondhand.application.service.in.common.exception.ProductNotFoundException;
-import com.codesquad.secondhand.application.service.in.command.ProductCommandService;
-import com.codesquad.secondhand.domain.product.Product;
-import com.codesquad.secondhand.domain.product.ProductTestUtils;
+import com.codesquad.secondhand.command.port.out.ProductRepository;
+import com.codesquad.secondhand.common.exception.InvalidEntityStateException;
+import com.codesquad.secondhand.common.exception.ProductNotFoundException;
+import com.codesquad.secondhand.command.service.in.ProductCommandService;
+import com.codesquad.secondhand.command.domain.product.Product;
+import com.codesquad.secondhand.command.domain.product.ProductTestUtils;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

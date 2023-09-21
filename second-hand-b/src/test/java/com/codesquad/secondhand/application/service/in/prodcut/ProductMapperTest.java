@@ -1,22 +1,22 @@
 package com.codesquad.secondhand.application.service.in.prodcut;
 
-import static com.codesquad.secondhand.domain.product.ProductTestUtils.getDefaultTestCategory;
-import static com.codesquad.secondhand.domain.product.ProductTestUtils.getDefaultTestRegion;
-import static com.codesquad.secondhand.domain.product.ProductTestUtils.getDefaultTestWriter;
+import static com.codesquad.secondhand.command.domain.product.ProductTestUtils.getDefaultTestCategory;
+import static com.codesquad.secondhand.command.domain.product.ProductTestUtils.getDefaultTestRegion;
+import static com.codesquad.secondhand.command.domain.product.ProductTestUtils.getDefaultTestWriter;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.codesquad.secondhand.adapter.in.web.command.image.response.ImageInfo;
-import com.codesquad.secondhand.adapter.in.web.query.prodcut.response.ProductDetail;
-import com.codesquad.secondhand.adapter.in.web.query.prodcut.response.ProductInfo;
-import com.codesquad.secondhand.adapter.in.web.common.utils.ProductWriter;
-import com.codesquad.secondhand.application.service.in.common.utils.ImageMapper;
-import com.codesquad.secondhand.application.service.in.common.utils.ProductMapper;
-import com.codesquad.secondhand.domain.product.Image;
-import com.codesquad.secondhand.domain.member.Member;
-import com.codesquad.secondhand.domain.product.Category;
-import com.codesquad.secondhand.domain.product.Product;
-import com.codesquad.secondhand.domain.product.ProductTestUtils;
-import com.codesquad.secondhand.domain.region.Region;
+import com.codesquad.secondhand.command.adapter.in.web.image.response.ImageInfo;
+import com.codesquad.secondhand.query.controller.prodcut.response.ProductDetail;
+import com.codesquad.secondhand.query.controller.prodcut.response.ProductInfo;
+import com.codesquad.secondhand.common.utils.ProductWriter;
+import com.codesquad.secondhand.common.utils.ImageMapper;
+import com.codesquad.secondhand.common.utils.ProductMapper;
+import com.codesquad.secondhand.command.domain.product.Image;
+import com.codesquad.secondhand.command.domain.member.Member;
+import com.codesquad.secondhand.command.domain.product.Category;
+import com.codesquad.secondhand.command.domain.product.Product;
+import com.codesquad.secondhand.command.domain.product.ProductTestUtils;
+import com.codesquad.secondhand.command.domain.region.Region;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
