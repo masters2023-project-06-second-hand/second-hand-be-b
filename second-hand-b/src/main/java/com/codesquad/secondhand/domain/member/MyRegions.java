@@ -1,8 +1,8 @@
 package com.codesquad.secondhand.domain.member;
 
-import com.codesquad.secondhand.application.service.in.exception.ExistsMemberRegionException;
-import com.codesquad.secondhand.application.service.in.exception.MinimumRegionRequirementException;
-import com.codesquad.secondhand.application.service.in.exception.NotExistsMemberRegionException;
+import com.codesquad.secondhand.application.service.in.common.exception.ExistsMemberRegionException;
+import com.codesquad.secondhand.application.service.in.common.exception.MinimumRegionRequirementException;
+import com.codesquad.secondhand.application.service.in.common.exception.NotExistsMemberRegionException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

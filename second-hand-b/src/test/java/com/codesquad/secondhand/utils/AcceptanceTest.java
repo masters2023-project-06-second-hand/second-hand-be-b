@@ -2,7 +2,7 @@ package com.codesquad.secondhand.utils;
 
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.documentationConfiguration;
 
-import com.codesquad.secondhand.adapter.out.s3.S3StorageService;
+import com.codesquad.secondhand.adapter.out.s3.S3StorageAdapter;
 import com.codesquad.secondhand.application.port.out.MemberRepository;
 import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.member.Role;
@@ -37,7 +37,7 @@ public abstract class AcceptanceTest {
     public String ayaanAccessToken;
     public String albertAccessToken;
     @MockBean
-    public S3StorageService s3StorageService;
+    public S3StorageAdapter s3StorageAdapter;
     @LocalServerPort
     private int port;
     @Autowired

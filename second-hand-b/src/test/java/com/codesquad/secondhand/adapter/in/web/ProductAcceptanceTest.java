@@ -32,7 +32,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
     @BeforeEach
     public void setS3StorageService() {
-        when(s3StorageService.upload(any())).thenReturn("testUrl");
+        when(s3StorageAdapter.upload(any())).thenReturn("testUrl");
     }
 
     @DisplayName("상품 등록 요청이 오면 상품 아이디를 반환한다.")

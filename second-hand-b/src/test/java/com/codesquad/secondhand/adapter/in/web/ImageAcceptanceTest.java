@@ -21,7 +21,7 @@ class ImageAcceptanceTest extends AcceptanceTest {
 
     @BeforeEach
     public void setS3StorageService() {
-        when(s3StorageService.upload(any())).thenReturn("testUrl");
+        when(s3StorageAdapter.upload(any())).thenReturn("testUrl");
     }
 
     @Test

@@ -1,7 +1,7 @@
 package com.codesquad.secondhand.adapter.in.web.query.common;
 
-import com.codesquad.secondhand.adapter.in.web.common.response.RegionInfos;
-import com.codesquad.secondhand.application.port.in.RegionUseCase;
+import com.codesquad.secondhand.adapter.in.web.query.common.response.RegionInfos;
+import com.codesquad.secondhand.application.port.in.query.RegionUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;

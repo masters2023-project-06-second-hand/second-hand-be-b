@@ -4,11 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.codesquad.secondhand.adapter.in.web.security.response.Tokens;
-import com.codesquad.secondhand.adapter.in.web.security.handler.AuthenticationResponseHandlerImpl;
-import com.codesquad.secondhand.application.port.in.AuthUseCase;
-import com.codesquad.secondhand.application.service.in.exception.ErrorResponse;
-import com.codesquad.secondhand.application.service.in.exception.Errors;
+import com.codesquad.secondhand.adapter.in.web.common.security.response.Tokens;
+import com.codesquad.secondhand.adapter.in.web.common.security.handler.AuthenticationResponseHandlerImpl;
+import com.codesquad.secondhand.application.port.in.common.AuthUseCase;
+import com.codesquad.secondhand.application.service.in.common.exception.ErrorResponse;
+import com.codesquad.secondhand.application.service.in.common.exception.Errors;
 import com.codesquad.secondhand.domain.units.JwtTokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;

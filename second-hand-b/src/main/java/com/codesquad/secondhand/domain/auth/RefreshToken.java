@@ -1,6 +1,6 @@
 package com.codesquad.secondhand.domain.auth;
 
-import com.codesquad.secondhand.application.service.in.exception.InvalidRefreshTokenException;
+import com.codesquad.secondhand.application.service.in.common.exception.InvalidRefreshTokenException;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

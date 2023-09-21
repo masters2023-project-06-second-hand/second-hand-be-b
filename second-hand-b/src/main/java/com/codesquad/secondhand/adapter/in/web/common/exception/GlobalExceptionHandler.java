@@ -1,10 +1,10 @@
 package com.codesquad.secondhand.adapter.in.web.common.exception;
 
-import com.codesquad.secondhand.application.service.in.exception.BusinessException;
-import com.codesquad.secondhand.application.service.in.exception.ErrorCode;
-import com.codesquad.secondhand.application.service.in.exception.ErrorResponse;
-import com.codesquad.secondhand.application.service.in.exception.Errors;
-import com.codesquad.secondhand.application.service.in.exception.NotRegisteredMemberException;
+import com.codesquad.secondhand.application.service.in.common.exception.BusinessException;
+import com.codesquad.secondhand.application.service.in.common.exception.ErrorCode;
+import com.codesquad.secondhand.application.service.in.common.exception.ErrorResponse;
+import com.codesquad.secondhand.application.service.in.common.exception.Errors;
+import com.codesquad.secondhand.application.service.in.common.exception.NotRegisteredMemberException;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.http.ResponseEntity;

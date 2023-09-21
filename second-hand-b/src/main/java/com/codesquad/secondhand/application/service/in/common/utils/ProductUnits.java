@@ -1,6 +1,6 @@
 package com.codesquad.secondhand.application.service.in.common.utils;
 
-import com.codesquad.secondhand.application.service.in.exception.MinimumImageRequirementException;
+import com.codesquad.secondhand.application.service.in.common.exception.MinimumImageRequirementException;
 import com.codesquad.secondhand.domain.product.Image;
 import java.util.List;
 

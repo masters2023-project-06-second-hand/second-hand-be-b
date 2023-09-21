@@ -5,10 +5,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.codesquad.secondhand.adapter.in.web.security.request.SignUpRequest;
-import com.codesquad.secondhand.adapter.in.web.security.response.Tokens;
+import com.codesquad.secondhand.adapter.in.web.common.security.request.SignUpRequest;
+import com.codesquad.secondhand.adapter.in.web.common.security.response.Tokens;
 import com.codesquad.secondhand.application.port.out.MemberRepository;
-import com.codesquad.secondhand.application.service.in.AuthService;
+import com.codesquad.secondhand.application.service.in.common.AuthService;
 import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.member.Role;
 import com.codesquad.secondhand.domain.units.JwtTokenProvider;

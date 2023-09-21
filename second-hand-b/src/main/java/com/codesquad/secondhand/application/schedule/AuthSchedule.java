@@ -1,6 +1,6 @@
 package com.codesquad.secondhand.application.schedule;
 
-import com.codesquad.secondhand.application.service.in.AuthService;
+import com.codesquad.secondhand.application.service.in.common.AuthService;
 import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;

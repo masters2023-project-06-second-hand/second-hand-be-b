@@ -3,11 +3,7 @@ package com.codesquad.secondhand.application.service.in.command;
 import com.codesquad.secondhand.adapter.in.web.command.product.request.ProductCreateRequest;
 import com.codesquad.secondhand.adapter.in.web.command.product.request.ProductModifyRequest;
 import com.codesquad.secondhand.application.port.in.command.ProductCommandUseCase;
-import com.codesquad.secondhand.application.service.in.CategoryQueryService;
-import com.codesquad.secondhand.application.service.in.prodcut.ImageService;
-import com.codesquad.secondhand.application.service.in.prodcut.ProductService;
 import com.codesquad.secondhand.application.service.in.common.utils.ProductUnits;
-import com.codesquad.secondhand.application.service.in.region.RegionService;
 import com.codesquad.secondhand.domain.product.Category;
 import com.codesquad.secondhand.domain.product.Image;
 import com.codesquad.secondhand.domain.product.Product;
@@ -23,17 +19,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class ProductCommandFacade implements ProductCommandUseCase {
 
-    private final ProductService productService;
-    private final RegionService regionService;
-    private final CategoryQueryService categoryService;
-    private final ImageService imageService;
+    private final ProductCommandService productCommandService;
+    private final RegionCommandService regionCommandService;
+    private final CategoryCommandService categoryCommandService;
+    private final ImageCommandService imageCommandService;
 
     @Transactional
     @Override
     public long save(ProductCreateRequest productCreateRequest, String validatedMemberId) {
         long memberId = Long.parseLong(validatedMemberId);
         Product product = toProduct(productCreateRequest, memberId);
-        return productService.save(product)
+        return productCommandService.save(product)
                 .getId();
     }
 
@@ -41,28 +37,28 @@ public class ProductCommandFacade implements ProductCommandUseCase {
     @Transactional
     @Override
     public void modify(long id, ProductModifyRequest productModifyRequest) {
-        Product product = productService.getById(id);
+        Product product = productCommandService.getById(id);
         modifyProduct(productModifyRequest, product);
     }
 
     @Transactional
     @Override
     public void modifyStatus(long id, String status) {
-        productService.modifyStatus(id, status);
+        productCommandService.modifyStatus(id, status);
     }
 
     @Transactional
     @Override
     public void delete(long id) {
-        productService.delete(id);
+        productCommandService.delete(id);
     }
 
     private Product toProduct(ProductCreateRequest productCreateRequest, long memberId) {
-        Region region = regionService.getById(productCreateRequest.getRegionId());
-        Category category = categoryService.getById(productCreateRequest.getCategoryId());
+        Region region = regionCommandService.getById(productCreateRequest.getRegionId());
+        Category category = categoryCommandService.getById(productCreateRequest.getCategoryId());
 
         List<Long> imagesId = productCreateRequest.getImagesId();
-        List<Image> images = imageService.getImageListById(imagesId);
+        List<Image> images = imageCommandService.getImageListById(imagesId);
         String thumbnailUrl = ProductUnits.getThumbnailUrl(images);
 
         return new Product(productCreateRequest.getName(),
@@ -78,13 +74,13 @@ public class ProductCommandFacade implements ProductCommandUseCase {
     }
 
     private void modifyProduct(ProductModifyRequest productModifyRequest, Product product) {
-        Category category = categoryService.getById(productModifyRequest.getCategoryId());
+        Category category = categoryCommandService.getById(productModifyRequest.getCategoryId());
 
         List<Long> imagesId = productModifyRequest.getImagesId();
-        List<Image> images = imageService.getImageListById(imagesId);
+        List<Image> images = imageCommandService.getImageListById(imagesId);
         String thumbnailUrl = ProductUnits.getThumbnailUrl(images);
 
-        Region region = regionService.getById(productModifyRequest.getRegionId());
+        Region region = regionCommandService.getById(productModifyRequest.getRegionId());
         product.modifyProduct(
                 productModifyRequest.getName(),
                 productModifyRequest.getContent(),

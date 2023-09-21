@@ -7,9 +7,6 @@ import com.codesquad.secondhand.adapter.in.web.query.prodcut.response.ProductDet
 import com.codesquad.secondhand.adapter.in.web.query.prodcut.response.ProductInfo;
 import com.codesquad.secondhand.adapter.in.web.query.prodcut.response.ProductsInfo;
 import com.codesquad.secondhand.application.port.in.query.ProductQueryUseCase;
-import com.codesquad.secondhand.application.service.in.MemberService;
-import com.codesquad.secondhand.application.service.in.prodcut.ProductService;
-import com.codesquad.secondhand.application.service.in.region.RegionService;
 import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.product.Category;
 import com.codesquad.secondhand.domain.product.Product;
@@ -26,39 +23,39 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class ProductQueryFacade implements ProductQueryUseCase {
 
-    private final ProductService productService;
-    private final RegionService regionService;
-    private final MemberService memberService;
+    private final ProductQueryService productQueryService;
+    private final RegionQueryService regionQueryService;
+    private final MemberQueryService memberQueryService;
 
     @Transactional
     @Override
     public ProductDetail getDetails(long id) {
-        Product product = productService.getById(id);
+        Product product = productQueryService.getById(id);
         long writerId = product.getWriterId();
-        Member member = memberService.getById(writerId);
+        Member member = memberQueryService.getById(writerId);
         Category category = product.getCategory();
         long regionId = product.getRegionId();
-        Region region = regionService.getById(regionId);
+        Region region = regionQueryService.getById(regionId);
         return toProductDetail(product, category, member, region);
     }
 
     @Transactional(readOnly = true)
     @Override
     public ProductsInfo getProductsByRegion(long regionId, Pageable pageable) {
-        Slice<Product> products = productService.getProductsByRegion(regionId, pageable);
+        Slice<Product> products = productQueryService.getProductsByRegion(regionId, pageable);
         return toProductsInfo(products);
     }
 
     @Transactional(readOnly = true)
     @Override
     public ProductsInfo getProductsByRegionAndCategory(long regionId, long categoryId, Pageable pageable) {
-        Slice<Product> products = productService.getProductsByRegionAndCategory(regionId, categoryId, pageable);
+        Slice<Product> products = productQueryService.getProductsByRegionAndCategory(regionId, categoryId, pageable);
         return toProductsInfo(products);
     }
 
     private ProductsInfo toProductsInfo(Slice<Product> products) {
         List<ProductInfo> productInfoList = products.stream()
-                .map(product -> toProductInfo(product, regionService.getById(product.getRegionId())))
+                .map(product -> toProductInfo(product, regionQueryService.getById(product.getRegionId())))
                 .collect(Collectors.toList());
         return new ProductsInfo(productInfoList, products.hasNext(), products.getNumber());
     }

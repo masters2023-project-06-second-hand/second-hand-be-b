@@ -2,7 +2,7 @@ package com.codesquad.secondhand.adapter.in.web.query.prodcut;
 
 import com.codesquad.secondhand.adapter.in.web.query.prodcut.response.CategoryDetail;
 import com.codesquad.secondhand.adapter.in.web.query.prodcut.response.CategorySimpleDetail;
-import com.codesquad.secondhand.application.port.in.CategoryQueryUseCase;
+import com.codesquad.secondhand.application.port.in.query.CategoryQueryUseCase;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

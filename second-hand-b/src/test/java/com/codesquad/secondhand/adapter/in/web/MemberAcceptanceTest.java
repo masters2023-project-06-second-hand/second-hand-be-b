@@ -29,7 +29,7 @@ class MemberAcceptanceTest extends AcceptanceTest {
 
     @BeforeEach
     public void setS3StorageService() {
-        when(s3StorageService.upload(any())).thenReturn("testUrl");
+        when(s3StorageAdapter.upload(any())).thenReturn("testUrl");
     }
 
     @DisplayName("특정 상품을 내 관심상품에 추가")

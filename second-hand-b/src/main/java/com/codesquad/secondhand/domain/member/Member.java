@@ -1,6 +1,6 @@
 package com.codesquad.secondhand.domain.member;
 
-import com.codesquad.secondhand.application.service.in.exception.NotExistsMemberRegionException;
+import com.codesquad.secondhand.application.service.in.common.exception.NotExistsMemberRegionException;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
