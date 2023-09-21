@@ -33,23 +33,15 @@ public class StompHandler implements ChannelInterceptor {
     }
 
     public void handleMessage(StompCommand stompCommand, StompHeaderAccessor accessor) {
-        switch (stompCommand) {
-            case CONNECT:
-
-                break;
-            case SUBSCRIBE:
-                connectToChatRoom(accessor);
-                break;
-            case DISCONNECT:
-
-                break;
+        if (StompCommand.CONNECT.equals(stompCommand)) {
+            connectToChatRoom(accessor);
         }
     }
 
     private void connectToChatRoom(StompHeaderAccessor accessor) {
         Long chatRoomId = getChatRoomId(accessor);
         Long memberId = validateAccessToken(accessor);
-        chatUseCase.addMemberToChatRoom(chatRoomId, memberId);
+        chatUseCase.addChatRoomMember(chatRoomId, memberId);
         chatUseCase.markMessagesAsRead(chatRoomId, memberId);
     }
 

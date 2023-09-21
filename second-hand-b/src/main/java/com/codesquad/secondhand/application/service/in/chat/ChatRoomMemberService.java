@@ -14,4 +14,8 @@ public class ChatRoomMemberService {
     public ChatRoomMember save(ChatRoomMember chatRoomMember) {
         return chatRoomMemberRepository.save(chatRoomMember);
     }
+
+    public void deleteByChatRoomIdAndMemberId(long chatRoomId, long memberId) {
+        chatRoomMemberRepository.deleteByChatRoomIdAndMemberId(chatRoomId, memberId);
+    }
 }

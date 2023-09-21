@@ -16,4 +16,9 @@ public class ChatRoomMemberRepositoryImpl implements ChatRoomMemberRepository {
     public ChatRoomMember save(ChatRoomMember chatRoomMember) {
         return chatRoomMemberCrudRepository.save(chatRoomMember);
     }
+
+    @Override
+    public void deleteByChatRoomIdAndMemberId(long chatRoomId, long memberId) {
+        chatRoomMemberCrudRepository.deleteByChatRoomIdAndMemberId(chatRoomId, memberId);
+    }
 }

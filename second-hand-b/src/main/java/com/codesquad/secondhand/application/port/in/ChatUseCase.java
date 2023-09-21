@@ -39,5 +39,13 @@ public interface ChatUseCase {
      * @param chatRoomId 채팅방 ID
      * @param memberId   추가할 사용자 ID
      */
-    void addMemberToChatRoom(long chatRoomId, long memberId);
+    void addChatRoomMember(long chatRoomId, long memberId);
+
+    /**
+     * 채팅방의 사용자 목록에서 사용자를 삭제한다.
+     *
+     * @param chatRoomId 채팅방 ID
+     * @param memberId   삭제할 사용자 ID
+     */
+    void deleteChatRoomMember(long chatRoomId, long memberId);
 }

@@ -5,4 +5,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface ChatRoomMemberCrudRepository extends CrudRepository<ChatRoomMember, Long> {
 
+    void deleteByChatRoomIdAndMemberId(long chatRoomId, long memberId);
 }

@@ -53,9 +53,14 @@ public class ChatFacade implements ChatUseCase {
     }
 
     @Override
-    public void addMemberToChatRoom(long chatRoomId, long memberId) {
+    public void addChatRoomMember(long chatRoomId, long memberId) {
         ChatRoomMember chatRoomMember = new ChatRoomMember(chatRoomId, memberId);
         chatRoomMemberService.save(chatRoomMember);
+    }
+
+    @Override
+    public void deleteChatRoomMember(long chatRoomId, long memberId) {
+        chatRoomMemberService.deleteByChatRoomIdAndMemberId(chatRoomId, memberId);
     }
 
     private ChatRoom toChatRoom(long productId, Member member) {

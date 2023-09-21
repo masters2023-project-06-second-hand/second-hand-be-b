@@ -5,4 +5,6 @@ import com.codesquad.secondhand.domain.chat.ChatRoomMember;
 public interface ChatRoomMemberRepository {
 
     ChatRoomMember save(ChatRoomMember chatRoomMember);
+
+    void deleteByChatRoomIdAndMemberId(long chatRoomId, long memberId);
 }
