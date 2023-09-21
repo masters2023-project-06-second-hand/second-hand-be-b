@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -31,7 +32,9 @@ public class Product {
     private int price;
     @Column(nullable = false)
     private Long writerId;
-    private Long categoryId;
+    @ManyToOne
+    @JoinColumn(name = "categoryId")
+    private Category category;
     @Embedded
     private Images images = new Images();
     @JoinColumn(name = "thumbnail_id", nullable = false)
@@ -43,13 +46,13 @@ public class Product {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    public Product(String name, String content, int price, long writerId, Long categoryId, String thumbnailUrl,
+    public Product(String name, String content, int price, long writerId, Category category, String thumbnailUrl,
             List<Image> images, long regionId, Status status, LocalDateTime createdAt) {
         this.name = name;
         this.content = content;
         this.price = price;
         this.writerId = writerId;
-        this.categoryId = categoryId;
+        this.category = category;
         this.thumbnailUrl = thumbnailUrl;
         this.images = new Images(images);
         this.regionId = regionId;
@@ -57,12 +60,12 @@ public class Product {
         this.createdAt = createdAt;
     }
 
-    public void modifyProduct(String name, String content, int price, Long categoryId, String thumbnailUrl,
+    public void modifyProduct(String name, String content, int price, Category category, String thumbnailUrl,
             List<Image> images, long regionId) {
         this.name = name;
         this.content = content;
         this.price = price;
-        this.categoryId = categoryId;
+        this.category = category;
         this.thumbnailUrl = thumbnailUrl;
         this.images.modify(images);
         this.regionId = regionId;
@@ -80,8 +83,8 @@ public class Product {
         return id;
     }
 
-    public Long getCategoryId() {
-        return categoryId;
+    public Category getCategory() {
+        return category;
     }
 
     public long getRegionId() {

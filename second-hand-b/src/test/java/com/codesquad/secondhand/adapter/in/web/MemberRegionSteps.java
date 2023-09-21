@@ -60,7 +60,7 @@ public class MemberRegionSteps {
     public static void 멤버의_지역목록_조회를_검증한다(ExtractableResponse<Response> response) {
         Assertions.assertAll(
                 () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
-                () -> assertThat(response.jsonPath().getLong("selectedRegionId")).isEqualTo(3L),
+                () -> assertThat(response.jsonPath().getLong("selectedRegionId")).isEqualTo(1L),
                 () -> assertThat(response.jsonPath().getList("regions")).hasSize(2),
                 () -> assertThat(response.jsonPath().getList("regions.id")).contains(1, 3)
         );

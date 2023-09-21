@@ -13,4 +13,6 @@ public interface RefreshTokenRepository {
     Optional<RefreshToken> findByEmail(String email);
 
     void deleteByEmail(String email);
+
+    boolean existsByEmail(String email);
 }

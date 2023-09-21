@@ -2,6 +2,8 @@ package com.codesquad.secondhand.adapter.in.web;
 
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.regionId로_상품목록을_조회한다;
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.regionId와_categoryId로_지역목록을_조회한다;
+import static com.codesquad.secondhand.adapter.in.web.ProductSteps.regionid로_조회된_상품몰록_검증;
+import static com.codesquad.secondhand.adapter.in.web.ProductSteps.regionid와_categoryId로_조회된_지역목록_검증;
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품등록을_검증한다;
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품상세를_조회한다;
 import static com.codesquad.secondhand.adapter.in.web.ProductSteps.상품상세조회를_검증한다;
@@ -21,7 +23,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import com.codesquad.secondhand.utils.AcceptanceTest;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -122,10 +123,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
         var response = regionId로_상품목록을_조회한다(regionId, ayaanAccessToken, spec);
 
         //then
-        Assertions.assertAll(
-                () -> assertThat(response.jsonPath().getList(".")).hasSize(2),
-                () -> assertThat(response.jsonPath().getList("id")).containsExactly(1, 2)
-        );
+        regionid로_조회된_상품몰록_검증(response);
     }
 
     @DisplayName("지역id와 카테고리id에 해당하는 상품 목록을 조회하여 반환한다.")
@@ -144,10 +142,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
         var response = regionId와_categoryId로_지역목록을_조회한다(regionId, categoryId, ayaanAccessToken, spec);
 
         //then
-        Assertions.assertAll(
-                () -> assertThat(response.jsonPath().getList(".")).hasSize(2),
-                () -> assertThat(response.jsonPath().getList("id")).containsExactly(2, 3)
-        );
+        regionid와_categoryId로_조회된_지역목록_검증(response);
     }
 
     @DisplayName("상품 삭제 요청을 받으면 요청을 수행하고 204 상태코드로 응답한다.")

@@ -38,7 +38,7 @@ public class ProductTestUtils {
                 TEST_CONTENT,
                 TEST_PRICE,
                 0,
-                testCategory.getId(),
+                testCategory,
                 TEST_THUMBNAIL_IMG_URL,
                 images,
                 1,

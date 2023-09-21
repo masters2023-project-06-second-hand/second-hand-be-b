@@ -65,7 +65,7 @@ class ProductTest {
         Category modifiedCategory = getModifiedCategory();
         List<Image> modifiedImages = getModifiedImages();
         product.modifyProduct(MODIFIED_PRODUCT_NAME, MODIFIED_PRODUCT_CONTENT, MODIFIED_PRODUCT_PRICE,
-                modifiedCategory.getId(),
+                modifiedCategory,
                 MODIFIED_THUMBNAIL_URL, modifiedImages, 1);
     }
 
@@ -84,7 +84,7 @@ class ProductTest {
                 () -> assertThat(product.getName()).isEqualTo(MODIFIED_PRODUCT_NAME),
                 () -> assertThat(product.getContent()).isEqualTo(MODIFIED_PRODUCT_CONTENT),
                 () -> assertThat(product.getPrice()).isEqualTo(MODIFIED_PRODUCT_PRICE),
-                () -> assertThat(product.getCategoryId()).isEqualTo(getModifiedCategory().getId()),
+                () -> assertThat(product.getCategory()).usingRecursiveComparison().isEqualTo(getModifiedCategory()),
                 () -> assertThat(product.getThumbnailUrl()).isEqualTo(MODIFIED_THUMBNAIL_URL),
                 () -> assertThat(product.fetchImages()).usingRecursiveComparison().isEqualTo(getModifiedImages()),
                 () -> assertThat(product.getRegionId()).isEqualTo(1)

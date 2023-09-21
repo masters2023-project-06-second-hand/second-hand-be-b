@@ -2,8 +2,9 @@ package com.codesquad.secondhand.application.port.out;
 
 import com.codesquad.secondhand.domain.product.Product;
 import com.codesquad.secondhand.domain.product.Status;
-import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
 public interface ProductRepository {
 
@@ -11,19 +12,21 @@ public interface ProductRepository {
 
     Optional<Product> findById(Long id);
 
-    List<Product> findLikesByMemberId(long memberId);
+    Slice<Product> findLikesByMemberId(long memberId, Pageable pageable);
 
-    List<Product> findLikesByMemberIdAndCategoryId(long memberId, long categoryId);
+    Slice<Product> findLikesByMemberIdAndCategoryId(long memberId, long categoryId, Pageable pageable);
 
-    List<Product> findByWriterId(long writerId);
+    Slice<Product> findByWriterId(long writerId, Pageable pageable);
 
-    List<Product> findByWriterIdAndStatus(long writerId, Status status);
+    Slice<Product> findByWriterIdAndStatus(long writerId, Status status, Pageable pageable);
 
-    List<Product> findByWriterIdAndStatusNot(long writerId, Status status);
+    Slice<Product> findByWriterIdAndStatusNot(long writerId, Status status, Pageable pageable);
 
-    List<Product> findByRegionId(long regionId);
+    Slice<Product> findByRegionId(long regionId, Pageable pageable);
 
-    List<Product> findByRegionIdAndCategoryId(long regionId, long categoryId);
+    Slice<Product> findByRegionIdAndCategoryId(long regionId, long categoryId, Pageable pageable);
 
     void deleteById(long productId);
+
+    boolean existById(long productId);
 }

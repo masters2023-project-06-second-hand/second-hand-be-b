@@ -7,10 +7,8 @@ import com.codesquad.secondhand.application.port.out.MemberRepository;
 import com.codesquad.secondhand.application.service.in.exception.MemberNotFoundException;
 import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.member.Role;
-import com.codesquad.secondhand.domain.product.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -27,14 +25,13 @@ public class MemberService {
         return new MemberInfo(member.getId(), member.getNickname(), member.getProfileImage());
     }
 
-    @Transactional
-    public void toggleProductLikeStatus(Member member, boolean isLiked, Product product) {
+    public void toggleProductLikeStatus(Member member, boolean isLiked, long productId) {
         Member savedMember = getById(member.getId());
         if (isLiked) {
-            savedMember.addLikes(product);
+            savedMember.addLikes(productId);
             return;
         }
-        savedMember.removeLikes(product);
+        savedMember.removeLikes(productId);
     }
 
 

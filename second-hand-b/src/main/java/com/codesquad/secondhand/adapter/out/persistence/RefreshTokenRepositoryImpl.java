@@ -33,4 +33,9 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
     public void deleteByEmail(String email) {
         refreshTokenCrudRepository.deleteByEmail(email);
     }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return refreshTokenCrudRepository.existsByEmail(email);
+    }
 }
