@@ -48,4 +48,13 @@ public interface ChatUseCase {
      * @param memberId   삭제할 사용자 ID
      */
     void deleteChatRoomMember(long chatRoomId, long memberId);
+
+    /**
+     * 채팅방에서 보낸 메시지를 저장한다.
+     *
+     * @param chatRoomId 채팅방 ID
+     * @param message    메시지
+     * @param senderId   보낸 사용자 ID
+     */
+    void saveChatMessage(long chatRoomId, String message, long senderId);
 }

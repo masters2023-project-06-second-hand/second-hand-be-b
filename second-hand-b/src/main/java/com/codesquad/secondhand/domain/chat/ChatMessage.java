@@ -1,6 +1,5 @@
 package com.codesquad.secondhand.domain.chat;
 
-import com.codesquad.secondhand.domain.member.Member;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,9 +24,8 @@ public class ChatMessage {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chat_room_id")
     private ChatRoom chatRoom;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sender_id")
-    private Member sender;
+    @Column(nullable = false)
+    private Long senderId;
     @Column(nullable = false)
     private String message;
     @Column(nullable = false, columnDefinition = "boolean default false")
@@ -35,16 +33,24 @@ public class ChatMessage {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    public ChatMessage(ChatRoom chatRoom, Long senderId, String message, boolean readOrNot, LocalDateTime createdAt) {
+        this.chatRoom = chatRoom;
+        this.senderId = senderId;
+        this.message = message;
+        this.readOrNot = readOrNot;
+        this.createdAt = createdAt;
+    }
+
     public String getMessage() {
         return message;
     }
 
     public Long getSenderId() {
-        return sender.getId();
+        return senderId;
     }
 
     public boolean isSender(long memberId) {
-        return sender.isSameId(memberId);
+        return senderId.equals(memberId);
     }
 
     public void readMessage() {

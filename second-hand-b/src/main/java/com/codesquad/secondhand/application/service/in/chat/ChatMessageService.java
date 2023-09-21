@@ -12,6 +12,10 @@ public class ChatMessageService {
 
     private final ChatMessageRepository chatMessageRepository;
 
+    public ChatMessage save(ChatMessage chatMessage) {
+        return chatMessageRepository.save(chatMessage);
+    }
+
     public List<ChatMessage> getChatMessagesByChatRoomId(long chatRoomId) {
         return chatMessageRepository.findAllByChatRoomId(chatRoomId);
     }

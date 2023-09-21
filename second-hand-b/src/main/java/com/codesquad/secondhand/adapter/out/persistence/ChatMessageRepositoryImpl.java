@@ -14,6 +14,11 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepository {
     private final ChatMessageCrudRepository chatMessageCrudRepository;
 
     @Override
+    public ChatMessage save(ChatMessage chatMessage) {
+        return chatMessageCrudRepository.save(chatMessage);
+    }
+
+    @Override
     public List<ChatMessage> findAllByChatRoomId(long chatRoomId) {
         return chatMessageCrudRepository.findAllByChatRoomIdOrderByCreatedAtAsc(chatRoomId);
     }

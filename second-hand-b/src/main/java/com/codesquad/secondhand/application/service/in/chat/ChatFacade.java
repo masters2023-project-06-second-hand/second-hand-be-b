@@ -22,6 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ChatFacade implements ChatUseCase {
 
+    public static final int CHAT_ROOM_MEMBER_MAX_SIZE = 2;
+
     private final ChatRoomService chatRoomService;
     private final ChatRoomMemberService chatRoomMemberService;
     private final ChatMessageService chatMessageService;
@@ -63,6 +65,12 @@ public class ChatFacade implements ChatUseCase {
         chatRoomMemberService.deleteByChatRoomIdAndMemberId(chatRoomId, memberId);
     }
 
+    @Override
+    public void saveChatMessage(long chatRoomId, String message, long senderId) {
+        ChatMessage chatMessage = toChatMessage(chatRoomId, message, senderId);
+        chatMessageService.save(chatMessage);
+    }
+
     private ChatRoom toChatRoom(long productId, Member member) {
         Product product = productService.getById(productId);
         Member seller = product.getWriter();
@@ -71,5 +79,21 @@ public class ChatFacade implements ChatUseCase {
                 seller,
                 member,
                 LocalDateTime.now());
+    }
+
+    private ChatMessage toChatMessage(long chatRoomId, String message, long senderId) {
+        ChatRoom chatRoom = chatRoomService.getById(chatRoomId);
+        List<ChatRoomMember> chatRoomMembers = chatRoomMemberService.findAllByChatRoomId(chatRoomId);
+        boolean readOrNot = isChatRoomFull(chatRoomMembers);
+        return new ChatMessage(
+                chatRoom,
+                senderId,
+                message,
+                readOrNot,
+                LocalDateTime.now());
+    }
+
+    private boolean isChatRoomFull(List<ChatRoomMember> chatRoomMembers) {
+        return chatRoomMembers.size() == CHAT_ROOM_MEMBER_MAX_SIZE;
     }
 }
