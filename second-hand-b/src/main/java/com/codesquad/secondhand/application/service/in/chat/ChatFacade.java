@@ -45,6 +45,11 @@ public class ChatFacade implements ChatUseCase {
         return toChatRoomDetail(chatRoom, chatMessages, member);
     }
 
+    @Override
+    public void readMessages(long chatRoomId, long memberId) {
+        chatMessageService.readChatMessages(chatRoomId, memberId);
+    }
+
     private ChatRoom toChatRoom(long productId, Member member) {
         Product product = productService.getById(productId);
         Member seller = product.getWriter();

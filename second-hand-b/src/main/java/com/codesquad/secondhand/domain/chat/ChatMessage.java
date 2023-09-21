@@ -26,6 +26,7 @@ public class ChatMessage {
     @JoinColumn(name = "chat_room_id")
     private ChatRoom chatRoom;
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sender_id")
     private Member sender;
     @Column(nullable = false)
     private String message;
@@ -40,5 +41,13 @@ public class ChatMessage {
 
     public Long getSenderId() {
         return sender.getId();
+    }
+
+    public boolean isSender(long memberId) {
+        return sender.isSameId(memberId);
+    }
+
+    public void readMessage() {
+        readOrNot = true;
     }
 }

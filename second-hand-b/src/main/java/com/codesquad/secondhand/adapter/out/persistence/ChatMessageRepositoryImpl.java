@@ -17,4 +17,9 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepository {
     public List<ChatMessage> findAllByChatRoomId(long chatRoomId) {
         return chatMessageCrudRepository.findAllByChatRoomIdOrderByCreatedAtAsc(chatRoomId);
     }
+
+    @Override
+    public void readChatMessagesByChatRoomIdAndNotSenderId(long chatRoomId, long memberId) {
+        chatMessageCrudRepository.readChatMessagesByChatRoomIdAndNotSenderId(chatRoomId, memberId);
+    }
 }

@@ -6,4 +6,6 @@ import java.util.List;
 public interface ChatMessageRepository {
 
     List<ChatMessage> findAllByChatRoomId(long chatRoomId);
+
+    void readChatMessagesByChatRoomIdAndNotSenderId(long chatRoomId, long memberId);
 }

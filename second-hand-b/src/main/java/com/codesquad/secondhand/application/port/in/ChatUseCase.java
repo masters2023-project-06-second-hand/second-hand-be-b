@@ -11,10 +11,25 @@ public interface ChatUseCase {
      *
      * @param productId 상품 식별자 ID
      * @param sellerId  판매자 식별자 ID
-     * @param member    로그인한 사용자
+     * @param member    로그인 된 사용자
      * @return 채팅방의 식별자 ID를 담은 객체
      */
     ChatRoomId getChatRoomId(long productId, long sellerId, Member member);
 
+    /**
+     * 채팅방 ID로 채팅방의 정보를 조회하여 반환한다.
+     *
+     * @param chatRoomId 채팅방 ID
+     * @param member     로그인 된 사용자
+     * @return 채팅 정보와 상품 정보를 담은 객체
+     */
     ChatRoomDetail getChatRoomDetail(long chatRoomId, Member member);
+
+    /**
+     * 채팅방 ID에 존재하는 메시지 중 상대방이 보낸 메시지를 모두 읽음 처리한다.
+     *
+     * @param chatRoomId 채팅방 ID
+     * @param memberId   로그인 된 사용자 ID
+     */
+    void readMessages(long chatRoomId, long memberId);
 }

@@ -15,4 +15,8 @@ public class ChatMessageService {
     public List<ChatMessage> getChatMessagesByChatRoomId(long chatRoomId) {
         return chatMessageRepository.findAllByChatRoomId(chatRoomId);
     }
+
+    public void readChatMessages(long chatRoomId, long memberId) {
+        chatMessageRepository.readChatMessagesByChatRoomIdAndNotSenderId(chatRoomId, memberId);
+    }
 }
