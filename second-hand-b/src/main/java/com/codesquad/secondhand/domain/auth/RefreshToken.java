@@ -1,13 +1,11 @@
 package com.codesquad.secondhand.domain.auth;
 
 import com.codesquad.secondhand.application.service.in.exception.InvalidRefreshTokenException;
-import com.codesquad.secondhand.domain.member.Member;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -25,14 +23,13 @@ public class RefreshToken {
     private String tokenValue;
     @Temporal(TemporalType.TIMESTAMP)
     private Date expireTime;
-    @OneToOne
-    private Member member;
+    private long memberId;
     private String email;
 
-    public RefreshToken(String tokenValue, Date expireTime, Member member, String email) {
+    public RefreshToken(String tokenValue, Date expireTime, long memberId, String email) {
         this.tokenValue = tokenValue;
         this.expireTime = expireTime;
-        this.member = member;
+        this.memberId = memberId;
         this.email = email;
     }
 

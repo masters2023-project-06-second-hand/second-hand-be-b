@@ -1,7 +1,7 @@
 package com.codesquad.secondhand.application.service.in.prodcut;
 
-import com.codesquad.secondhand.adapter.in.web.request.product.DeleteImageRequest;
-import com.codesquad.secondhand.adapter.in.web.response.product.ImageInfo;
+import com.codesquad.secondhand.adapter.in.web.command.image.request.DeleteImageRequest;
+import com.codesquad.secondhand.adapter.in.web.command.image.response.ImageInfo;
 import com.codesquad.secondhand.application.port.in.ImageUseCase;
 import com.codesquad.secondhand.application.port.out.ImageRepository;
 import com.codesquad.secondhand.application.service.in.exception.ImageNotFoundException;

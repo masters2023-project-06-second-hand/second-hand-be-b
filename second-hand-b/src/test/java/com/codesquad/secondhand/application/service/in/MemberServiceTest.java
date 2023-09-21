@@ -2,12 +2,10 @@ package com.codesquad.secondhand.application.service.in;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 
+import com.codesquad.secondhand.application.port.out.MemberRepository;
 import com.codesquad.secondhand.application.service.in.exception.MemberNotFoundException;
 import com.codesquad.secondhand.application.service.in.exception.PermissionDeniedException;
-import com.codesquad.secondhand.application.port.out.MemberRepository;
-import com.codesquad.secondhand.domain.member.Member;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -53,11 +51,9 @@ class MemberServiceTest {
     void validateMemberPermission() {
         // given
         long notSameId = 1;
-        Member member = mock(Member.class);
-        given(member.isSameId(1)).willReturn(false);
 
         // when
-        assertThatThrownBy(() -> MemberUtils.validateMemberPermission(member, notSameId))
+        assertThatThrownBy(() -> MemberUtils.validateMemberPermission("2", notSameId))
                 .isInstanceOf(PermissionDeniedException.class);
     }
 }

@@ -5,10 +5,12 @@ import static com.codesquad.secondhand.domain.product.ProductTestUtils.getDefaul
 import static com.codesquad.secondhand.domain.product.ProductTestUtils.getDefaultTestWriter;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.codesquad.secondhand.adapter.in.web.response.product.ImageInfo;
-import com.codesquad.secondhand.adapter.in.web.response.product.ProductDetail;
-import com.codesquad.secondhand.adapter.in.web.response.product.ProductInfo;
-import com.codesquad.secondhand.adapter.in.web.response.product.ProductWriter;
+import com.codesquad.secondhand.adapter.in.web.command.image.response.ImageInfo;
+import com.codesquad.secondhand.adapter.in.web.query.prodcut.response.ProductDetail;
+import com.codesquad.secondhand.adapter.in.web.query.prodcut.response.ProductInfo;
+import com.codesquad.secondhand.adapter.in.web.common.utils.ProductWriter;
+import com.codesquad.secondhand.application.service.in.common.utils.ImageMapper;
+import com.codesquad.secondhand.application.service.in.common.utils.ProductMapper;
 import com.codesquad.secondhand.domain.product.Image;
 import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.product.Category;

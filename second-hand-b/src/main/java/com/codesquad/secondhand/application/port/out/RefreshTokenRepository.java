@@ -12,7 +12,7 @@ public interface RefreshTokenRepository {
 
     Optional<RefreshToken> findByEmail(String email);
 
-    void deleteByEmail(String email);
+    void deleteByMemberId(long memberId);
 
-    boolean existsByEmail(String email);
+    boolean existsByMemberId(long memberId);
 }

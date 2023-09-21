@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.codesquad.secondhand.adapter.in.web.response.security.Tokens;
+import com.codesquad.secondhand.adapter.in.web.security.response.Tokens;
 import com.codesquad.secondhand.adapter.in.web.security.handler.AuthenticationResponseHandlerImpl;
 import com.codesquad.secondhand.application.port.in.AuthUseCase;
 import com.codesquad.secondhand.application.service.in.exception.ErrorResponse;

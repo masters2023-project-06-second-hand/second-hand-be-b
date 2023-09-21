@@ -17,6 +17,7 @@ public class JwtTokenProvider {
     private static final SecretKey SIGN_UP_TOKEN_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     private static final String IS_REGISTERED_CLAIM = "isRegistered";
     private static final String EMAIL_CLAIM = "email";
+    private static final String ROLE_CLAIM = "role";
     private static final String SECOND_HAND_CLAIM = "second_hand";
     public static final long THIRTY_MIN = 30 * 60 * 1000L;
     public static final long THIRTY_DAYS = 30 * 60 * 60 * 1000L;
@@ -40,27 +41,16 @@ public class JwtTokenProvider {
     }
 
 
-    public static String createAccessToken(String email, String id, Date startDate) {
+    public static String createAccessToken(String email, String id, String role, Date startDate) {
         return Jwts.builder()
                 .claim(EMAIL_CLAIM, email)
                 .claim(IS_REGISTERED_CLAIM, true)
+                .claim(ROLE_CLAIM, role)
                 .setIssuer(SECOND_HAND_CLAIM)
                 .setSubject(id)
                 .setIssuedAt(startDate)
                 .setExpiration(getAccessTokenExpiryDate(startDate))
                 .signWith(ACCESS_TOKEN_KEY)
-                .compact();
-    }
-
-    public static String createAccessToken(String email, String id, Date startDate, SecretKey accessTokenKey) {
-        return Jwts.builder()
-                .claim(EMAIL_CLAIM, email)
-                .claim(IS_REGISTERED_CLAIM, true)
-                .setIssuer(SECOND_HAND_CLAIM)
-                .setSubject(id)
-                .setIssuedAt(startDate)
-                .setExpiration(getAccessTokenExpiryDate(startDate))
-                .signWith(accessTokenKey)
                 .compact();
     }
 
@@ -74,6 +64,22 @@ public class JwtTokenProvider {
                 .setExpiration(JwtTokenProvider.getRefreshTokenExpiryDate(startDate))
                 .signWith(REFRESH_TOKEN_KEY)
                 .compact();
+    }
+
+    public static String getIdFormAccessToken(String accessToken) {
+        Jws<Claims> claims = Jwts.parserBuilder()
+                .setSigningKey(ACCESS_TOKEN_KEY)
+                .build()
+                .parseClaimsJws(accessToken);
+        return claims.getBody().getSubject();
+    }
+
+    public static String getRoleFormAccessToken(String accessToken) {
+        Jws<Claims> claims = Jwts.parserBuilder()
+                .setSigningKey(ACCESS_TOKEN_KEY)
+                .build()
+                .parseClaimsJws(accessToken);
+        return claims.getBody().get(ROLE_CLAIM, String.class);
     }
 
     private static Date getSignUpTokenExpiryDate(Date startDate) {
@@ -133,10 +139,6 @@ public class JwtTokenProvider {
                 .parseClaimsJws(jwtToken);
         return claims.getBody()
                 .get(IS_REGISTERED_CLAIM, Boolean.class);
-    }
-
-    public static String getEmailFromAccessToken(String jwtToken) {
-        return getEmailFromToken(jwtToken, ACCESS_TOKEN_KEY);
     }
 
     public static String getEmailFromSignUpToken(String jwtToken) {

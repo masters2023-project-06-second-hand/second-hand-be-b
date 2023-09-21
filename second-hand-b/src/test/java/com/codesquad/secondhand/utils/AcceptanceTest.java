@@ -73,7 +73,9 @@ public abstract class AcceptanceTest {
         Member albert = memberRepository.save(albertMember);
 
         final Date startDate = new Date();
-        ayaanAccessToken = JwtTokenProvider.createAccessToken(AYAAN_EMAIL, ayaan.getIdStringValue(), startDate);
-        albertAccessToken = JwtTokenProvider.createAccessToken(ALBERT_EMAIL, albert.getIdStringValue(), startDate);
+        ayaanAccessToken = JwtTokenProvider.createAccessToken(AYAAN_EMAIL, ayaan.getIdStringValue(),
+                ayaan.getRole().getKey(), startDate);
+        albertAccessToken = JwtTokenProvider.createAccessToken(ALBERT_EMAIL, albert.getIdStringValue(),
+                albert.getRole().getKey(), startDate);
     }
 }

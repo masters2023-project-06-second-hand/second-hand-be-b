@@ -217,7 +217,7 @@ public class ProductSteps {
     }
 
     public static ExtractableResponse<Response> 상품용_이미지를_업로드한다(File file, String accessToken,
-            RequestSpecification specification) throws IOException {
+            RequestSpecification specification) {
         return RestAssured.given().log().all()
                 .spec(specification)
                 .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -228,7 +228,7 @@ public class ProductSteps {
     }
 
     public static ExtractableResponse<Response> 회원용_이미지를_업로드한다(File file, String accessToken,
-            RequestSpecification specification) throws IOException {
+            RequestSpecification specification) {
         return RestAssured.given().log().all()
                 .spec(specification)
                 .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -250,32 +250,29 @@ public class ProductSteps {
                 .then().log().all().extract();
     }
 
-    public static ExtractableResponse<Response> regionId로_상품목록을_조회한다(Long regionId, String accessToken) {
-        return regionId로_상품목록을_조회한다(regionId, accessToken, new RequestSpecBuilder().build());
+    public static ExtractableResponse<Response> regionId로_상품목록을_조회한다(Long regionId) {
+        return regionId로_상품목록을_조회한다(regionId, new RequestSpecBuilder().build());
     }
 
-    public static ExtractableResponse<Response> regionId로_상품목록을_조회한다(Long regionId, String accessToken,
+    public static ExtractableResponse<Response> regionId로_상품목록을_조회한다(Long regionId,
             RequestSpecification specification) {
         return RestAssured.given().log().all()
                 .spec(specification)
                 .queryParam("regionId", regionId)
-                .auth().oauth2(accessToken)
                 .when().get("/api/products")
                 .then().log().all().extract();
     }
 
-    public static ExtractableResponse<Response> regionId와_categoryId로_지역목록을_조회한다(Long regionId, Long categoryId,
-            String accessToken) {
-        return regionId와_categoryId로_지역목록을_조회한다(regionId, categoryId, accessToken, new RequestSpecBuilder().build());
+    public static ExtractableResponse<Response> regionId와_categoryId로_지역목록을_조회한다(Long regionId, Long categoryId) {
+        return regionId와_categoryId로_지역목록을_조회한다(regionId, categoryId, new RequestSpecBuilder().build());
     }
 
     public static ExtractableResponse<Response> regionId와_categoryId로_지역목록을_조회한다(Long regionId, Long categoryId,
-            String accessToken, RequestSpecification specification) {
+            RequestSpecification specification) {
         return RestAssured.given().log().all()
                 .spec(specification)
                 .queryParam("regionId", regionId)
                 .queryParam("categoryId", categoryId)
-                .auth().oauth2(accessToken)
                 .when().get("/api/products")
                 .then().log().all().extract();
     }

@@ -2,6 +2,7 @@ package com.codesquad.secondhand.adapter.in.web.request.annotation;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.codesquad.secondhand.adapter.in.web.command.product.annotation.ImagesIdValidator;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;

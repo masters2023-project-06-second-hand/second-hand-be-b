@@ -120,7 +120,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
         Long regionId = 1L;
 
         //when
-        var response = regionId로_상품목록을_조회한다(regionId, ayaanAccessToken, spec);
+        var response = regionId로_상품목록을_조회한다(regionId, spec);
 
         //then
         regionid로_조회된_상품몰록_검증(response);
@@ -139,7 +139,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
         Long categoryId = 2L;
 
         //when
-        var response = regionId와_categoryId로_지역목록을_조회한다(regionId, categoryId, ayaanAccessToken, spec);
+        var response = regionId와_categoryId로_지역목록을_조회한다(regionId, categoryId, spec);
 
         //then
         regionid와_categoryId로_조회된_지역목록_검증(response);

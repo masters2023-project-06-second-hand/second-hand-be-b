@@ -1,9 +1,9 @@
 package com.codesquad.secondhand.application.service.in.region;
 
-import static com.codesquad.secondhand.application.service.in.region.RegionMapper.toRegionsInfo;
+import static com.codesquad.secondhand.application.service.in.common.utils.RegionMapper.toRegionsInfo;
 
-import com.codesquad.secondhand.adapter.in.web.response.RegionInfo;
-import com.codesquad.secondhand.adapter.in.web.response.RegionInfos;
+import com.codesquad.secondhand.adapter.in.web.common.response.RegionInfo;
+import com.codesquad.secondhand.adapter.in.web.common.response.RegionInfos;
 import com.codesquad.secondhand.application.port.in.RegionUseCase;
 import com.codesquad.secondhand.application.port.out.RegionRepository;
 import com.codesquad.secondhand.application.service.in.exception.RegionNotFoundException;

@@ -1,7 +1,7 @@
 package com.codesquad.secondhand.application.service.in;
 
-import com.codesquad.secondhand.adapter.in.web.request.security.SignUpRequest;
-import com.codesquad.secondhand.adapter.in.web.response.security.Tokens;
+import com.codesquad.secondhand.adapter.in.web.security.request.SignUpRequest;
+import com.codesquad.secondhand.adapter.in.web.security.response.Tokens;
 import com.codesquad.secondhand.application.port.in.AuthUseCase;
 import com.codesquad.secondhand.application.port.out.RefreshTokenRepository;
 import com.codesquad.secondhand.application.service.in.exception.InvalidRefreshTokenException;
@@ -78,28 +78,29 @@ public class AuthService implements AuthUseCase {
     }
 
     @Override
-    public void signOut(Member member) {
-        String email = member.getEmail();
-        if (refreshTokenRepository.existsByEmail(email)) {
-            refreshTokenRepository.deleteByEmail(email);
+    public void signOut(String validatedMemberId) {
+        long memberId = Long.parseLong(validatedMemberId);
+        if (refreshTokenRepository.existsByMemberId(memberId)) {
+            refreshTokenRepository.deleteByMemberId(memberId);
         }
     }
 
     private Tokens getTokens(String email, Member member) {
         Date startDate = new Date();
-        var accessToken = getAccessToken(email, member.getIdStringValue(), startDate);
+        var accessToken = getAccessToken(email, member, startDate);
         var refreshToken = getRefreshToken(email, member, startDate);
         return new Tokens(accessToken, refreshToken, member.getId());
     }
 
-    private String getAccessToken(String email, String id, Date startDate) {
-        return JwtTokenProvider.createAccessToken(email, id, startDate);
+    private String getAccessToken(String email, Member member, Date startDate) {
+        return JwtTokenProvider.createAccessToken(email, member.getIdStringValue(), member.getRole().getKey(),
+                startDate);
     }
 
     private String getRefreshToken(String email, Member member, Date startDate) {
         Date expiryDate = JwtTokenProvider.getRefreshTokenExpiryDate(startDate);
         String refreshToken = JwtTokenProvider.createRefreshToken(email, member.getIdStringValue(), startDate);
-        refreshTokenRepository.save(new RefreshToken(refreshToken, expiryDate, member, email));
+        refreshTokenRepository.save(new RefreshToken(refreshToken, expiryDate, member.getId(), email));
         return refreshToken;
     }
 

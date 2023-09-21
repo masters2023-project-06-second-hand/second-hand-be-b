@@ -1,8 +1,6 @@
 package com.codesquad.secondhand.domain.member;
 
 import com.codesquad.secondhand.application.service.in.exception.NotExistsMemberRegionException;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -15,8 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -83,19 +79,11 @@ public class Member {
         return myRegions.getRegions();
     }
 
-    public List<Long> fetchProducts() {
-        return likes.getProducts();
-    }
-
     public void selectRegion(long regionId) {
         if (!myRegions.contains(regionId)) {
             throw new NotExistsMemberRegionException();
         }
         this.selectedRegionId = regionId;
-    }
-
-    public Collection<GrantedAuthority> getRoleAuthority() {
-        return Collections.singleton(new SimpleGrantedAuthority(role.getKey()));
     }
 
     public String getIdStringValue() {

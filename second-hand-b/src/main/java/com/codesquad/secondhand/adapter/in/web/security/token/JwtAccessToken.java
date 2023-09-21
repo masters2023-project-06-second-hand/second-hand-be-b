@@ -1,19 +1,20 @@
 package com.codesquad.secondhand.adapter.in.web.security.token;
 
-import com.codesquad.secondhand.domain.member.Member;
 import java.util.Collection;
+import java.util.Collections;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 public class JwtAccessToken implements Authentication {
 
-    private final Member member;
+    private final String id;
     private final Collection<? extends GrantedAuthority> authorities;
     private boolean isAuthenticated;
 
-    public JwtAccessToken(Member member, Collection<? extends GrantedAuthority> authorities) {
-        this.member = member;
-        this.authorities = authorities;
+    public JwtAccessToken(String id, String role) {
+        this.id = id;
+        this.authorities = Collections.singleton(new SimpleGrantedAuthority(role));
     }
 
     @Override
@@ -33,7 +34,7 @@ public class JwtAccessToken implements Authentication {
 
     @Override
     public Object getPrincipal() {
-        return member;
+        return getName();
     }
 
     @Override
@@ -48,6 +49,6 @@ public class JwtAccessToken implements Authentication {
 
     @Override
     public String getName() {
-        return member.getEmail();
+        return id;
     }
 }

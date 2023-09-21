@@ -2,7 +2,7 @@ package com.codesquad.secondhand.application.service.in;
 
 import static com.codesquad.secondhand.application.service.in.MemberUtils.validateMemberPermission;
 
-import com.codesquad.secondhand.adapter.in.web.response.MemberInfo;
+import com.codesquad.secondhand.adapter.in.web.query.member.response.MemberInfo;
 import com.codesquad.secondhand.application.port.out.MemberRepository;
 import com.codesquad.secondhand.application.service.in.exception.MemberNotFoundException;
 import com.codesquad.secondhand.domain.member.Member;
@@ -20,13 +20,16 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
-    public MemberInfo getProfile(Member member, Long memberId) {
-        validateMemberPermission(member, memberId);
+    public MemberInfo getProfile(String validatedMemberId, Long memberId) {
+
+        validateMemberPermission(validatedMemberId, memberId);
+        Member member = getById(memberId);
         return new MemberInfo(member.getId(), member.getNickname(), member.getProfileImage());
     }
 
-    public void toggleProductLikeStatus(Member member, boolean isLiked, long productId) {
-        Member savedMember = getById(member.getId());
+    public void toggleProductLikeStatus(String memberIdValue, boolean isLiked, long productId) {
+        long memberId = Long.parseLong(memberIdValue);
+        Member savedMember = getById(memberId);
         if (isLiked) {
             savedMember.addLikes(productId);
             return;
@@ -35,7 +38,7 @@ public class MemberService {
     }
 
 
-    public Member getById(Long memberId) {
+    public Member getById(long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(MemberNotFoundException::new);
     }

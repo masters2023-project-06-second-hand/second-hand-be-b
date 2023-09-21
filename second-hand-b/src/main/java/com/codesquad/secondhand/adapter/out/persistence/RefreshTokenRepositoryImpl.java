@@ -30,12 +30,12 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
     }
 
     @Override
-    public void deleteByEmail(String email) {
-        refreshTokenCrudRepository.deleteByEmail(email);
+    public void deleteByMemberId(long memberId) {
+        refreshTokenCrudRepository.deleteByMemberId(memberId);
     }
 
     @Override
-    public boolean existsByEmail(String email) {
-        return refreshTokenCrudRepository.existsByEmail(email);
+    public boolean existsByMemberId(long memberId) {
+        return refreshTokenCrudRepository.existsByMemberId(memberId);
     }
 }

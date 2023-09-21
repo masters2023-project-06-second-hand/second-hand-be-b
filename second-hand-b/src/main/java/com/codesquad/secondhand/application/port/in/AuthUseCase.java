@@ -1,8 +1,7 @@
 package com.codesquad.secondhand.application.port.in;
 
-import com.codesquad.secondhand.adapter.in.web.request.security.SignUpRequest;
-import com.codesquad.secondhand.adapter.in.web.response.security.Tokens;
-import com.codesquad.secondhand.domain.member.Member;
+import com.codesquad.secondhand.adapter.in.web.security.request.SignUpRequest;
+import com.codesquad.secondhand.adapter.in.web.security.response.Tokens;
 
 public interface AuthUseCase {
 
@@ -12,5 +11,5 @@ public interface AuthUseCase {
 
     Tokens getToken(String authentication);
 
-    void signOut(Member member);
+    void signOut(String validatedMemberId);
 }
