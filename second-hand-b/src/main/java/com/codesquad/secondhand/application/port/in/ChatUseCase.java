@@ -31,5 +31,13 @@ public interface ChatUseCase {
      * @param chatRoomId 채팅방 ID
      * @param memberId   로그인 된 사용자 ID
      */
-    void readMessages(long chatRoomId, long memberId);
+    void markMessagesAsRead(long chatRoomId, long memberId);
+
+    /**
+     * 채팅방의 사용자 목록에 사용자를 추가한다.
+     *
+     * @param chatRoomId 채팅방 ID
+     * @param memberId   추가할 사용자 ID
+     */
+    void addMemberToChatRoom(long chatRoomId, long memberId);
 }

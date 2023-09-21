@@ -19,7 +19,7 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepository {
     }
 
     @Override
-    public void readChatMessagesByChatRoomIdAndNotSenderId(long chatRoomId, long memberId) {
-        chatMessageCrudRepository.readChatMessagesByChatRoomIdAndNotSenderId(chatRoomId, memberId);
+    public void markMessagesAsReadByChatRoomIdAndNotSenderId(long chatRoomId, long memberId) {
+        chatMessageCrudRepository.markMessagesAsReadByChatRoomIdAndNotSenderId(chatRoomId, memberId);
     }
 }

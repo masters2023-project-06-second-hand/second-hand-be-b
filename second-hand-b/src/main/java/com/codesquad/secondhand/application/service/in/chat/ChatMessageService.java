@@ -16,7 +16,7 @@ public class ChatMessageService {
         return chatMessageRepository.findAllByChatRoomId(chatRoomId);
     }
 
-    public void readChatMessages(long chatRoomId, long memberId) {
-        chatMessageRepository.readChatMessagesByChatRoomIdAndNotSenderId(chatRoomId, memberId);
+    public void markMessagesAsRead(long chatRoomId, long memberId) {
+        chatMessageRepository.markMessagesAsReadByChatRoomIdAndNotSenderId(chatRoomId, memberId);
     }
 }

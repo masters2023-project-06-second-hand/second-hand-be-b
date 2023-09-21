@@ -49,7 +49,8 @@ public class StompHandler implements ChannelInterceptor {
     private void connectToChatRoom(StompHeaderAccessor accessor) {
         Long chatRoomId = getChatRoomId(accessor);
         Long memberId = validateAccessToken(accessor);
-        chatUseCase.readMessages(chatRoomId, memberId);
+        chatUseCase.addMemberToChatRoom(chatRoomId, memberId);
+        chatUseCase.markMessagesAsRead(chatRoomId, memberId);
     }
 
     private Long getChatRoomId(StompHeaderAccessor accessor) {

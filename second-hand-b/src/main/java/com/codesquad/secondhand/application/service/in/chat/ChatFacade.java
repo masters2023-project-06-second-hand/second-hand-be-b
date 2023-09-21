@@ -9,6 +9,7 @@ import com.codesquad.secondhand.application.service.in.exception.ChatRoomNotFoun
 import com.codesquad.secondhand.application.service.in.prodcut.ProductService;
 import com.codesquad.secondhand.domain.chat.ChatMessage;
 import com.codesquad.secondhand.domain.chat.ChatRoom;
+import com.codesquad.secondhand.domain.chat.ChatRoomMember;
 import com.codesquad.secondhand.domain.member.Member;
 import com.codesquad.secondhand.domain.product.Product;
 import java.time.LocalDateTime;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ChatFacade implements ChatUseCase {
 
     private final ChatRoomService chatRoomService;
+    private final ChatRoomMemberService chatRoomMemberService;
     private final ChatMessageService chatMessageService;
     private final ProductService productService;
 
@@ -46,8 +48,14 @@ public class ChatFacade implements ChatUseCase {
     }
 
     @Override
-    public void readMessages(long chatRoomId, long memberId) {
-        chatMessageService.readChatMessages(chatRoomId, memberId);
+    public void markMessagesAsRead(long chatRoomId, long memberId) {
+        chatMessageService.markMessagesAsRead(chatRoomId, memberId);
+    }
+
+    @Override
+    public void addMemberToChatRoom(long chatRoomId, long memberId) {
+        ChatRoomMember chatRoomMember = new ChatRoomMember(chatRoomId, memberId);
+        chatRoomMemberService.save(chatRoomMember);
     }
 
     private ChatRoom toChatRoom(long productId, Member member) {

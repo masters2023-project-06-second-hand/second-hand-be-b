@@ -17,5 +17,5 @@ public interface ChatMessageCrudRepository extends CrudRepository<ChatMessage, L
             + "and sender_id <> :memberId "
             + "and read_or_not = false",
             nativeQuery = true)
-    void readChatMessagesByChatRoomIdAndNotSenderId(long chatRoomId, long memberId);
+    void markMessagesAsReadByChatRoomIdAndNotSenderId(long chatRoomId, long memberId);
 }

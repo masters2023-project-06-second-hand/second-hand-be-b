@@ -7,5 +7,5 @@ public interface ChatMessageRepository {
 
     List<ChatMessage> findAllByChatRoomId(long chatRoomId);
 
-    void readChatMessagesByChatRoomIdAndNotSenderId(long chatRoomId, long memberId);
+    void markMessagesAsReadByChatRoomIdAndNotSenderId(long chatRoomId, long memberId);
 }
