@@ -28,11 +28,11 @@ public class StompHandler implements ChannelInterceptor {
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-        handleMessage(Objects.requireNonNull(accessor.getCommand()), accessor);
+        handleCommand(Objects.requireNonNull(accessor.getCommand()), accessor);
         return message;
     }
 
-    public void handleMessage(StompCommand stompCommand, StompHeaderAccessor accessor) {
+    private void handleCommand(StompCommand stompCommand, StompHeaderAccessor accessor) {
         if (StompCommand.CONNECT.equals(stompCommand)) {
             connectToChatRoom(accessor);
         }
@@ -53,13 +53,12 @@ public class StompHandler implements ChannelInterceptor {
     private Long validateAccessToken(StompHeaderAccessor accessor) {
         String accessToken = getAccessToken(accessor);
         Date now = new Date();
-        if (JwtTokenProvider.isValidAccessToken(accessToken, now) && JwtTokenProvider.isAccessToken(accessToken)) {
+        if (JwtTokenProvider.isValidAccessToken(accessToken, now)) {
             String email = JwtTokenProvider.getEmailFromAccessToken(accessToken);
             Member member = memberService.getByEmail(email);
             return member.getId();
-        } else {
-            throw new TokenExpiredException();
         }
+        throw new TokenExpiredException();
     }
 
     private String getAccessToken(StompHeaderAccessor accessor) {

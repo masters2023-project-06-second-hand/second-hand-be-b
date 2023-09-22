@@ -28,7 +28,7 @@ public class ChatMessage {
     private Long senderId;
     @Column(nullable = false)
     private String message;
-    @Column(nullable = false, columnDefinition = "boolean default false")
+    @Column(nullable = false)
     private boolean readOrNot;
     @Column(nullable = false)
     private LocalDateTime createdAt;
