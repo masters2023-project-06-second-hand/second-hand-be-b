@@ -4,6 +4,3 @@ spring:
       local: localdb, oauth2, cloud
       dev: devcloud,devdb,devoauth2
     default: local
-front:
-  server:
-    address: "http://localhost:5173/"
