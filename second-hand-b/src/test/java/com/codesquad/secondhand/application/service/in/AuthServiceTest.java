@@ -3,8 +3,10 @@ package com.codesquad.secondhand.application.service.in;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 
-import com.codesquad.secondhand.application.service.in.exception.MemberNotFoundException;
-import com.codesquad.secondhand.application.service.in.exception.NotRegisteredMemberException;
+import com.codesquad.secondhand.common.exception.MemberNotFoundException;
+import com.codesquad.secondhand.common.exception.NotRegisteredMemberException;
+import com.codesquad.secondhand.common.security.service.AuthService;
+import com.codesquad.secondhand.query.service.MemberQueryService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,14 +21,14 @@ class AuthServiceTest {
     AuthService authService;
 
     @Mock
-    MemberService memberService;
+    MemberQueryService memberQueryService;
 
     @DisplayName("이메일로 로그인 요청시,이메일 존재하지 않은 예외가 발생하면 예외를 잡고 가입하지 않는 예외를 던진다")
     @Test
     void signIn() {
         // given
         String notExistsEmail = "notExists@email.com";
-        given(memberService.getByEmail(notExistsEmail)).willThrow(MemberNotFoundException.class);
+        given(memberQueryService.getByEmail(notExistsEmail)).willThrow(MemberNotFoundException.class);
 
         // when,then
         assertThatThrownBy(() -> authService.signIn(notExistsEmail)).isInstanceOf(NotRegisteredMemberException.class);

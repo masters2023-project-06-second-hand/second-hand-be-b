@@ -3,6 +3,7 @@ plugins {
     id 'org.springframework.boot' version '2.7.14'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
     id "org.asciidoctor.jvm.convert" version "3.3.2"
+    id 'jacoco'
 }
 
 group = 'com.codesquad'
@@ -60,6 +61,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
 }
 
+
 ext {
     snippetsDir = file('build/generated-snippets')
 }
@@ -92,4 +94,26 @@ task copyDocument(type: Copy) {
 
     from file("build/docs/asciidoc")
     into file("src/main/resources/static/docs")
+}
+
+jacoco {
+    toolVersion = "0.8.7"
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = true
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                counter = 'COMPLEXITY'
+                value = 'COVEREDRATIO'
+                minimum = 0.60
+            }
+        }
+    }
 }
