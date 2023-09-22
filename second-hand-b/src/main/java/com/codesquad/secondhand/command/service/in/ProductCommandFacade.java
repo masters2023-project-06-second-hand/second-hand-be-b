@@ -2,13 +2,13 @@ package com.codesquad.secondhand.command.service.in;
 
 import com.codesquad.secondhand.command.adapter.in.web.product.request.ProductCreateRequest;
 import com.codesquad.secondhand.command.adapter.in.web.product.request.ProductModifyRequest;
-import com.codesquad.secondhand.command.port.in.ProductCommandUseCase;
-import com.codesquad.secondhand.common.utils.ProductUnits;
 import com.codesquad.secondhand.command.domain.product.Category;
 import com.codesquad.secondhand.command.domain.product.Image;
 import com.codesquad.secondhand.command.domain.product.Product;
 import com.codesquad.secondhand.command.domain.product.Status;
 import com.codesquad.secondhand.command.domain.region.Region;
+import com.codesquad.secondhand.command.port.in.ProductCommandUseCase;
+import com.codesquad.secondhand.common.utils.ProductUnits;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

@@ -3,11 +3,11 @@ package com.codesquad.secondhand.query.service;
 import static com.codesquad.secondhand.common.utils.MemberUtils.validateMemberPermission;
 import static com.codesquad.secondhand.common.utils.ProductMapper.toProductInfo;
 
+import com.codesquad.secondhand.command.domain.product.Product;
+import com.codesquad.secondhand.command.domain.product.Status;
 import com.codesquad.secondhand.query.controller.prodcut.response.ProductInfo;
 import com.codesquad.secondhand.query.controller.prodcut.response.ProductsInfo;
 import com.codesquad.secondhand.query.port.MemberProductQueryUseCase;
-import com.codesquad.secondhand.command.domain.product.Product;
-import com.codesquad.secondhand.command.domain.product.Status;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;

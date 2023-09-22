@@ -3,14 +3,14 @@ package com.codesquad.secondhand.query.service;
 import static com.codesquad.secondhand.common.utils.ProductMapper.toProductDetail;
 import static com.codesquad.secondhand.common.utils.ProductMapper.toProductInfo;
 
-import com.codesquad.secondhand.query.controller.prodcut.response.ProductDetail;
-import com.codesquad.secondhand.query.controller.prodcut.response.ProductInfo;
-import com.codesquad.secondhand.query.controller.prodcut.response.ProductsInfo;
-import com.codesquad.secondhand.query.port.ProductQueryUseCase;
 import com.codesquad.secondhand.command.domain.member.Member;
 import com.codesquad.secondhand.command.domain.product.Category;
 import com.codesquad.secondhand.command.domain.product.Product;
 import com.codesquad.secondhand.command.domain.region.Region;
+import com.codesquad.secondhand.query.controller.prodcut.response.ProductDetail;
+import com.codesquad.secondhand.query.controller.prodcut.response.ProductInfo;
+import com.codesquad.secondhand.query.controller.prodcut.response.ProductsInfo;
+import com.codesquad.secondhand.query.port.ProductQueryUseCase;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;

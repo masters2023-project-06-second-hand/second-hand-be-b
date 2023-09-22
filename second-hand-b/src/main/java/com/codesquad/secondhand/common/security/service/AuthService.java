@@ -1,17 +1,17 @@
 package com.codesquad.secondhand.common.security.service;
 
-import com.codesquad.secondhand.common.security.request.SignUpRequest;
-import com.codesquad.secondhand.common.security.response.Tokens;
-import com.codesquad.secondhand.common.security.port.AuthUseCase;
-import com.codesquad.secondhand.command.port.out.RefreshTokenRepository;
-import com.codesquad.secondhand.query.service.MemberQueryService;
-import com.codesquad.secondhand.common.exception.InvalidRefreshTokenException;
-import com.codesquad.secondhand.common.exception.MemberNotFoundException;
-import com.codesquad.secondhand.common.exception.NotRegisteredMemberException;
-import com.codesquad.secondhand.query.service.RegionQueryService;
 import com.codesquad.secondhand.command.domain.auth.RefreshToken;
 import com.codesquad.secondhand.command.domain.member.Member;
 import com.codesquad.secondhand.command.domain.units.JwtTokenProvider;
+import com.codesquad.secondhand.command.port.out.RefreshTokenRepository;
+import com.codesquad.secondhand.common.exception.InvalidRefreshTokenException;
+import com.codesquad.secondhand.common.exception.MemberNotFoundException;
+import com.codesquad.secondhand.common.exception.NotRegisteredMemberException;
+import com.codesquad.secondhand.common.security.port.AuthUseCase;
+import com.codesquad.secondhand.common.security.request.SignUpRequest;
+import com.codesquad.secondhand.common.security.response.Tokens;
+import com.codesquad.secondhand.query.service.MemberQueryService;
+import com.codesquad.secondhand.query.service.RegionQueryService;
 import java.util.Date;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +42,8 @@ public class AuthService implements AuthUseCase {
     @Override
     public Tokens signUp(String email, SignUpRequest signUpRequest) {
         List<Long> regionsId = signUpRequest.getRegionsId();
-        Member member = memberQueryService.signUpMember(email, signUpRequest.getNickname(), signUpRequest.getProfileImg());
+        Member member = memberQueryService.signUpMember(email, signUpRequest.getNickname(),
+                signUpRequest.getProfileImg());
         long firstRegionId = regionsId.get(REGIONS_FIRST_INDEX);
         regionQueryService.validateRegionId(firstRegionId);
         member.addRegion(firstRegionId);

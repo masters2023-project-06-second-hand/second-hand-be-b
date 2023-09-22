@@ -5,13 +5,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.codesquad.secondhand.common.security.request.SignUpRequest;
-import com.codesquad.secondhand.common.security.response.Tokens;
-import com.codesquad.secondhand.command.port.out.MemberRepository;
-import com.codesquad.secondhand.common.security.service.AuthService;
 import com.codesquad.secondhand.command.domain.member.Member;
 import com.codesquad.secondhand.command.domain.member.Role;
 import com.codesquad.secondhand.command.domain.units.JwtTokenProvider;
+import com.codesquad.secondhand.command.port.out.MemberRepository;
+import com.codesquad.secondhand.common.security.request.SignUpRequest;
+import com.codesquad.secondhand.common.security.response.Tokens;
+import com.codesquad.secondhand.common.security.service.AuthService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
 import java.time.ZoneId;

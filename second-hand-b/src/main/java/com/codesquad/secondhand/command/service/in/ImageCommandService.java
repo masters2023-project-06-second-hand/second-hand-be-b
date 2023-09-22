@@ -2,10 +2,10 @@ package com.codesquad.secondhand.command.service.in;
 
 import com.codesquad.secondhand.command.adapter.in.web.image.request.DeleteImageRequest;
 import com.codesquad.secondhand.command.adapter.in.web.image.response.ImageInfo;
+import com.codesquad.secondhand.command.domain.product.Image;
 import com.codesquad.secondhand.command.port.in.ImageUseCase;
 import com.codesquad.secondhand.command.port.out.ImageRepository;
 import com.codesquad.secondhand.common.exception.ImageNotFoundException;
-import com.codesquad.secondhand.command.domain.product.Image;
 import java.util.List;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

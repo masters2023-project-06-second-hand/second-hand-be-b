@@ -1,9 +1,9 @@
 package com.codesquad.secondhand.command.service.in;
 
+import com.codesquad.secondhand.command.domain.product.Product;
 import com.codesquad.secondhand.command.port.out.ProductRepository;
 import com.codesquad.secondhand.common.exception.InvalidEntityStateException;
 import com.codesquad.secondhand.common.exception.ProductNotFoundException;
-import com.codesquad.secondhand.command.domain.product.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -25,6 +25,6 @@ public class MemberQueryFacade implements MemberQueryUseCase {
     @Transactional(readOnly = true)
     @Override
     public List<CategorySimpleDetail> fetchMemberInterestCategories(String validatedMemberId, long memberId) {
-        return categoryService.getLikesCategoryByMemberId(validatedMemberId,memberId);
+        return categoryService.getLikesCategoryByMemberId(validatedMemberId, memberId);
     }
 }

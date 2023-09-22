@@ -1,9 +1,9 @@
 package com.codesquad.secondhand.command.adapter.in.web.image;
 
 import com.codesquad.secondhand.command.adapter.in.web.image.request.DeleteImageRequest;
+import com.codesquad.secondhand.command.adapter.in.web.image.response.ImageInfo;
 import com.codesquad.secondhand.command.port.in.FileUseCase;
 import com.codesquad.secondhand.command.port.in.ImageUseCase;
-import com.codesquad.secondhand.command.adapter.in.web.image.response.ImageInfo;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

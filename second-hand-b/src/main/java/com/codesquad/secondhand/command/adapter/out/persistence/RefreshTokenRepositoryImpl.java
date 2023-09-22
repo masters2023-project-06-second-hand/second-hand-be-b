@@ -1,8 +1,8 @@
 package com.codesquad.secondhand.command.adapter.out.persistence;
 
 import com.codesquad.secondhand.command.adapter.out.persistence.imports.RefreshTokenCrudRepository;
-import com.codesquad.secondhand.command.port.out.RefreshTokenRepository;
 import com.codesquad.secondhand.command.domain.auth.RefreshToken;
+import com.codesquad.secondhand.command.port.out.RefreshTokenRepository;
 import java.util.Date;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;

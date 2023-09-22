@@ -2,11 +2,11 @@ package com.codesquad.secondhand.query.service;
 
 import static com.codesquad.secondhand.common.utils.MemberUtils.validateMemberPermission;
 
-import com.codesquad.secondhand.query.controller.member.response.MemberInfo;
-import com.codesquad.secondhand.command.port.out.MemberRepository;
-import com.codesquad.secondhand.common.exception.MemberNotFoundException;
 import com.codesquad.secondhand.command.domain.member.Member;
 import com.codesquad.secondhand.command.domain.member.Role;
+import com.codesquad.secondhand.command.port.out.MemberRepository;
+import com.codesquad.secondhand.common.exception.MemberNotFoundException;
+import com.codesquad.secondhand.query.controller.member.response.MemberInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

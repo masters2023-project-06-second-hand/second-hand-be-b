@@ -4,9 +4,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 
 import com.codesquad.secondhand.command.port.out.MemberRepository;
-import com.codesquad.secondhand.common.utils.MemberUtils;
 import com.codesquad.secondhand.common.exception.MemberNotFoundException;
 import com.codesquad.secondhand.common.exception.PermissionDeniedException;
+import com.codesquad.secondhand.common.utils.MemberUtils;
 import com.codesquad.secondhand.query.service.MemberQueryService;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;

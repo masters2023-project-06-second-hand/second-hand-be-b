@@ -97,4 +97,8 @@ public class Member {
     public boolean removeLikes(long productId) {
         return likes.remove(productId);
     }
+
+    public boolean isSameId(Long memberId) {
+        return id.equals(memberId);
+    }
 }

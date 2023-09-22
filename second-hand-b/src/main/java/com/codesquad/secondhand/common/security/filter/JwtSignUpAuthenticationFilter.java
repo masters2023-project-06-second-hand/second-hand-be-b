@@ -1,8 +1,8 @@
 package com.codesquad.secondhand.common.security.filter;
 
-import com.codesquad.secondhand.common.security.token.JwtSignUpToken;
 import com.codesquad.secondhand.command.domain.member.Role;
 import com.codesquad.secondhand.command.domain.units.JwtTokenProvider;
+import com.codesquad.secondhand.common.security.token.JwtSignUpToken;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Date;

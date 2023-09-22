@@ -3,14 +3,14 @@ package com.codesquad.secondhand.common.utils;
 import static com.codesquad.secondhand.common.utils.ImageMapper.toImageInfos;
 
 import com.codesquad.secondhand.command.adapter.in.web.image.response.ImageInfo;
-import com.codesquad.secondhand.query.controller.prodcut.response.ProductDetail;
-import com.codesquad.secondhand.query.controller.prodcut.response.ProductInfo;
-import com.codesquad.secondhand.command.domain.product.Image;
 import com.codesquad.secondhand.command.domain.member.Member;
 import com.codesquad.secondhand.command.domain.product.Category;
+import com.codesquad.secondhand.command.domain.product.Image;
 import com.codesquad.secondhand.command.domain.product.Product;
 import com.codesquad.secondhand.command.domain.product.Status;
 import com.codesquad.secondhand.command.domain.region.Region;
+import com.codesquad.secondhand.query.controller.prodcut.response.ProductDetail;
+import com.codesquad.secondhand.query.controller.prodcut.response.ProductInfo;
 import java.util.List;
 
 public class ProductMapper {

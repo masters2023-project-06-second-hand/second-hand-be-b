@@ -3,10 +3,10 @@ package com.codesquad.secondhand.utils;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.documentationConfiguration;
 
 import com.codesquad.secondhand.command.adapter.out.s3.S3StorageAdapter;
-import com.codesquad.secondhand.command.port.out.MemberRepository;
 import com.codesquad.secondhand.command.domain.member.Member;
 import com.codesquad.secondhand.command.domain.member.Role;
 import com.codesquad.secondhand.command.domain.units.JwtTokenProvider;
+import com.codesquad.secondhand.command.port.out.MemberRepository;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;

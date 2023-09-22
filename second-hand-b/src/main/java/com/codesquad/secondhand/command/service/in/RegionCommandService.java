@@ -1,8 +1,8 @@
 package com.codesquad.secondhand.command.service.in;
 
+import com.codesquad.secondhand.command.domain.region.Region;
 import com.codesquad.secondhand.command.port.out.RegionRepository;
 import com.codesquad.secondhand.common.exception.RegionNotFoundException;
-import com.codesquad.secondhand.command.domain.region.Region;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,7 @@
 package com.codesquad.secondhand.query.controller.member;
 
-import com.codesquad.secondhand.query.controller.prodcut.response.CategorySimpleDetail;
 import com.codesquad.secondhand.query.controller.member.response.MemberInfo;
+import com.codesquad.secondhand.query.controller.prodcut.response.CategorySimpleDetail;
 import com.codesquad.secondhand.query.port.MemberQueryUseCase;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,8 @@ public class MemberQueryController {
             @AuthenticationPrincipal String validatedMemberId,
             @PathVariable long memberId
     ) {
-        List<CategorySimpleDetail> categories = memberQueryUseCase.fetchMemberInterestCategories(validatedMemberId, memberId);
+        List<CategorySimpleDetail> categories = memberQueryUseCase.fetchMemberInterestCategories(validatedMemberId,
+                memberId);
         return ResponseEntity.ok(categories);
     }
 }

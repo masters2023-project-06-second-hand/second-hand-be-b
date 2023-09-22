@@ -1,8 +1,8 @@
 package com.codesquad.secondhand.command.service.in;
 
 
-import com.codesquad.secondhand.command.port.in.MyRegionsCommandUseCase;
 import com.codesquad.secondhand.command.domain.member.Member;
+import com.codesquad.secondhand.command.port.in.MyRegionsCommandUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

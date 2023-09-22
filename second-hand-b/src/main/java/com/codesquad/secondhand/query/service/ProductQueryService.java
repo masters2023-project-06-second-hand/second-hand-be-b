@@ -1,9 +1,9 @@
 package com.codesquad.secondhand.query.service;
 
-import com.codesquad.secondhand.command.port.out.ProductRepository;
-import com.codesquad.secondhand.common.exception.ProductNotFoundException;
 import com.codesquad.secondhand.command.domain.product.Product;
 import com.codesquad.secondhand.command.domain.product.Status;
+import com.codesquad.secondhand.command.port.out.ProductRepository;
+import com.codesquad.secondhand.common.exception.ProductNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;

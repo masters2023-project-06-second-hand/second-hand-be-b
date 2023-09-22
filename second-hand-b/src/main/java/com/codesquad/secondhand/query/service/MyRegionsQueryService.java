@@ -3,11 +3,11 @@ package com.codesquad.secondhand.query.service;
 
 import static com.codesquad.secondhand.common.utils.RegionMapper.toRegionsInfo;
 
-import com.codesquad.secondhand.query.controller.member.response.MemberRegionInfos;
-import com.codesquad.secondhand.query.controller.common.response.RegionInfo;
-import com.codesquad.secondhand.query.port.MyRegionsQueryUseCase;
 import com.codesquad.secondhand.command.domain.member.Member;
 import com.codesquad.secondhand.command.domain.region.Region;
+import com.codesquad.secondhand.query.controller.common.response.RegionInfo;
+import com.codesquad.secondhand.query.controller.member.response.MemberRegionInfos;
+import com.codesquad.secondhand.query.port.MyRegionsQueryUseCase;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -2,12 +2,12 @@ package com.codesquad.secondhand.query.service;
 
 import static com.codesquad.secondhand.common.utils.RegionMapper.toRegionsInfo;
 
+import com.codesquad.secondhand.command.domain.region.Region;
+import com.codesquad.secondhand.command.port.out.RegionRepository;
+import com.codesquad.secondhand.common.exception.RegionNotFoundException;
 import com.codesquad.secondhand.query.controller.common.response.RegionInfo;
 import com.codesquad.secondhand.query.controller.common.response.RegionInfos;
 import com.codesquad.secondhand.query.port.RegionUseCase;
-import com.codesquad.secondhand.command.port.out.RegionRepository;
-import com.codesquad.secondhand.common.exception.RegionNotFoundException;
-import com.codesquad.secondhand.command.domain.region.Region;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;

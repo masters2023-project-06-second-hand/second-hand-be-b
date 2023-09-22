@@ -1,12 +1,12 @@
 package com.codesquad.secondhand.query.service;
 
+import com.codesquad.secondhand.command.domain.product.Category;
+import com.codesquad.secondhand.command.port.out.CategoryRepository;
+import com.codesquad.secondhand.common.exception.CategoryNotFoundException;
+import com.codesquad.secondhand.common.utils.MemberUtils;
 import com.codesquad.secondhand.query.controller.prodcut.response.CategoryDetail;
 import com.codesquad.secondhand.query.controller.prodcut.response.CategorySimpleDetail;
 import com.codesquad.secondhand.query.port.CategoryQueryUseCase;
-import com.codesquad.secondhand.command.port.out.CategoryRepository;
-import com.codesquad.secondhand.common.utils.MemberUtils;
-import com.codesquad.secondhand.common.exception.CategoryNotFoundException;
-import com.codesquad.secondhand.command.domain.product.Category;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;

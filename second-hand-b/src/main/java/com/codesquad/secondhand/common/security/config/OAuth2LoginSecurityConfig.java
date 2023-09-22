@@ -1,9 +1,9 @@
 package com.codesquad.secondhand.common.security.config;
 
+import com.codesquad.secondhand.command.domain.member.Role;
 import com.codesquad.secondhand.common.security.filter.JwtSignInAuthenticationFilter;
 import com.codesquad.secondhand.common.security.filter.JwtSignUpAuthenticationFilter;
 import com.codesquad.secondhand.common.security.handler.OAuth2LoginSuccessHandler;
-import com.codesquad.secondhand.command.domain.member.Role;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

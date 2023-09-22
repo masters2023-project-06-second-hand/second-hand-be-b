@@ -6,17 +6,17 @@ import static com.codesquad.secondhand.command.domain.product.ProductTestUtils.g
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.codesquad.secondhand.command.adapter.in.web.image.response.ImageInfo;
-import com.codesquad.secondhand.query.controller.prodcut.response.ProductDetail;
-import com.codesquad.secondhand.query.controller.prodcut.response.ProductInfo;
-import com.codesquad.secondhand.common.utils.ProductWriter;
-import com.codesquad.secondhand.common.utils.ImageMapper;
-import com.codesquad.secondhand.common.utils.ProductMapper;
-import com.codesquad.secondhand.command.domain.product.Image;
 import com.codesquad.secondhand.command.domain.member.Member;
 import com.codesquad.secondhand.command.domain.product.Category;
+import com.codesquad.secondhand.command.domain.product.Image;
 import com.codesquad.secondhand.command.domain.product.Product;
 import com.codesquad.secondhand.command.domain.product.ProductTestUtils;
 import com.codesquad.secondhand.command.domain.region.Region;
+import com.codesquad.secondhand.common.utils.ImageMapper;
+import com.codesquad.secondhand.common.utils.ProductMapper;
+import com.codesquad.secondhand.common.utils.ProductWriter;
+import com.codesquad.secondhand.query.controller.prodcut.response.ProductDetail;
+import com.codesquad.secondhand.query.controller.prodcut.response.ProductInfo;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -35,7 +35,7 @@ class ProductMapperTest {
         ProductInfo targetProductInfo = ProductMapper.toProductInfo(product, region);
 
         // then
-        validateMapToProductInfo(targetProductInfo,region, product);
+        validateMapToProductInfo(targetProductInfo, region, product);
     }
 
     @DisplayName("Product로 ProductDetail를 만든다")
@@ -51,7 +51,7 @@ class ProductMapperTest {
         ProductDetail productDetail = ProductMapper.toProductDetail(product, category, member, region);
 
         // then
-        validateToProductDetail(product, member, category,region, productDetail);
+        validateToProductDetail(product, member, category, region, productDetail);
     }
 
     private static void validateToProductDetail(Product product, Member member, Category category,

@@ -1,9 +1,9 @@
 package com.codesquad.secondhand.command.adapter.out.persistence;
 
 import com.codesquad.secondhand.command.adapter.out.persistence.imports.ProductCrudRepository;
-import com.codesquad.secondhand.command.port.out.ProductRepository;
 import com.codesquad.secondhand.command.domain.product.Product;
 import com.codesquad.secondhand.command.domain.product.Status;
+import com.codesquad.secondhand.command.port.out.ProductRepository;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;

@@ -22,7 +22,8 @@ public class MemberProductCommandController {
             @RequestBody ToggleProductLikeStatusRequest toggleProductLikeStatusRequest,
             @PathVariable Long productId
     ) {
-        memberProductCommandUseCase.toggleProductLikeStatus(validatedMemberId, productId, toggleProductLikeStatusRequest.isLiked());
+        memberProductCommandUseCase.toggleProductLikeStatus(validatedMemberId, productId,
+                toggleProductLikeStatusRequest.isLiked());
         return ResponseEntity.noContent().build();
     }
 

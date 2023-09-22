@@ -1,8 +1,8 @@
 package com.codesquad.secondhand.command.service.in;
 
+import com.codesquad.secondhand.command.domain.member.Member;
 import com.codesquad.secondhand.command.port.out.MemberRepository;
 import com.codesquad.secondhand.common.exception.MemberNotFoundException;
-import com.codesquad.secondhand.command.domain.member.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

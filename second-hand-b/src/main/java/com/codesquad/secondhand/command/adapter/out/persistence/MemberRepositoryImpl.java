@@ -1,8 +1,8 @@
 package com.codesquad.secondhand.command.adapter.out.persistence;
 
 import com.codesquad.secondhand.command.adapter.out.persistence.imports.MemberCrudRepository;
-import com.codesquad.secondhand.command.port.out.MemberRepository;
 import com.codesquad.secondhand.command.domain.member.Member;
+import com.codesquad.secondhand.command.port.out.MemberRepository;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

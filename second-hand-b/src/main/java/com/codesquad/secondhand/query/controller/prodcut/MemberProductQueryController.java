@@ -26,11 +26,13 @@ public class MemberProductQueryController {
             Pageable pageable
     ) {
         if (status.isPresent()) {
-            ProductsInfo productInfos = memberProductQueryUseCase.getMySellingProductsByStatus(validatedMemberId, memberId,
+            ProductsInfo productInfos = memberProductQueryUseCase.getMySellingProductsByStatus(validatedMemberId,
+                    memberId,
                     status.get(), pageable);
             return ResponseEntity.ok(productInfos);
         }
-        ProductsInfo productInfos = memberProductQueryUseCase.getMySellingProducts(validatedMemberId, memberId, pageable);
+        ProductsInfo productInfos = memberProductQueryUseCase.getMySellingProducts(validatedMemberId, memberId,
+                pageable);
         return ResponseEntity.ok(productInfos);
     }
 
@@ -42,11 +44,13 @@ public class MemberProductQueryController {
             Pageable pageable
     ) {
         if (categoryId.isPresent()) {
-            ProductsInfo productInfos = memberProductQueryUseCase.fetchMemberFavoriteProducts(validatedMemberId, memberId,
+            ProductsInfo productInfos = memberProductQueryUseCase.fetchMemberFavoriteProducts(validatedMemberId,
+                    memberId,
                     categoryId.get(), pageable);
             return ResponseEntity.ok(productInfos);
         }
-        ProductsInfo productDetails = memberProductQueryUseCase.fetchMemberFavoriteProducts(validatedMemberId, memberId, pageable);
+        ProductsInfo productDetails = memberProductQueryUseCase.fetchMemberFavoriteProducts(validatedMemberId, memberId,
+                pageable);
         return ResponseEntity.ok(productDetails);
     }
 }

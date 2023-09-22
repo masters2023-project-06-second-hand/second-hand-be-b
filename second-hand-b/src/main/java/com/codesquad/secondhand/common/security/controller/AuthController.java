@@ -1,9 +1,9 @@
 package com.codesquad.secondhand.common.security.controller;
 
+import com.codesquad.secondhand.common.security.port.AuthUseCase;
 import com.codesquad.secondhand.common.security.request.RefreshTokenRequest;
 import com.codesquad.secondhand.common.security.request.SignUpRequest;
 import com.codesquad.secondhand.common.security.response.Tokens;
-import com.codesquad.secondhand.common.security.port.AuthUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
