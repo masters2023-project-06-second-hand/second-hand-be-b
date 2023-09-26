@@ -1,15 +1,15 @@
-package com.codesquad.secondhand.command.service.in.chat;
+package com.codesquad.secondhand.common.utils;
 
-import com.codesquad.secondhand.command.adapter.in.web.chat.response.ChatRoomDetail;
 import com.codesquad.secondhand.command.adapter.in.web.chat.response.ChatRoomMessage;
 import com.codesquad.secondhand.command.adapter.in.web.chat.response.ChatRoomProduct;
 import com.codesquad.secondhand.command.domain.chat.ChatMessage;
 import com.codesquad.secondhand.command.domain.chat.ChatRoom;
 import com.codesquad.secondhand.command.domain.product.Product;
+import com.codesquad.secondhand.query.controller.chat.response.ChatRoomDetail;
 import java.util.List;
 import java.util.stream.Collectors;
 
-class ChatMapper {
+public class ChatMapper {
 
     private ChatMapper() {
         throw new UnsupportedOperationException();

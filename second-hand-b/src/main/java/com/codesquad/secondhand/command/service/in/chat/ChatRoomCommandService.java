@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class ChatRoomService {
+public class ChatRoomCommandService {
 
     private final ChatRoomRepository chatRoomRepository;
 

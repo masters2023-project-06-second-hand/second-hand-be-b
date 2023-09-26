@@ -1,7 +1,8 @@
-package com.codesquad.secondhand.common.security.handler;
+package com.codesquad.secondhand.common.messaging.handler;
 
 import com.codesquad.secondhand.command.domain.units.JwtTokenProvider;
-import com.codesquad.secondhand.command.port.in.ChatUseCase;
+import com.codesquad.secondhand.command.port.in.ChatMessageCommandUseCase;
+import com.codesquad.secondhand.command.port.in.ChatRoomCommandUseCase;
 import com.codesquad.secondhand.command.service.in.MemberCommandService;
 import com.codesquad.secondhand.common.exception.PermissionDeniedException;
 import java.util.Date;
@@ -21,7 +22,8 @@ public class StompHandler implements ChannelInterceptor {
     private static final String AUTHORIZATION = "Authorization";
     private static final int DESTINATION_PREFIX_LENGTH = 10;
 
-    private final ChatUseCase chatUseCase;
+    private final ChatRoomCommandUseCase chatRoomCommandUseCase;
+    private final ChatMessageCommandUseCase chatMessageCommandUseCase;
     private final MemberCommandService memberService;
 
     @Override
@@ -38,10 +40,10 @@ public class StompHandler implements ChannelInterceptor {
     }
 
     private void connectToChatRoom(StompHeaderAccessor accessor) {
-        Long chatRoomId = getChatRoomId(accessor);
-        Long memberId = validateAccessToken(accessor);
-        chatUseCase.addChatRoomMember(chatRoomId, memberId);
-        chatUseCase.markMessagesAsRead(chatRoomId, memberId);
+        long chatRoomId = getChatRoomId(accessor);
+        long memberId = validateAccessToken(accessor);
+        chatRoomCommandUseCase.addChatRoomMember(chatRoomId, memberId);
+        chatMessageCommandUseCase.markMessagesAsRead(chatRoomId, memberId);
     }
 
     private Long getChatRoomId(StompHeaderAccessor accessor) {
