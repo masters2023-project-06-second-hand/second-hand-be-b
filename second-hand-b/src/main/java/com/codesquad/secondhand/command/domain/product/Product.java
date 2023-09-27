@@ -37,7 +37,7 @@ public class Product {
     private Category category;
     @Embedded
     private Images images = new Images();
-    @JoinColumn(name = "thumbnail_id", nullable = false)
+    @JoinColumn(name = "thumbnail_url", nullable = false)
     private String thumbnailUrl;
     @Column(nullable = false)
     private Long regionId;
