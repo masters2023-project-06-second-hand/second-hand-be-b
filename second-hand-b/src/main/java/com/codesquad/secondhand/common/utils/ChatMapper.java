@@ -4,8 +4,13 @@ import com.codesquad.secondhand.command.adapter.in.web.chat.response.ChatRoomMes
 import com.codesquad.secondhand.command.adapter.in.web.chat.response.ChatRoomProduct;
 import com.codesquad.secondhand.command.domain.chat.ChatMessage;
 import com.codesquad.secondhand.command.domain.chat.ChatRoom;
+import com.codesquad.secondhand.command.domain.chat.dto.ChatRoomDto;
 import com.codesquad.secondhand.command.domain.product.Product;
+import com.codesquad.secondhand.query.controller.chat.response.ChatMessageInfo;
 import com.codesquad.secondhand.query.controller.chat.response.ChatRoomDetail;
+import com.codesquad.secondhand.query.controller.chat.response.ChatRoomInfo;
+import com.codesquad.secondhand.query.controller.chat.response.ChatRoomMemberInfo;
+import com.codesquad.secondhand.query.controller.chat.response.ChatRoomProductInfo;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,5 +34,22 @@ public class ChatMapper {
                 .collect(Collectors.toList());
 
         return new ChatRoomDetail(chatRoomProduct, opponentName, chatRoomMessages);
+    }
+
+    public static ChatRoomInfo toChatRoomInfo(ChatRoomDto chatRoomDto) {
+        ChatRoomProductInfo chatRoomProductInfo = new ChatRoomProductInfo(chatRoomDto.getProductId(),
+                chatRoomDto.getProductThumbnailUrl());
+        ChatRoomMemberInfo chatRoomMemberInfo = new ChatRoomMemberInfo(chatRoomDto.getOpponentName(),
+                chatRoomDto.getOpponentThumbnailUrl());
+        ChatMessageInfo chatMessageInfo = new ChatMessageInfo(chatRoomDto.getMessage(),
+                chatRoomDto.getUnreadMessageCount(),
+                chatRoomDto.getSendAt());
+
+        return new ChatRoomInfo(
+                chatRoomDto.getId(),
+                chatRoomProductInfo,
+                chatRoomMemberInfo,
+                chatMessageInfo
+        );
     }
 }
