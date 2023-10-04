@@ -1,6 +1,7 @@
 package com.codesquad.secondhand.acceptanceTest.in.web;
 
 import static com.codesquad.secondhand.acceptanceTest.in.web.ChatSteps.채팅방ID를_조회한다;
+import static com.codesquad.secondhand.acceptanceTest.in.web.ChatSteps.채팅방_목록을_조회한다;
 import static com.codesquad.secondhand.acceptanceTest.in.web.ChatSteps.채팅방_정보를_조회한다;
 import static com.codesquad.secondhand.acceptanceTest.in.web.ProductSteps.상품을_등록한다;
 import static com.codesquad.secondhand.utils.RestDocsUtils.출력_필드_추가;
@@ -24,7 +25,7 @@ class ChatAcceptanceTest extends AcceptanceTest {
     @Test
     @DisplayName("채팅방 ID를 조회하여 채팅방이 없으면 채팅방을 생성하고 채팅방 ID를 반환한다.")
     void getChattingRoomId() {
-        출력_필드_추가("chat_getChattingRoomId", spec);
+        출력_필드_추가("chat_getChatRoomId", spec);
 
         // given
         Long productId = 상품을_등록한다(ayaanAccessToken, 1).jsonPath().getLong("id");
@@ -40,7 +41,7 @@ class ChatAcceptanceTest extends AcceptanceTest {
     @Test
     @DisplayName("채팅방 ID로 채팅방 정보를 조회하여 반환한다.")
     void getChattingRoomDetail() {
-        출력_필드_추가("chat_getChattingRoomDetail", spec);
+        출력_필드_추가("chat_getChatRoomDetail", spec);
 
         // given
         Long productId = 상품을_등록한다(ayaanAccessToken, 1).jsonPath().getLong("id");
@@ -55,5 +56,22 @@ class ChatAcceptanceTest extends AcceptanceTest {
                 () -> assertThat(response.jsonPath().getLong("product.id")).isEqualTo(productId),
                 () -> assertThat(response.jsonPath().getString("opponentName")).isEqualTo(AYAAN_NICKNAME)
         );
+    }
+
+    @Test
+    @DisplayName("사용자 ID로 사용자가 참여 중인 채팅방의 목록을 조회하여 반환한다.")
+    void getJoinedChatRooms() {
+        출력_필드_추가("chat_getJoinedChatRooms", spec);
+
+        // given
+        Long productId = 상품을_등록한다(ayaanAccessToken, 1).jsonPath().getLong("id");
+        Long memberId = 1L;
+        Long chatRoomId = 채팅방ID를_조회한다(productId, memberId, albertAccessToken).jsonPath().getLong("chatRoomId");
+
+        // when
+        var response = 채팅방_목록을_조회한다(memberId, albertAccessToken, spec);
+
+        // then
+        assertThat(response.jsonPath().getList(".")).hasSize(1);
     }
 }

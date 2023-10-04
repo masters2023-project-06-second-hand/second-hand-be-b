@@ -1,5 +1,7 @@
-package com.codesquad.secondhand.command.adapter.in.web.chat.response;
+package com.codesquad.secondhand.query.controller.chat.response;
 
+import com.codesquad.secondhand.command.adapter.in.web.chat.response.ChatRoomMessage;
+import com.codesquad.secondhand.command.adapter.in.web.chat.response.ChatRoomProduct;
 import java.util.List;
 import lombok.Getter;
 

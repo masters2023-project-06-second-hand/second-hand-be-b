@@ -1,6 +1,6 @@
-package com.codesquad.secondhand.common.security.config;
+package com.codesquad.secondhand.common.messaging.config;
 
-import com.codesquad.secondhand.common.security.handler.StompHandler;
+import com.codesquad.secondhand.common.messaging.handler.StompHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
