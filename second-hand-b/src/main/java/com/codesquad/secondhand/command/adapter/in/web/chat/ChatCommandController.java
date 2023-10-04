@@ -18,10 +18,12 @@ public class ChatCommandController {
 
     @PostMapping("/api/chats/room-id")
     public ResponseEntity<ChatRoomId> getChatRoomId(
-            @AuthenticationPrincipal String memberId,
+            @AuthenticationPrincipal String memberIdStr,
             @RequestBody ChatRoomIdRequest chatRoomIdRequest) {
-        ChatRoomId chatRoomId = chatRoomCommandUseCase.getOrCreateChatRoomId(chatRoomIdRequest.getProductId(),
-                chatRoomIdRequest.getSellerId(), Long.parseLong(memberId));
+        Long productId = chatRoomIdRequest.getProductId();
+        Long sellerId = chatRoomIdRequest.getSellerId();
+        long memberId = Long.parseLong(memberIdStr);
+        ChatRoomId chatRoomId = chatRoomCommandUseCase.getOrCreateChatRoomId(productId, sellerId, memberId);
         return ResponseEntity.ok(chatRoomId);
     }
 }
