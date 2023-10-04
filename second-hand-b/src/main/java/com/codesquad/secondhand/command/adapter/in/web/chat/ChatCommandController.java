@@ -3,6 +3,7 @@ package com.codesquad.secondhand.command.adapter.in.web.chat;
 import com.codesquad.secondhand.command.adapter.in.web.chat.request.ChatRoomIdRequest;
 import com.codesquad.secondhand.command.adapter.in.web.chat.response.ChatRoomId;
 import com.codesquad.secondhand.command.port.in.ChatRoomCommandUseCase;
+import com.codesquad.secondhand.common.exception.ChatRoomNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,7 +24,12 @@ public class ChatCommandController {
         Long productId = chatRoomIdRequest.getProductId();
         Long sellerId = chatRoomIdRequest.getSellerId();
         long memberId = Long.parseLong(memberIdStr);
-        ChatRoomId chatRoomId = chatRoomCommandUseCase.getOrCreateChatRoomId(productId, sellerId, memberId);
-        return ResponseEntity.ok(chatRoomId);
+        try {
+            ChatRoomId chatRoomId = chatRoomCommandUseCase.getChatRoomId(productId, sellerId, memberId);
+            return ResponseEntity.ok(chatRoomId);
+        } catch (ChatRoomNotFoundException e) {
+            ChatRoomId chatRoomId = chatRoomCommandUseCase.createChatRoomId(productId, memberId);
+            return ResponseEntity.ok(chatRoomId);
+        }
     }
 }
