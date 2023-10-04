@@ -22,7 +22,7 @@ public class ChatSteps {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(body)
                 .auth().oauth2(accessToken)
-                .when().get("/api/chats/room-id")
+                .when().post("/api/chats/room-id")
                 .then().log().all().extract();
     }
 

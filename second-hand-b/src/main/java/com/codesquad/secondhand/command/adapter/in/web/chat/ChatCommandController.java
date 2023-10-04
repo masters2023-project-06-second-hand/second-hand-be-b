@@ -6,7 +6,7 @@ import com.codesquad.secondhand.command.port.in.ChatRoomCommandUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,7 +16,7 @@ public class ChatCommandController {
 
     private final ChatRoomCommandUseCase chatRoomCommandUseCase;
 
-    @GetMapping("/api/chats/room-id")
+    @PostMapping("/api/chats/room-id")
     public ResponseEntity<ChatRoomId> getChatRoomId(
             @AuthenticationPrincipal String memberId,
             @RequestBody ChatRoomIdRequest chatRoomIdRequest) {
