@@ -8,6 +8,7 @@ import com.codesquad.secondhand.command.domain.product.Product;
 import com.codesquad.secondhand.command.port.in.ChatRoomCommandUseCase;
 import com.codesquad.secondhand.command.service.in.MemberCommandService;
 import com.codesquad.secondhand.command.service.in.ProductCommandService;
+import com.codesquad.secondhand.common.exception.ChatRoomNotFoundException;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,15 +23,18 @@ public class ChatRoomCommandFacade implements ChatRoomCommandUseCase {
     private final ProductCommandService productService;
     private final MemberCommandService memberService;
 
-    @Override
-    public ChatRoomId getChatRoomId(long productId, long sellerId, long memberId) {
-        ChatRoom chatRoom = chatRoomCommandService.getChatRoomId(productId, sellerId, memberId);
-        return new ChatRoomId(chatRoom.getId());
-    }
-
     @Transactional
     @Override
-    public ChatRoomId createChatRoomId(long productId, long memberId) {
+    public ChatRoomId getChatRoomId(long productId, long sellerId, long memberId) {
+        try {
+            ChatRoom chatRoom = chatRoomCommandService.getChatRoomId(productId, sellerId, memberId);
+            return new ChatRoomId(chatRoom.getId());
+        } catch (ChatRoomNotFoundException e) {
+            return createChatRoomId(productId, memberId);
+        }
+    }
+
+    private ChatRoomId createChatRoomId(long productId, long memberId) {
         ChatRoom chatRoom = toChatRoom(productId, memberId);
         ChatRoom savedChatRoom = chatRoomCommandService.save(chatRoom);
         return new ChatRoomId(savedChatRoom.getId());
