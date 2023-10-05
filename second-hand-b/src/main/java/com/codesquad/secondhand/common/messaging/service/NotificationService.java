@@ -15,6 +15,7 @@ public class NotificationService implements NotificationUseCase {
 
     private static final Long SSE_TIMEOUT = 60 * 60 * 1000L;
     private static final String SUBSCRIBE_EVENT_NAME = "subscribe";
+    private static final String NOTIFY_EVENT_NAME = "notify";
 
     @Override
     public SseEmitter subscribe(Long memberId) {
@@ -25,7 +26,7 @@ public class NotificationService implements NotificationUseCase {
 
     @Override
     public void notify(Long memberId, Object data) {
-
+        sendToClient(memberId, NOTIFY_EVENT_NAME, data);
     }
 
     private SseEmitter createSseEmitter(Long memberId) {
