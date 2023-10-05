@@ -1,6 +1,5 @@
 import { styled } from 'styled-components';
 import { ActionBar } from '@components/ActionBar/ActionBar';
-import { EditBar } from '@components/ActionBar/EditBar';
 import { PostBar } from '@components/ActionBar/PostBar';
 import { TextButton } from '@components/Button/TextButton';
 import { Header } from '@components/Header/Header';
@@ -18,19 +17,22 @@ import {
   useChangeProductStatusMutation,
   useDeleteProductMutation,
 } from '@api/product/product';
-import { Product, ProductStatus } from '@api/product/types';
-import extractRegionName from '@utils/extractRegionName';
+import { Product, ProductStatProps, ProductStatus } from '@api/product/types';
 import { QUERY_KEYS } from '@api/queryKey';
+import { useToast } from '@components/Toast/useToast';
 
 export const DetailPage = ({
   productData,
   goEditPage,
+  productStat,
 }: {
   productData: Product;
+  productStat: ProductStatProps;
   goEditPage(): void;
 }) => {
   const [userInfo] = useAtom(userInfoAtom);
-  const { navigateToGoBack } = usePageNavigator();
+  const toast = useToast();
+  const { navigateToGoBack, navigateToHome } = usePageNavigator();
   const { openModal } = useModal();
   const changeProductStatus = useChangeProductStatusMutation(
     QUERY_KEYS.PRODUCT_DETAIL(productData.id)
@@ -46,18 +48,13 @@ export const DetailPage = ({
       rightButtonText: '삭제',
       onDelete: () => {
         deleteProduct.mutate(productData.id);
+        toast.noti(`${productName}(이)가 삭제되었습니다`);
+        navigateToHome();
       },
     });
   };
 
-  const isWriter = userInfo?.id !== productData.writer.id;
-
-  const stat = {
-    chattingCount: 2,
-    likeCount: 2,
-    viewCount: 2,
-    isLiked: true,
-  };
+  const isWriter = userInfo?.id === productData.writer.id;
 
   return (
     <>
@@ -72,7 +69,7 @@ export const DetailPage = ({
             뒤로
           </TextButton>
         </Header.Left>
-        {!isWriter && (
+        {isWriter && (
           <MenuDropdown
             trigger={
               <Header.Right>
@@ -99,6 +96,7 @@ export const DetailPage = ({
           <MenuDropdown
             trigger={<States name={productData.status} />}
             position="bottom-left"
+            size="S"
           >
             {STATES_OF_PRODUCT.filter(
               (status) => status !== productData.status
@@ -119,27 +117,25 @@ export const DetailPage = ({
           <Title>
             <ProductName>{productData.productName}</ProductName>
             <ProductInfo>
-              {productData.categoryName} ・{' '}
+              {productData.category.name} ・{' '}
               {displayTimeAgo(productData.createdAt)}
             </ProductInfo>
           </Title>
           <ProductContent>{productData.content}</ProductContent>
+
           <ProductStats>
-            채팅 {stat.chattingCount} 관심 {stat.likeCount} 조회{' '}
-            {stat.viewCount}
+            채팅 {productStat.chattingCount} 관심 {productStat.likeCount} 조회{' '}
+            {productStat.viewCount}
           </ProductStats>
         </InfoContent>
       </Content>
       <ActionBar>
-        {isWriter ? (
-          <EditBar regionName={extractRegionName(productData.regionName)} />
-        ) : (
-          <PostBar
-            id={productData.id}
-            isLiked={stat.isLiked}
-            price={productData.price}
-          />
-        )}
+        <PostBar
+          id={productData.id}
+          isLiked={productStat.isLiked}
+          price={productData.price}
+          isWriter={isWriter}
+        />
       </ActionBar>
     </>
   );

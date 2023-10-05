@@ -14,7 +14,7 @@ interface Region {
 
 export const userInfoAtom = atom<UserInfo>(null);
 
-type UserRegions = {
+export type UserRegions = {
   selectedRegion: { id: number; name: string };
   regions: Region[];
 };

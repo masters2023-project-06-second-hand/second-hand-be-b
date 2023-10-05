@@ -1,9 +1,13 @@
+import React, { useState } from 'react';
 import { styled } from 'styled-components';
 import { Icon } from '@components/Icon/Icon';
 import { StateBadge } from '@components/Badge/StateBadge';
-import { Dropdown } from '@components/Dropdown/Dropdown';
 import { formatPrice, displayTimeAgo, displayCount } from '@utils/index';
-import { getDropdownItems } from './getDropdownItem';
+import { userInfoAtom } from '@atoms/userAtom';
+import { useAtom } from 'jotai';
+import { BottomMenu } from '@components/BottomMenu/BottomMenu';
+import { getDropdownItems } from '@components/BottomMenu/getProductStatus';
+import { usePageNavigator } from '@hooks/usePageNavigator';
 
 type ProductItem = {
   id: number;
@@ -22,63 +26,68 @@ export type ProductItemProps = {
   item: ProductItem;
 };
 
-export const ProductItem: React.FC<ProductItemProps> = ({ item }) => {
-  const testUserId = 1; // 해당 유저에게만 dots 버튼 떠야함
-  const isWriter = item.writerId === testUserId;
+export const ProductItem = React.forwardRef<HTMLLIElement, ProductItemProps>(
+  ({ item }, ref) => {
+    const [userInfo] = useAtom(userInfoAtom);
+    const [menuVisible, setMenuVisible] = useState(false);
+    const { navigateToDetail } = usePageNavigator();
 
-  return (
-    <Wrapper>
-      <Thumbnail src={item.thumbnailUrl} />
-      <Content>
-        <Top>
-          <Info>
-            <Title>{item.name}</Title>
-            <RegionAndTime>
-              {item.region} ・ {displayTimeAgo(item.createdAt)}
-            </RegionAndTime>
-            <StateAndPrice>
-              {item.status !== '판매중' && <StateBadge state={item.status} />}
-              <Price>{formatPrice(item.price)}</Price>
-            </StateAndPrice>
-          </Info>
+    const isWriter = userInfo ? item.writerId === userInfo.id : false;
 
-          {isWriter && (
-            <MoreButton>
-              <Dropdown
-                trigger={
-                  <Icon name="dots" size="M" stroke="neutralTextStrong" />
-                }
-                position="bottom-right"
-              >
-                {getDropdownItems(item.status).map((option) => (
-                  /* Todo. 클릭 시 옵션별 처리 추가하기 */
-                  <li key={option.id} onClick={() => {}}>
-                    {option.name}
-                  </li>
-                ))}
-              </Dropdown>
-            </MoreButton>
-          )}
-        </Top>
+    return (
+      <Wrapper ref={ref}>
+        <Thumbnail
+          onClick={() => navigateToDetail(item.id)}
+          src={item.thumbnailUrl}
+        />
+        <Content>
+          <Top>
+            <Info>
+              <Title onClick={() => navigateToDetail(item.id)}>
+                {item.name}
+              </Title>
+              <RegionAndTime>
+                {item.region} ・ {displayTimeAgo(item.createdAt)}
+              </RegionAndTime>
+              <StateAndPrice>
+                {item.status !== '판매중' && <StateBadge state={item.status} />}
+                <Price>{formatPrice(item.price)}</Price>
+              </StateAndPrice>
+            </Info>
 
-        <ChatAndLike>
-          {item.chattingCount > 0 && (
-            <Chat>
-              <Icon name="message" size="S" stroke="neutralTextWeak" />
-              {displayCount(item.chattingCount)}
-            </Chat>
-          )}
-          {item.likeCount > 0 && (
-            <Like>
-              <Icon name="heart" size="S" stroke="neutralTextWeak" />
-              {displayCount(item.likeCount)}
-            </Like>
-          )}
-        </ChatAndLike>
-      </Content>
-    </Wrapper>
-  );
-};
+            {isWriter && (
+              <MoreButton onClick={() => setMenuVisible(!menuVisible)}>
+                <Icon name="dots" size="M" stroke="neutralTextStrong" />
+              </MoreButton>
+            )}
+            {menuVisible && (
+              <BottomMenu
+                productId={item.id}
+                menuList={getDropdownItems(item.status)}
+                onClose={() => setMenuVisible(!menuVisible)}
+              />
+            )}
+          </Top>
+
+          <ChatAndLike>
+            {item.chattingCount > 0 && (
+              <Chat>
+                <Icon name="message" size="S" stroke="neutralTextWeak" />
+                {displayCount(item.chattingCount)}
+              </Chat>
+            )}
+            {item.likeCount > 0 && (
+              <Like>
+                <Icon name="heart" size="S" stroke="neutralTextWeak" />
+                {displayCount(item.likeCount)}
+              </Like>
+            )}
+          </ChatAndLike>
+        </Content>
+      </Wrapper>
+    );
+  }
+);
 
 const Wrapper = styled.li`
   padding: 16px 0;
@@ -94,6 +103,7 @@ const Thumbnail = styled.img`
   background-size: cover;
   border-radius: ${({ theme: { radius } }) => radius.small};
   border: 1px solid ${({ theme: { color } }) => color.neutralBorder};
+  cursor: pointer;
 `;
 const Content = styled.div`
   flex: 1;
@@ -117,6 +127,7 @@ const Title = styled.h3`
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 200px;
+  cursor: pointer;
 `;
 const RegionAndTime = styled.p`
   font: ${({ theme: { font } }) => font.displayDefault12};

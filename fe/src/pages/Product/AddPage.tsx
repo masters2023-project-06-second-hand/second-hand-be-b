@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { ActionBar } from '@components/ActionBar/ActionBar';
 import { EditBar } from '@components/ActionBar/EditBar';
@@ -7,14 +7,13 @@ import { TextButton } from '@components/Button/TextButton';
 import { Header } from '@components/Header/Header';
 import { Input } from '@components/Input/Input';
 import { PriceInput } from '@components/Input/PriceInput';
-import { PictureItem } from '@components/PictureItem/PictureItem';
+
 import { Tag } from '@components/Tag/Tag';
 import { Textarea } from '@components/Textarea/Textarea';
 import { useInput } from '@hooks/useInput';
 import { usePrice } from '@hooks/usePrice';
 import { Categories } from '@api/category/types';
 import { useCategoriesWithoutImages } from '@api/category/useCategories';
-import { MAX_IMAGE_SIZE } from '@constants/constants';
 import generateRecommendCategory from '@utils/generateRecommendCategory';
 import { Product } from '@api/product/types';
 import { Icon } from '@components/Icon/Icon';
@@ -22,6 +21,11 @@ import { useAtom } from 'jotai';
 import { userRegionsAtom } from '@atoms/userAtom';
 import { usePageNavigator } from '@hooks/usePageNavigator';
 import extractRegionName from '@utils/extractRegionName';
+import { useModal } from '@components/Modal/useModal';
+import { ImgProps } from '@api/images/type';
+import { usePostProductMutation } from '@api/product/product';
+import { useDeleteImgMutation, usePostImgMutation } from '@api/images/images';
+import { PictureItem } from '@components/PictureItem/PictureItem';
 
 export const AddPage = ({
   productData,
@@ -31,24 +35,75 @@ export const AddPage = ({
   goDetailPage?(): void;
 }) => {
   const category = useCategoriesWithoutImages();
+  const { openModal } = useModal();
   const { navigateToGoBack } = usePageNavigator();
   const [userRegions] = useAtom(userRegionsAtom);
-  const [imgFiles, setImgFiles] = useState<File[]>([]);
-  const [productImgs, setProductImgs] = useState<string[]>([]);
   const { value: name, onChange: onChangeName } = useInput(
     productData?.productName
-  );
-  const { value: content, onChange: onChangeContent } = useInput(
-    productData?.content
   );
   const { value: price, onChange: onChangePrice } = usePrice(
     productData?.price.toString()
   );
-  const [selectedCategory, setSelectedCategory] = useState<number>();
+  const { value: content, onChange: onChangeContent } = useInput(
+    productData?.content
+  );
+  const [selectedRegion, setSelectedRegion] = useState<number>(
+    userRegions.selectedRegion.id
+  );
+  const [selectedCategory, setSelectedCategory] = useState<number | null>(
+    productData ? productData.category.id : null
+  );
+  const [imgData, setImgData] = useState<ImgProps[]>(
+    productData ? productData.images : []
+  );
   const [recommendCategories, setRecommendCategories] =
     useState<Categories[]>();
-  const isAllRequired = imgFiles.length === 0 || name === '' || content === '';
   const hasName = name;
+
+  const postData = {
+    name: name,
+    categoryId: selectedCategory!,
+    price: price.replace(/,/g, ''),
+    content: content,
+    regionId: selectedRegion,
+    imagesId: imgData.map((item) => item.id),
+  };
+
+  const isValid = !!imgData && !!name && !!selectedCategory && !!content;
+
+  const uploadProductImg = (newImgData: ImgProps) => {
+    setImgData([...imgData, newImgData]);
+  };
+
+  const deleteProductImg = (imgId: number) => {
+    const updatedImgData = imgData.filter((img) => img.id !== imgId);
+    setImgData(updatedImgData);
+  };
+
+  const selectRegion = (regionId: number) => {
+    setSelectedRegion(regionId);
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files) {
+      postImg.mutate(files);
+    }
+  };
+
+  const postNewProduct = usePostProductMutation();
+  const handleDeleteImg = useDeleteImgMutation(deleteProductImg);
+  const postImg = usePostImgMutation(uploadProductImg);
+
+  const openCategoryModal = () => {
+    openModal('category', {
+      selectedCategoryId: selectedCategory!,
+      categoryData: category,
+      onClick: (categoryId: number) => {
+        setSelectedCategory(categoryId);
+      },
+    });
+  };
 
   // To do: 카테로그 추천 로직 변경
   useEffect(() => {
@@ -62,23 +117,8 @@ export const AddPage = ({
   useEffect(() => {
     if (hasName) return;
     setRecommendCategories(generateRecommendCategory(category));
-    setSelectedCategory(undefined);
+    setSelectedCategory(null);
   }, [hasName]);
-
-  const onUploadImg = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-
-    if (file && file.size <= MAX_IMAGE_SIZE) {
-      setImgFiles([...imgFiles, file]);
-      setProductImgs([...productImgs, URL.createObjectURL(file)]);
-    }
-  };
-
-  const deleteImg = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const imgId = e.currentTarget.id;
-    setImgFiles(imgFiles.filter((_, idx) => idx.toString() !== imgId));
-    setProductImgs(productImgs.filter((_, idx) => idx.toString() !== imgId));
-  };
 
   return (
     <>
@@ -94,7 +134,14 @@ export const AddPage = ({
         </Header.Left>
         <Header.Center>내 물건 팔기</Header.Center>
         <Header.Right>
-          <TextButton disabled={isAllRequired} textColor="accentPrimary">
+          <TextButton
+            disabled={!isValid}
+            textColor="accentPrimary"
+            onClick={
+              // To Do: ProductDetail API가 수정되면 수정 로직 추가
+              productData ? () => {} : () => postNewProduct.mutate(postData)
+            }
+          >
             완료
           </TextButton>
         </Header.Right>
@@ -104,16 +151,16 @@ export const AddPage = ({
           <ScrollWrapper>
             <ImgScroll>
               <AddImgInput
-                numberOfImg={productImgs.length}
-                onChange={onUploadImg}
+                numberOfImg={imgData.length}
+                onChange={handleFileChange}
               />
-              {productImgs.map((productImg, index) => (
+              {imgData.map((productImg, index) => (
                 <PictureItem
-                  key={index}
-                  id={index}
+                  key={productImg.id}
+                  id={productImg.id}
                   isThumbnail={index === 0}
-                  imgUrl={productImg}
-                  deleteImg={deleteImg}
+                  imgUrl={productImg.imgUrl}
+                  deleteImg={() => handleDeleteImg.mutate(productImg.id)}
                 />
               ))}
             </ImgScroll>
@@ -135,7 +182,7 @@ export const AddPage = ({
                   />
                 ))}
               </RecommendCategories>
-              <MoreCategoryButton>
+              <MoreCategoryButton onClick={openCategoryModal}>
                 <Icon name="chevronRight" stroke="neutralTextStrong" />
               </MoreCategoryButton>
             </RecommendCategoryWrapper>
@@ -159,9 +206,7 @@ export const AddPage = ({
         </ContentSection>
       </Contents>
       <ActionBar>
-        <EditBar
-          regionName={extractRegionName(userRegions.selectedRegion.name)}
-        />
+        <EditBar userRegions={userRegions} selectRegion={selectRegion} />
       </ActionBar>
     </>
   );

@@ -1,15 +1,16 @@
 import {
   RegionSettingModalProps,
   SearchRegionModalProps,
-  CategotyModalProps,
+  CategoryModalProps,
   AlertModalProps,
   ModalType,
   ModalPropsMapping,
 } from './types';
 
-import { CategoryModal, AlertModal } from './Modal';
+import { AlertModal } from './Modal';
 import { RegionSettingModal } from '@components/Modal/RegionSettingModal';
 import { SearchRegionModal } from '@components/Modal/SearchRegionModal';
+import { CategoryModal } from './CategoryModal';
 
 export function createModalComponent<T extends ModalType>(
   type: T,
@@ -21,7 +22,7 @@ export function createModalComponent<T extends ModalType>(
     case 'searchRegion':
       return <SearchRegionModal {...(props as SearchRegionModalProps)} />;
     case 'category':
-      return <CategoryModal {...(props as CategotyModalProps)} />;
+      return <CategoryModal {...(props as CategoryModalProps)} />;
     case 'alert':
       return <AlertModal {...(props as AlertModalProps)} />;
     default:

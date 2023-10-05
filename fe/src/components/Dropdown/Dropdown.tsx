@@ -6,12 +6,14 @@ type DropdownProps = {
   trigger: ReactNode;
   children: ReactNode;
   position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+  size?: 'L' | 'S';
 };
 
 export const Dropdown: React.FC<DropdownProps> = ({
   trigger,
   children,
   position = 'bottom-left',
+  size = 'L',
 }) => {
   const { isOpen, toggleDropdown, dropdownRef } = useDropdown();
 
@@ -21,7 +23,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
       {isOpen && (
         <>
           <Overlay onClick={toggleDropdown} />
-          <List $position={position} onClick={toggleDropdown}>
+          <List $position={position} $size={size} onClick={toggleDropdown}>
             {children}
           </List>
         </>
@@ -66,6 +68,7 @@ const POSITION_STYLES = {
 
 const List = styled.ul<{
   $position: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+  $size: 'L' | 'S';
 }>`
   position: absolute;
   ${({ $position }) => POSITION_STYLES[$position]}
@@ -74,15 +77,16 @@ const List = styled.ul<{
   flex-direction: column;
   border: 1px solid ${({ theme: { color } }) => color.neutralBorder};
   background-color: ${({ theme: { color } }) => color.neutralBackground};
-  font: ${({ theme: { font } }) => font.availableDefault16};
+  font: ${({ $size, theme: { font } }) =>
+    $size === 'L' ? font.availableDefault16 : font.displayDefault12};
   border-radius: ${({ theme: { radius } }) => radius.medium};
-  width: 240px;
+  width: ${({ $size }) => ($size === 'L' ? '240px' : '140px')};
   align-items: flex-start;
 
   li {
     width: 100%;
     text-align: left;
-    padding: 16px;
+    padding: ${({ $size }) => ($size === 'L' ? '16px' : '14px')};
     border-bottom: 1px solid ${({ theme: { color } }) => color.neutralBorder};
 
     &:last-child {

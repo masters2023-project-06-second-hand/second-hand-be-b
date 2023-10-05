@@ -4,6 +4,7 @@ import { userInfoAtom, userRegionsAtom } from '@atoms/userAtom';
 import { privateApi } from '../index';
 import { API_ENDPOINTS } from '@constants/endpoints';
 import { QUERY_KEYS } from '@api/queryKey';
+import { useToast } from '@components/Toast/useToast';
 
 /* TODO. 코드 분리 하자 */
 
@@ -12,7 +13,7 @@ interface Region {
   name: string;
 }
 
-interface UserRegions {
+export interface UserRegions {
   selectedRegionId: number;
   regions: Region[];
 }
@@ -70,6 +71,7 @@ export const useGetUserReigions = (): void => {
 export const useDeleteUserRegionMutation = () => {
   const [userInfo] = useAtom(userInfoAtom);
   const queryClient = useQueryClient();
+  const toast = useToast();
 
   const { mutate } = useMutation(
     (regionId: number) => {
@@ -83,7 +85,7 @@ export const useDeleteUserRegionMutation = () => {
         queryClient.invalidateQueries([
           QUERY_KEYS.USER_REGIONS(userInfo ? userInfo.id : null),
         ]);
-        /* + add toast */
+        toast.noti('선택한 동네가 삭제되었습니다.');
       },
     }
   );
@@ -94,6 +96,7 @@ export const useDeleteUserRegionMutation = () => {
 export const useSetUserRegionMutation = () => {
   const [userInfo] = useAtom(userInfoAtom);
   const queryClient = useQueryClient();
+  const toast = useToast();
 
   const { mutate } = useMutation(
     (regionId: number) => {
@@ -107,7 +110,7 @@ export const useSetUserRegionMutation = () => {
         queryClient.invalidateQueries([
           QUERY_KEYS.USER_REGIONS(userInfo ? userInfo.id : null),
         ]);
-        /* + add toast */
+        toast.noti('기본 동네가 변경되었습니다.');
       },
     }
   );
@@ -118,6 +121,7 @@ export const useSetUserRegionMutation = () => {
 export const useAddUserRegionMutation = () => {
   const [userInfo] = useAtom(userInfoAtom);
   const queryClient = useQueryClient();
+  const toast = useToast();
 
   const { mutate } = useMutation(
     (regionId: number) => {
@@ -131,7 +135,7 @@ export const useAddUserRegionMutation = () => {
         queryClient.invalidateQueries([
           QUERY_KEYS.USER_REGIONS(userInfo ? userInfo.id : null),
         ]);
-        /* + add toast */
+        toast.noti('동네가 추가 되었습니다.');
       },
     }
   );

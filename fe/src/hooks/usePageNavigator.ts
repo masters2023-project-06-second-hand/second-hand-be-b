@@ -11,7 +11,7 @@ export const usePageNavigator = () => {
     navigateToLiked: () => navigate(PATH.LIKED),
     navigateToChat: () => navigate(PATH.CHAT),
     navigateToAccount: () => navigate(PATH.ACCOUNT),
-    navigateToDetail: () => navigate(PATH.DETAIL),
+    navigateToDetail: (productId: number) => navigate(PATH.DETAIL(productId)),
     navigateToAdd: () => navigate(PATH.ADD),
     navigateToJoin: () => navigate(PATH.JOIN),
     navigateToCallback: () => navigate(PATH.CALLBACK),

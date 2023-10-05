@@ -1,13 +1,21 @@
 import { styled } from 'styled-components';
+import { useSetAtom } from 'jotai';
 import { Header } from '@components/Header/Header';
 import { TextButton } from '@components/Button/TextButton';
 import { Icon } from '@components/Icon/Icon';
 import { useCategoriesWithImages } from '@api/category/useCategories';
 import { usePageNavigator } from '@hooks/usePageNavigator';
+import { selectedCategoryIdAtom } from '@atoms/categoryAtom';
 
 export const CategoryPage = () => {
-  const { navigateToGoBack } = usePageNavigator();
+  const { navigateToGoBack, navigateToHome } = usePageNavigator();
   const categories = useCategoriesWithImages();
+  const setSelectedCategoryId = useSetAtom(selectedCategoryIdAtom);
+
+  const handleCategorySelect = (categoryId: number) => {
+    setSelectedCategoryId(categoryId);
+    navigateToHome();
+  };
 
   return (
     <>
@@ -26,7 +34,7 @@ export const CategoryPage = () => {
       </Header>
       <Content>
         {categories.map((item) => (
-          <Category key={item.id}>
+          <Category key={item.id} onClick={() => handleCategorySelect(item.id)}>
             <img src={item.imgUrl} alt={item.name} />
             <p>{item.name}</p>
           </Category>

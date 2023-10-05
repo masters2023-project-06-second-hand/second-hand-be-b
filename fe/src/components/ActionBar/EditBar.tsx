@@ -1,18 +1,39 @@
+import { UserRegions } from '@atoms/userAtom';
 import { TextButton } from '@components/Button/TextButton';
+import { MenuDropdown } from '@components/Dropdown/MenuDropdown';
 import { Icon } from '@components/Icon/Icon';
+import extractRegionName from '@utils/extractRegionName';
 import { styled } from 'styled-components';
 
 type Props = {
-  regionName: string;
+  userRegions: UserRegions;
+  selectRegion(regionId: number): void;
 };
 
-export const EditBar: React.FC<Props> = ({ regionName }) => {
+export const EditBar: React.FC<Props> = ({ userRegions, selectRegion }) => {
   return (
     <Bar>
-      <RegionButton onClick={() => {}}>
-        <Icon name="mapPinFilled" fill="neutralTextStrong" />
-        <Region>{regionName}</Region>
-      </RegionButton>
+      <MenuDropdown
+        trigger={
+          <RegionButton onClick={() => {}}>
+            <Icon name="mapPinFilled" fill="neutralTextStrong" />
+            <Region>
+              {extractRegionName(userRegions.selectedRegion.name)}
+            </Region>
+          </RegionButton>
+        }
+        position="top-left"
+      >
+        {userRegions.regions.map((region) => (
+          <RegionList
+            key={region.id}
+            onClick={() => selectRegion(region.id)}
+            $isSelected={userRegions.selectedRegion.id === region.id}
+          >
+            {extractRegionName(region.name)}
+          </RegionList>
+        ))}
+      </MenuDropdown>
     </Bar>
   );
 };
@@ -32,4 +53,8 @@ const RegionButton = styled(TextButton)`
 const Region = styled.span`
   color: ${({ theme }) => theme.color.neutralTextStrong};
   font: ${({ theme }) => theme.font.availableDefault16};
+`;
+
+const RegionList = styled.li<{ $isSelected: boolean }>`
+  font: ${({ theme: { font } }) => font.displayStrong16};
 `;

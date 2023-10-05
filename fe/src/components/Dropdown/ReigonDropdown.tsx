@@ -19,7 +19,6 @@ type DropdownProps = {
   position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
 };
 
-// Todo. 목록에 '내 동네 설정하기' 없는 경우도 만들어줘야함
 export const RegionDropdown: React.FC<DropdownProps> = ({
   trigger,
   myRegions,

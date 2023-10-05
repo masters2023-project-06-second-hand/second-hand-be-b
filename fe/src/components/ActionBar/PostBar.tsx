@@ -1,44 +1,59 @@
-import { useState } from 'react';
 import { styled } from 'styled-components';
 import { Button } from '@components/Button/Button';
 import { LikeButton } from '@components/Button/LikeButton';
 import formatPrice from '@utils/formatPrice';
-import axios from 'axios';
+import { privateApi } from '@api/index';
+import { API_ENDPOINTS } from '@constants/endpoints';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { QUERY_KEYS } from '@api/queryKey';
 
 type Props = {
   id: number;
   isLiked: boolean;
   price: number;
+  isWriter: boolean;
 };
 
-export const PostBar: React.FC<Props> = ({ id, isLiked, price }) => {
-  const [isClicked, setIsClicked] = useState<boolean>(isLiked);
+export const PostBar: React.FC<Props> = ({ id, isLiked, price, isWriter }) => {
+  const changeProductLiked = async () => {
+    const requestData = {
+      isLiked: !isLiked,
+    };
+    const response = await privateApi.put(
+      API_ENDPOINTS.UPDATE_LIKE(id),
+      requestData
+    );
 
-  const toggleLikeButton = () => {
-    axios
-      .put(`api/products/${id}/likes`, {
-        isLiked: !isClicked,
-      })
-      .then(() => {
-        setIsClicked(!isClicked);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    return response;
   };
+
+  const useProductLikedMutation = () => {
+    const queryClient = useQueryClient();
+    const { mutate } = useMutation(changeProductLiked, {
+      onSuccess: () =>
+        queryClient.invalidateQueries(QUERY_KEYS.PRODUCT_STAT(id)),
+    });
+
+    return { mutate };
+  };
+
+  const updateProductLiked = useProductLikedMutation();
 
   return (
     <Bar>
       <Info>
-        <LikeButton isClicked={isClicked} onClick={toggleLikeButton} />
+        <LikeButton
+          isClicked={isLiked}
+          onClick={() => updateProductLiked.mutate()}
+        />
         <Price>{formatPrice(price)}</Price>
       </Info>
       <Button
         backgroundColor="accentPrimary"
         size="S"
-        text="대화 중인 채팅방"
+        text={isWriter ? '대화 중인 채팅방' : '채팅방'}
         // 채팅 관련 API가 나오면 클릭 이벤트 변경
-        onClick={() => {}}
+        onClick={isWriter ? () => {} : () => {}}
       />
     </Bar>
   );

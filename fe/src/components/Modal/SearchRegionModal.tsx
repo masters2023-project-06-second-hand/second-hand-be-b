@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useMemo } from 'react';
 import { styled } from 'styled-components';
 import { Input } from '@components/Input/Input';
 import { SearchRegionModalProps } from './types';
@@ -7,20 +7,36 @@ import { Icon } from '@components/Icon/Icon';
 import { useInput } from '@hooks/useInput';
 import { useDebounce } from '@hooks/useDebounce';
 import { useModal } from './useModal';
+import { useRegions } from '@api/region/regionList';
+import { useInfiniteScroll } from '@hooks/useInfiniteScroll';
 
 export const SearchRegionModal: React.FC<SearchRegionModalProps> = ({
   style,
+  onSelectRegion,
 }) => {
   const { closeModal, closeAllModals } = useModal();
   const { value: region, onChange: onChangeRegion } = useInput();
   const debouncedRegion = useDebounce(region, 500);
 
-  useEffect(() => {
-    if (debouncedRegion) {
-      /* TODO. 필터링 된 지역 목록 요청 (API 미완료) */
-      console.log(debouncedRegion);
+  const { data, isLoading, isError, isFetching, fetchNextPage, hasNextPage } =
+    useRegions(debouncedRegion);
+
+  const flattenedData = useMemo(() => {
+    if (data) {
+      const flattened = data.pages.flatMap((item) => item.regions);
+      console.log(flattened);
+
+      return flattened;
     }
-  }, [debouncedRegion]);
+    return [];
+  }, [data]);
+
+  const lastElementRef = useInfiniteScroll({
+    isLoading,
+    hasNextPage,
+    fetchNextPage,
+    isFetching,
+  });
 
   return (
     <ModalBase style={style}>
@@ -41,24 +57,30 @@ export const SearchRegionModal: React.FC<SearchRegionModalProps> = ({
         />
       </InputWrapper>
 
-      {/* Todo. 지역 검색 리스트 추가하기 */}
-      <List>
-        <Option>서울 강남구 개포1동</Option>
-        <Option>서울 강남구 개포2동</Option>
-        <Option>서울 강남구 개포3동</Option>
-        <Option>서울 강남구 개포3동</Option>
-        <Option>서울 강남구 개포3동</Option>
-        <Option>서울 강남구 개포3동</Option>
-        <Option>서울 강남구 개포3동</Option>
-        <Option>서울 강남구 개포3동</Option>
-        <Option>서울 강남구 개포3동</Option>
-        <Option>서울 강남구 개포3동</Option>
-        <Option>서울 강남구 개포3동</Option>
-        <Option>서울 강남구 개포3동</Option>
-        <Option>서울 강남구 개포3동</Option>
-        <Option>서울 강남구 개포3동</Option>
-        <Option>서울 강남구 개포3동</Option>
-      </List>
+      {isLoading ? (
+        <LoadingMessage>지역 리스트를 불러오는 중...</LoadingMessage>
+      ) : isError ? (
+        <ErrorMessage>불러오는 중에 오류가 발생했습니다.</ErrorMessage>
+      ) : flattenedData.length === 0 ? (
+        <NoResultsMessage>결과가 없습니다</NoResultsMessage>
+      ) : (
+        <List>
+          {flattenedData.map((item, index) => (
+            <Option
+              key={item.id}
+              ref={index === flattenedData.length - 1 ? lastElementRef : null}
+              onClick={() => onSelectRegion(item.id)}
+            >
+              {item.name}
+            </Option>
+          ))}
+          {!hasNextPage && (
+            <EndOfResultsMessage>
+              더 이상의 결과가 없습니다.
+            </EndOfResultsMessage>
+          )}
+        </List>
+      )}
     </ModalBase>
   );
 };
@@ -107,7 +129,7 @@ const List = styled.ul`
   font: ${({ theme: { font } }) => font.availableDefault16};
   padding: 0 24px;
   overflow-y: scroll;
-  height: 100%;
+  height: 576px;
   scrollbar-width: none;
   &::-webkit-scrollbar {
     display: none;
@@ -119,4 +141,25 @@ const Option = styled.li`
   &:last-child {
     border-bottom: none;
   }
+`;
+
+const LoadingMessage = styled.div`
+  text-align: center;
+  padding-top: 40px;
+`;
+
+const ErrorMessage = styled.div`
+  text-align: center;
+  padding-top: 40px;
+`;
+
+const NoResultsMessage = styled.div`
+  text-align: center;
+  padding-top: 40px;
+`;
+
+const EndOfResultsMessage = styled.div`
+  text-align: center;
+  padding-top: 16px;
+  color: ${({ theme: { color } }) => color.neutralTextWeak};
 `;

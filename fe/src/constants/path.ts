@@ -5,7 +5,7 @@ export const PATH = {
   LIKED: '/liked',
   CHAT: '/chat',
   ACCOUNT: '/account',
-  DETAIL: '/product',
+  DETAIL: (productId: number) => `/product/${productId}`,
   ADD: '/add',
   JOIN: '/join',
   CALLBACK: '/callback/:provider',
