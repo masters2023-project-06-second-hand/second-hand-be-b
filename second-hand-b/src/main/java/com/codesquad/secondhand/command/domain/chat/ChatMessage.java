@@ -49,6 +49,10 @@ public class ChatMessage {
         return senderId;
     }
 
+    public boolean isReadOrNot() {
+        return readOrNot;
+    }
+
     public boolean isSender(long memberId) {
         return senderId.equals(memberId);
     }

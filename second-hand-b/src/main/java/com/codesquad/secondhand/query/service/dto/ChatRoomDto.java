@@ -1,4 +1,4 @@
-package com.codesquad.secondhand.command.domain.chat.dto;
+package com.codesquad.secondhand.query.service.dto;
 
 import java.time.LocalDateTime;
 

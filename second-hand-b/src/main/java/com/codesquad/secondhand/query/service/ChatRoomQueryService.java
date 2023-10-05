@@ -1,9 +1,9 @@
 package com.codesquad.secondhand.query.service;
 
 import com.codesquad.secondhand.command.domain.chat.ChatRoom;
-import com.codesquad.secondhand.command.domain.chat.dto.ChatRoomDto;
 import com.codesquad.secondhand.command.port.out.ChatRoomRepository;
 import com.codesquad.secondhand.common.exception.ChatRoomNotFoundException;
+import com.codesquad.secondhand.query.service.dto.ChatRoomDto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -4,11 +4,11 @@ import static com.codesquad.secondhand.common.utils.ChatMapper.toChatRoomDetail;
 
 import com.codesquad.secondhand.command.domain.chat.ChatMessage;
 import com.codesquad.secondhand.command.domain.chat.ChatRoom;
-import com.codesquad.secondhand.command.domain.chat.dto.ChatRoomDto;
 import com.codesquad.secondhand.common.utils.ChatMapper;
 import com.codesquad.secondhand.query.controller.chat.response.ChatRoomDetail;
 import com.codesquad.secondhand.query.controller.chat.response.ChatRoomInfo;
 import com.codesquad.secondhand.query.port.ChatRoomQueryUseCase;
+import com.codesquad.secondhand.query.service.dto.ChatRoomDto;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;

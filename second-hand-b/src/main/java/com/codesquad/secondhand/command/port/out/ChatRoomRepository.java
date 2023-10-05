@@ -1,7 +1,7 @@
 package com.codesquad.secondhand.command.port.out;
 
 import com.codesquad.secondhand.command.domain.chat.ChatRoom;
-import com.codesquad.secondhand.command.domain.chat.dto.ChatRoomDto;
+import com.codesquad.secondhand.query.service.dto.ChatRoomDto;
 import java.util.List;
 import java.util.Optional;
 

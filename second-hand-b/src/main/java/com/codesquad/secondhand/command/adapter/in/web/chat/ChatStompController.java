@@ -1,4 +1,4 @@
-package com.codesquad.secondhand.common.messaging.controller;
+package com.codesquad.secondhand.command.adapter.in.web.chat;
 
 import com.codesquad.secondhand.command.adapter.in.web.chat.request.ChatMessageRequest;
 import com.codesquad.secondhand.command.port.in.ChatMessageCommandUseCase;

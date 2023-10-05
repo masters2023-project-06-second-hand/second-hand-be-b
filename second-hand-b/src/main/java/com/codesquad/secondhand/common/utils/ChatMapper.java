@@ -4,13 +4,13 @@ import com.codesquad.secondhand.command.adapter.in.web.chat.response.ChatRoomMes
 import com.codesquad.secondhand.command.adapter.in.web.chat.response.ChatRoomProduct;
 import com.codesquad.secondhand.command.domain.chat.ChatMessage;
 import com.codesquad.secondhand.command.domain.chat.ChatRoom;
-import com.codesquad.secondhand.command.domain.chat.dto.ChatRoomDto;
 import com.codesquad.secondhand.command.domain.product.Product;
 import com.codesquad.secondhand.query.controller.chat.response.ChatMessageInfo;
 import com.codesquad.secondhand.query.controller.chat.response.ChatRoomDetail;
 import com.codesquad.secondhand.query.controller.chat.response.ChatRoomInfo;
 import com.codesquad.secondhand.query.controller.chat.response.ChatRoomMemberInfo;
 import com.codesquad.secondhand.query.controller.chat.response.ChatRoomProductInfo;
+import com.codesquad.secondhand.query.service.dto.ChatRoomDto;
 import java.util.List;
 import java.util.stream.Collectors;
 

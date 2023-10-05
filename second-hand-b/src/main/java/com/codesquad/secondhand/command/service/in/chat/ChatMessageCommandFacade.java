@@ -1,5 +1,6 @@
 package com.codesquad.secondhand.command.service.in.chat;
 
+import com.codesquad.secondhand.command.adapter.in.web.chat.response.ChatNotification;
 import com.codesquad.secondhand.command.domain.chat.ChatMessage;
 import com.codesquad.secondhand.command.domain.chat.ChatRoom;
 import com.codesquad.secondhand.command.domain.chat.ChatRoomMember;
@@ -19,12 +20,17 @@ public class ChatMessageCommandFacade implements ChatMessageCommandUseCase {
     private final ChatMessageCommandService chatMessageCommandService;
     private final ChatRoomCommandService chatRoomCommandService;
     private final ChatRoomMemberCommandService chatRoomMemberCommandService;
+    private final NotificationService notificationService;
 
     @Transactional
     @Override
     public void saveChatMessage(long chatRoomId, String message, long senderId) {
-        ChatMessage chatMessage = toChatMessage(chatRoomId, message, senderId);
+        ChatRoom chatRoom = chatRoomCommandService.getById(chatRoomId);
+        ChatMessage chatMessage = toChatMessage(chatRoom, message, senderId);
         chatMessageCommandService.save(chatMessage);
+
+        long opponentId = chatRoom.getOpponentId(senderId);
+        notifyChatMessage(chatMessage, chatRoomId, opponentId);
     }
 
     @Override
@@ -32,8 +38,8 @@ public class ChatMessageCommandFacade implements ChatMessageCommandUseCase {
         chatMessageCommandService.markMessagesAsRead(chatRoomId, memberId);
     }
 
-    private ChatMessage toChatMessage(long chatRoomId, String message, long senderId) {
-        ChatRoom chatRoom = chatRoomCommandService.getById(chatRoomId);
+    private ChatMessage toChatMessage(ChatRoom chatRoom, String message, long senderId) {
+        Long chatRoomId = chatRoom.getId();
         List<ChatRoomMember> chatRoomMembers = chatRoomMemberCommandService.findAllByChatRoomId(chatRoomId);
         boolean readOrNot = isChatRoomFull(chatRoomMembers);
         return new ChatMessage(
@@ -46,5 +52,13 @@ public class ChatMessageCommandFacade implements ChatMessageCommandUseCase {
 
     private boolean isChatRoomFull(List<ChatRoomMember> chatRoomMembers) {
         return chatRoomMembers.size() == CHAT_ROOM_MEMBER_MAX_SIZE;
+    }
+
+    private void notifyChatMessage(ChatMessage chatMessage, long chatRoomId, long opponentId) {
+        if (!chatMessage.isReadOrNot()) {
+            String message = chatMessage.getMessage();
+            ChatNotification chatNotification = new ChatNotification(chatRoomId, message);
+            notificationService.notify(opponentId, chatNotification);
+        }
     }
 }
