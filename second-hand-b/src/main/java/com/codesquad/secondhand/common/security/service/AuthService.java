@@ -79,6 +79,7 @@ public class AuthService implements AuthUseCase {
                 .orElseThrow(InvalidRefreshTokenException::new);
     }
 
+    @Transactional
     @Override
     public void signOut(String validatedMemberId) {
         long memberId = Long.parseLong(validatedMemberId);
