@@ -63,6 +63,7 @@ public class OAuth2LoginSecurityConfig {
                                 .hasAnyAuthority(Role.MANAGER.getKey(), Role.MEMBER.getKey())
                 )
                 .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(AbstractHttpConfigurer::disable)
                 .addFilterBefore(
                         new JwtSignUpAuthenticationFilter(),
                         OAuth2AuthorizationRequestRedirectFilter.class)
