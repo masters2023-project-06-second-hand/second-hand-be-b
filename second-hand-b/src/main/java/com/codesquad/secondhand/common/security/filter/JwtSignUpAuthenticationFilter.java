@@ -21,11 +21,6 @@ public class JwtSignUpAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
-        Authentication existsAuthentication = SecurityContextHolder.getContext().getAuthentication();
-        if (existsAuthentication != null && existsAuthentication.isAuthenticated()) {
-            filterChain.doFilter(request, response);
-            return;
-        }
         String token = JwtTokenProvider.resolveToken(request);
         Date now = new Date();
         if (token != null && JwtTokenProvider.isValidSignUpToken(token, now)) {
