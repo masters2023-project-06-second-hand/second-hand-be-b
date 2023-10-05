@@ -56,4 +56,11 @@ public class ChatRoom {
         }
         return seller.getNickname();
     }
+
+    public Long getOpponentId(Long memberId) {
+        if (seller.isSameId(memberId)) {
+            return buyer.getId();
+        }
+        return seller.getId();
+    }
 }

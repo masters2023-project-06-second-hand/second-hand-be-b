@@ -1,7 +1,7 @@
-package com.codesquad.secondhand.common.messaging.service;
+package com.codesquad.secondhand.command.service.in.chat;
 
-import com.codesquad.secondhand.common.messaging.port.NotificationUseCase;
-import com.codesquad.secondhand.common.messaging.repository.SseEmitterRepository;
+import com.codesquad.secondhand.command.port.in.NotificationUseCase;
+import com.codesquad.secondhand.command.repository.SseEmitterRepository;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,6 @@ public class NotificationService implements NotificationUseCase {
         return sseEmitter;
     }
 
-    @Override
     public void notify(Long memberId, Object data) {
         sendToClient(memberId, NOTIFY_EVENT_NAME, data);
     }

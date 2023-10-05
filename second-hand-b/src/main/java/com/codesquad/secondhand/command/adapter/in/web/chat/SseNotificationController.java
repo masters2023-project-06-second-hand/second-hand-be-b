@@ -1,6 +1,6 @@
-package com.codesquad.secondhand.common.messaging.controller;
+package com.codesquad.secondhand.command.adapter.in.web.chat;
 
-import com.codesquad.secondhand.common.messaging.port.NotificationUseCase;
+import com.codesquad.secondhand.command.port.in.NotificationUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
