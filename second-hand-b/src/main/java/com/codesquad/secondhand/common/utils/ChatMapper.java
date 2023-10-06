@@ -1,7 +1,10 @@
 package com.codesquad.secondhand.common.utils;
 
+import com.codesquad.secondhand.command.adapter.in.web.chat.request.ChatMessageRequest;
+import com.codesquad.secondhand.command.adapter.in.web.chat.response.ChatMessageResponse;
 import com.codesquad.secondhand.command.adapter.in.web.chat.response.ChatRoomMessage;
 import com.codesquad.secondhand.command.adapter.in.web.chat.response.ChatRoomProduct;
+import com.codesquad.secondhand.command.adapter.in.web.chat.response.Message;
 import com.codesquad.secondhand.command.domain.chat.ChatMessage;
 import com.codesquad.secondhand.command.domain.chat.ChatRoom;
 import com.codesquad.secondhand.command.domain.product.Product;
@@ -51,5 +54,10 @@ public class ChatMapper {
                 chatRoomMemberInfo,
                 chatMessageInfo
         );
+    }
+
+    public static ChatMessageResponse toChatMessageResponse(ChatMessageRequest chatMessageRequest) {
+        Message message = new Message(chatMessageRequest.getMessage(), chatMessageRequest.getSenderId());
+        return new ChatMessageResponse(chatMessageRequest.getChatRoomId(), message);
     }
 }
